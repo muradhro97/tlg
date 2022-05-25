@@ -1,0 +1,13 @@
+#page-wrapper{
+  margin:0;
+}
+
+.navbar-font>li>a{
+  font-size: 17px;
+
+}
+.brand-font{
+  font-size: 25px;
+  font-weight: bolder;
+}
+
