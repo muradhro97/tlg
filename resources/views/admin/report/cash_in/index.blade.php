@@ -134,11 +134,11 @@
                                         $iteration = $loop->iteration
                                         ?>
                                         <tr>
-                                            <td>{{$iteration}}</td>
-                                            <td>{{$row->date}}</td>
-                                            <td>{{$row->project->name}}</td>
-                                            <td>{{$row->organization->name}}</td>
-                                            <td>{{number_format($row->amount,2)}}</td>
+                                            <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}"> {{$iteration}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->date}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->project->name}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->organization->name}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{number_format($row->total,2)}}</a></td>
                                             {{--                                <td>--}}
                                             {{--                                    <a href="{{route('cash_in_details',$row['id'])}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>--}}
                                             {{--                                </td>--}}
@@ -181,11 +181,11 @@
                                             $iteration = $loop->iteration
                                             ?>
                                             <tr>
-                                                <td>{{$iteration}}</td>
-                                                <td>{{$row->date}}</td>
-                                                <td>{{$row->project->name}}</td>
-                                                <td>{{$row->organization->name}}</td>
-                                                <td>{{number_format($row->amount,2)}}</td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}"> {{$iteration}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->date}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->project->name}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->organization->name}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{number_format($row->total,2)}}</a></td>
                                                 {{--                                <td>--}}
                                                 {{--                                    <a href="{{route('cash_in_details',$row['id'])}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>--}}
                                                 {{--                                </td>--}}
@@ -229,11 +229,11 @@
                                             $iteration = $loop->iteration
                                             ?>
                                             <tr>
-                                                <td>{{$iteration}}</td>
-                                                <td>{{$row->date}}</td>
-                                                <td>{{$row->project->name}}</td>
-                                                <td>{{$row->organization->name}}</td>
-                                                <td>{{number_format($row->total,2)}}</td>
+                                                <td><a href="{{url('/admin/extract/'.$row->id)}}"> {{$iteration}}</a></td>
+                                                <td><a href="{{url('/admin/extract/'.$row->id)}}">{{$row->date}}</a></td>
+                                                <td><a href="{{url('/admin/extract/'.$row->id)}}">{{$row->project->name}}</a></td>
+                                                <td><a href="{{url('/admin/extract/'.$row->id)}}">{{$row->organization->name}}</a></td>
+                                                <td><a href="{{url('/admin/extract/'.$row->id)}}">{{number_format($row->total,2)}}</a></td>
                                                 {{--                                <td>--}}
                                                 {{--                                    <a href="{{route('cash_in_details',$row['id'])}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>--}}
                                                 {{--                                </td>--}}
