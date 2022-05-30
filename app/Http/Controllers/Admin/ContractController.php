@@ -11,6 +11,7 @@ use App\ContractItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 
 class  ContractController extends Controller
@@ -29,7 +30,14 @@ class  ContractController extends Controller
     public function index(Request $request)
     {
         //
+         
+        //  dd($rows);
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
         $rows = Contract::latest();
+        $rows->whereIn('project_id',$product_ids);
+
+        // $user->projects->contains($rows);
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
 
@@ -58,6 +66,7 @@ class  ContractController extends Controller
             $rows->where('date', '<=', $request->to);
         }
 
+        
         $rows = $rows->paginate(20);
 
         return view('admin.contract.index', compact('rows'));

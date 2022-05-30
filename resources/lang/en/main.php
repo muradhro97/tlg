@@ -529,7 +529,7 @@ return [
     'expenses_grouped' => 'Expenses Grouped by Item',
     'creditor' => 'Creditor',
     'debtor' => 'Debtor',
-    'actual_cash_in' => 'Actual Cash In',
+    'actual_cash_in' => 'Funding',
     'cash_in_extracts' => 'Cash In Extracts',
     'contract_value' => 'Contract Value',
     'funding' => 'Funding',

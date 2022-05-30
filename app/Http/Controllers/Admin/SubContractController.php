@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Auth;
 
 
 class  SubContractController extends Controller
@@ -47,7 +48,10 @@ class  SubContractController extends Controller
 //
 //        }
 //        return "done";
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
         $rows = SubContract::latest();
+        $rows->whereIn('project_id',$product_ids);
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
 
@@ -76,6 +80,8 @@ class  SubContractController extends Controller
         if ($request->filled('to')) {
             $rows->where('date', '<=', $request->to);
         }
+        
+
         $rows = $rows->paginate(20);
 
         return view('admin.sub_contract.index', compact('rows'));

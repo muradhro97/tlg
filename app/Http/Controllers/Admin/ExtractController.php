@@ -15,6 +15,7 @@ use App\SubContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
+use Auth;
 
 class ExtractController extends Controller
 {
@@ -36,10 +37,12 @@ class ExtractController extends Controller
     public function index(Request $request)
     {
         //
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
 
         $rows = Extract::whereHas('organization', function ($q) {
             return $q->where('type', 'subContractor');
-        })->latest();
+        })->whereIn('project_id',$product_ids)->latest();
 
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
@@ -73,10 +76,12 @@ class ExtractController extends Controller
     public function mainIndex(Request $request)
     {
         //
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
 
         $rows = Extract::whereHas('organization', function ($q) {
             return $q->where('type', 'mainContractor');
-        })->latest();
+        })->whereIn('project_id',$product_ids)->latest();
 
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
