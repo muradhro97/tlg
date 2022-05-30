@@ -13,6 +13,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
+use Auth;
 
 class AccountingCashInController extends Controller
 {
@@ -31,7 +32,12 @@ class AccountingCashInController extends Controller
     {
         //
 
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
         $rows = Accounting::latest()->where('type','cashin');
+        $rows->whereIn('project_id',$product_ids);
+
+        
 
 
         if ($request->filled('project_id')) {

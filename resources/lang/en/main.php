@@ -541,6 +541,8 @@ return [
     'organization cred/debt' => 'organization cred/debt',
     'manager_did_not_accept/debt' => 'Manager Did Not Accept',
     'extract_value' => 'Extract Value',
+    'amount_from'=>'Amount From',
+    'amount_to'=>'Amount To',
 
 
 ];

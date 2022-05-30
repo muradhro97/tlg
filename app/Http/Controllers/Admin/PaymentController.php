@@ -42,6 +42,18 @@ class PaymentController extends Controller
         //
 
         $rows = Payment::latest();
+
+        if ($request->filled('amount_from')) {
+            $rows->where('amount', '>=', $request->amount_from);
+    
+        }
+    
+        if ($request->filled('amount_to')) {
+            $rows->where('amount', '<=', $request->amount_to);
+    
+        }
+
+
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
 

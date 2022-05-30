@@ -443,6 +443,8 @@ return [
     'safe_accept_decline' => '安全接受拒絕',
     'manager_notification' => '經理通知',
     'safe_notification' => '安全通知',
+    'amount_from'=>'Amount From',
+    'amount_to'=>'Amount To',
 
 
 

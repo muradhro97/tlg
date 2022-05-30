@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Accounting;
-use App\AccountingDetail;
-use App\AccountingImage;
-use App\Employee;
-use App\Http\Controllers\Controller;
-
 use App\Item;
-use App\Payment;
-use App\PusherNotification;
 use App\Safe;
-use App\SafeTransaction;
-
-
-use App\StockTransaction;
 use App\User;
+use App\Payment;
+use App\Employee;
+
+use App\Accounting;
+use App\AccountingImage;
+use App\SafeTransaction;
+use App\AccountingDetail;
+use App\StockTransaction;
+
+
+use App\PusherNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 
 
@@ -41,8 +42,11 @@ class InvoiceController extends Controller
     public function index(Request $request)
     {
         //
-
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
         $rows = Accounting::latest()->whereIn('type', ['invoice', 'expense']);
+        $rows->whereIn('project_id',$product_ids);
+        
 
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);

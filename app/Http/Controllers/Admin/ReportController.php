@@ -2,28 +2,32 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Accounting;
-use App\AccountingDetail;
-use App\AccountingEmployeeSalaryDetail;
-use App\AccountingWorkerSalaryDetail;
-use App\Employee;
-use App\Extract;
-use App\Http\Controllers\Controller;
 use App\Item;
+use App\Extract;
+use App\Employee;
+use App\Accounting;
 use App\Organization;
+use App\AccountingDetail;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use App\AccountingWorkerSalaryDetail;
+use App\AccountingEmployeeSalaryDetail;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReportController extends Controller
 {
     public function directCost(Request $request){
         /* total worker salaries*/
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+
         $rows = AccountingWorkerSalaryDetail::whereHas('accounting',function ($query){
             return $query->where('payment_status','confirmed');
         })->latest();
-
+        $rows->whereIn('project_id',$product_ids);
         if ($request->filled('from')) {
             $rows->whereHas('accounting', function ($q) use ($request){
                 $q->where('start' ,'>=' , $request->from);
@@ -83,9 +87,14 @@ class ReportController extends Controller
     }
 
     public function directWorkerSalaries(Request $request){
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+
+
         $rows = AccountingWorkerSalaryDetail::whereHas('accounting',function ($query){
             return $query->where('payment_status','confirmed');
         })->latest();
+        $rows->whereIn('project_id',$product_ids);
 
         if ($request->filled('from')) {
             $rows->whereHas('accounting', function ($q) use ($request){
@@ -109,8 +118,12 @@ class ReportController extends Controller
     }
 
     public function directInvoices(Request $request){
-        $rows = Accounting::latest()->where('type', 'invoice')->where('payment_status','confirmed');
 
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+
+        $rows = Accounting::latest()->where('type', 'invoice')->where('payment_status','confirmed');
+        $rows->whereIn('project_id',$product_ids);
         if ($request->filled('from')) {
             $rows->where('created_at', '>=', $request->from);
         }
@@ -133,6 +146,11 @@ class ReportController extends Controller
         $rows = Extract::whereHas('organization',function ($query){
             return $query->where('type','subContractor');
         })->latest();
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+        $rows->whereIn('project_id',$product_ids);
+
+
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
         }
@@ -163,6 +181,10 @@ class ReportController extends Controller
         $rows = AccountingEmployeeSalaryDetail::whereHas('accounting',function ($query){
             return $query->where('payment_status','confirmed');
         })->latest();
+
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+        $rows->whereIn('project_id',$product_ids);
 
         if ($request->filled('from')) {
             $rows->where('created_at', '>=', $request->from);
@@ -213,6 +235,10 @@ class ReportController extends Controller
             return $query->where('payment_status','confirmed');
         })->latest();
 
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+        $rows->whereIn('project_id',$product_ids);
+
         if ($request->filled('from')) {
             $rows->where('created_at', '>=', $request->from);
         }
@@ -243,6 +269,10 @@ class ReportController extends Controller
             }
             return $query;
         });
+
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+        $rows->whereIn('project_id',$product_ids);
 
 
         if ($request->filled('project_id')) {
@@ -326,15 +356,33 @@ class ReportController extends Controller
     }
 
     public function cashIn(Request $request){
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+        
         $funding_rows = Accounting::cashin()->whereHas('organization',function ($query){
             return $query->where('type','mainContractor');
         });
+        $funding_rows->whereIn('project_id', $product_ids);
         $cash_in_rows = Accounting::cashin()->whereHas('organization',function ($query){
             return $query->where('type','subContractor');
         });
+        $cash_in_rows->whereIn('project_id', $product_ids);
         $extract_rows = Extract::whereHas('organization',function ($query){
             return $query->where('type','mainContractor');
         });
+        $extract_rows->whereIn('project_id', $product_ids);
+        if ($request->filled('amount_from')) {
+            $funding_rows->where('amount', '>=', $request->amount_from);
+            $cash_in_rows->where('amount', '>=', $request->amount_from);
+            $extract_rows->where('total', '>=', $request->amount_from);
+        }
+
+        if ($request->filled('amount_to')) {
+            $funding_rows->where('amount', '<=', $request->amount_to);
+            $cash_in_rows->where('amount', '<=', $request->amount_to);
+            $extract_rows->where('total', '<=', $request->amount_to);
+        }
+
         if ($request->filled('from')) {
             $funding_rows->where('date', '>=', $request->from);
             $cash_in_rows->where('date', '>=', $request->from);

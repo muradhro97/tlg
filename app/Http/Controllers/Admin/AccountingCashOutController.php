@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Accounting;
-use App\AccountingImage;
-use App\CashInDetail;
-use App\Http\Controllers\Controller;
-use App\PusherNotification;
 use App\Safe;
-use App\SafeTransaction;
 use App\User;
+use App\Accounting;
+use App\CashInDetail;
+use App\AccountingImage;
+use App\SafeTransaction;
+use App\PusherNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 
 class AccountingCashOutController extends Controller
@@ -31,7 +32,12 @@ class AccountingCashOutController extends Controller
     {
         //
 
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
         $rows = Accounting::latest()->where('type','cashout');
+        $rows->whereIn('project_id',$product_ids);
+
+        
 
 
         if ($request->filled('project_id')) {

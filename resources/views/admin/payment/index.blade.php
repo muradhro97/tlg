@@ -95,6 +95,34 @@
                     </div>
                 </div>
 
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label" for="amount_from">{{trans('main.amount_from')}}</label>
+                        <div class="input-group clockpicker" data-autoclose="true">
+                            <input type="number" step="0.01" name="amount_from" class="form-control"
+                                   placeholder="{{trans('main.amount_from')}}" value="{{old('amount_from')}}">
+                            <span class="input-group-addon">
+                                <span class="fa fa-usd"></span>
+                            </span>
+                        </div>
+                        {{--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">--}}
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label" for="amount_to">{{trans('main.amount_to')}}</label>
+                        <div class="input-group clockpicker" data-autoclose="true">
+                            <input type="number" step="0.01" name="amount_to" class="form-control"
+                                   placeholder="{{trans('main.amount_to')}}" value="{{old('amount_to')}}">
+                            <span class="input-group-addon">
+                                <span class="fa fa-usd"></span>
+                            </span>
+                        </div>
+                        {{--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">--}}
+                    </div>
+                </div>
+
             </div>
             <div class="clearfix"></div>
             <div class="row">

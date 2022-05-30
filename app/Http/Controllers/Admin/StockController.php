@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Accounting;
-use App\Http\Controllers\Controller;
-
 use App\Item;
-use App\Item_quantity;
-use App\PusherNotification;
 use App\Safe;
-use App\SafeTransaction;
 
-
-use App\StockTransaction;
 use App\User;
+use App\Accounting;
+use App\Item_quantity;
+use App\SafeTransaction;
+use App\StockTransaction;
+
+
+use App\PusherNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 
 class StockController extends Controller
@@ -33,6 +34,10 @@ class StockController extends Controller
         $rows = Accounting::where('stock_status', 'waiting')
             ->where('manager_status', 'accept')
             ->where('type', 'invoice');
+
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
+        $rows->whereIn('project_id',$product_ids);
 
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
