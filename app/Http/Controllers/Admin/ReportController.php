@@ -8,6 +8,8 @@ use App\Employee;
 use App\Accounting;
 use App\Organization;
 use App\AccountingDetail;
+use App\Project;
+use App\SafeTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -147,10 +149,10 @@ class ReportController extends Controller
     }
 
     public function directExtracts(Request $request){
-        
+
         $user=Auth::user();
         $product_ids=$user->projects()->select('project_id');
-        
+
         $rows = Extract::whereHas('organization',function ($query){
             return $query->where('type','subContractor');
         })->latest();
@@ -183,7 +185,7 @@ class ReportController extends Controller
     }
 
     public function indirectCost(Request $request){
-        
+
 
         $user=Auth::user();
         $product_ids=$user->projects()->select('project_id');
@@ -246,7 +248,7 @@ class ReportController extends Controller
             $query->whereIn('project_id' , $product_ids);
         })->latest();
 
-        
+
         // $rows->whereIn('project_id',$product_ids);
 
         if ($request->filled('from')) {
@@ -285,7 +287,7 @@ class ReportController extends Controller
             $query->whereIn('project_id' , $product_ids);
         });
 
-        
+
         // $rows->whereIn('project_id',$product_ids);
 
 
@@ -372,7 +374,7 @@ class ReportController extends Controller
     public function cashIn(Request $request){
         $user=Auth::user();
         $product_ids=$user->projects()->select('project_id');
-        
+
         $funding_rows = Accounting::cashin()->whereHas('organization',function ($query){
             return $query->where('type','mainContractor');
         });
@@ -507,4 +509,111 @@ class ReportController extends Controller
         }
         return view('admin.report.organizations.details', compact('extracts','rows','organization'));
     }
+
+    public function human_resources(Request $request){
+        $projects = Project::query();
+        if ($request->filled('project_id'))
+        {
+            $projects->where('id',$request->project_id);
+        }
+
+        $projects->with(['employeeTimeSheets' => function ($query)use ($request){
+            if ($request->filled('organization_id'))
+            {
+                $query->whereHas('employee',function ($query) use ($request){
+                    $query->where('organization_id',$request->organization_id);
+                });
+            }
+            if ($request->filled('job_id'))
+            {
+                $query->whereHas('employee',function ($query) use ($request){
+                    $query->where('job_id',$request->job_id);
+                });
+            }
+            if ($request->filled('from')) {
+                $query->where('date', '>=', $request->from);
+            }
+            if ($request->filled('to')) {
+                $query->where('date', '<=', $request->to);
+            }
+            if ($request->filled('attendance'))
+            {
+                $query->where('attendance',$request->attendance);
+            }
+            return $query;
+        }]);
+
+        $projects->with(['workerTimeSheets' => function ($query)use ($request){
+            if ($request->filled('organization_id'))
+            {
+                $query->whereHas('worker',function ($query) use ($request){
+                    $query->where('organization_id',$request->organization_id);
+                });
+            }
+            if ($request->filled('job_id'))
+            {
+                $query->whereHas('worker',function ($query) use ($request){
+                    $query->where('job_id',$request->job_id);
+                });
+            }
+            if ($request->filled('from')) {
+                $query->where('date', '>=', $request->from);
+            }
+            if ($request->filled('to')) {
+                $query->where('date', '<=', $request->to);
+            }
+            if ($request->filled('attendance'))
+            {
+                $query->where('attendance',$request->attendance);
+            }
+            return $query;
+        }]);
+
+        $rows = $projects->get()->map(function ($project){
+            $project->employees_count = $project->employeeTimeSheets->count();
+            $project->worker_count = $project->workerTimeSheets->count();
+            return $project;
+        });
+
+        return view('admin.report.human_resources.index', compact('rows'));
+    }
+
+    public function safe(Request $request){
+        $safe_transactions = SafeTransaction::query();
+        $safe_transactions->where(function ($query){
+            return $query->whereHas('accounting',function ($query){
+                return $query->whereIn('type',['cashin','cashout']);
+            })->orWhereHas('payment',function ($query){
+                return $query->where('type','custody');
+            });
+        });
+
+        $from = $request->from;
+        $to = $request->to;
+        $safe_transactions->when($from,function ($query)use ($from){
+            return $query->whereDate('safe_transactions.created_at', '>=', $from);
+        });
+
+        $safe_transactions->when($to,function ($query)use ($to){
+            return $query->whereDate('safe_transactions.created_at', '<=', $to);
+        });
+
+
+        $safe_transactions = $safe_transactions->get();
+        return view('admin.report.safe.index', compact('safe_transactions'));
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,5 +16,12 @@ class Project extends Model
 
     protected $guarded = ['id'];
 
+    public function employeeTimeSheets(){
+        return $this->hasManyThrough(EmployeeTimeSheet::class,Employee::class);
+    }
+
+    public function workerTimeSheets(){
+        return $this->hasManyThrough(WorkerTimeSheet::class,Worker::class);
+    }
 
 }

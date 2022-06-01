@@ -227,7 +227,7 @@
                         <th>{{trans('main.module') }}</th>
                         <th>{{trans('main.type') }}</th>
                         <th>{{trans('main.amount') }}</th>
-                        <th>{{trans('main.safe') }}</th>
+{{--                        <th>{{trans('main.safe') }}</th>--}}
                         {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
                         {{--<th data-hide="all" >{{trans('main.organization') }}</th>--}}
                         {{--<th data-hide="all" >{{trans('main.project') }}</th>--}}
@@ -257,7 +257,7 @@
                                 <td>{{$row->module}}</td>
                                 <td>{{ $row->accounting->type ?? ''}}</td>
                                 <td>{{$row->amount}}</td>
-                                <td>{{ $row->parent->type ?? ''}}</td>
+{{--                                <td>{{ $row->parent->type ?? ''}}</td>--}}
                                 {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->organization->name ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->project->name ?? ''}}</td>--}}

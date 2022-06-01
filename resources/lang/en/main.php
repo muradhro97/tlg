@@ -543,6 +543,9 @@ return [
     'extract_value' => 'Extract Value',
     'amount_from'=>'Amount From',
     'amount_to'=>'Amount To',
+    'Employee Attendance Count'=>'Employee Attendance Count',
+    'Worker Attendance Count'=>'Worker Attendance Count',
+    'Human Resources'=>'Human Resources',
 
 
 ];

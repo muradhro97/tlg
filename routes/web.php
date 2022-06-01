@@ -273,6 +273,10 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
 
     Route::get('reports/cash_in' , 'Admin\ReportController@cashIn');
 
+    Route::get('reports/human_resources' , 'Admin\ReportController@human_resources');
+
+    Route::get('reports/safe' , 'Admin\ReportController@safe');
+
     Route::get('reports/employee_loans' , 'Admin\ReportController@employeeLoans');
     Route::get('reports/worker_loans' , 'Admin\ReportController@workerLoans');
 
