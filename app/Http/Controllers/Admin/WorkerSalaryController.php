@@ -81,7 +81,7 @@ class WorkerSalaryController extends Controller
 
     public function create(Request $request)
     {
-//        return "asa";
+    //    return "asa";
         $model = new Accounting();
         $projects = auth()->user()->projects->pluck('id')->toArray();
 //        $from = Carbon::parse($request->from);

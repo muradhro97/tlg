@@ -9,7 +9,7 @@
 @inject('organization','App\Organization')
 @inject('project','App\Project')
 @inject('contractType','App\ContractType')
-@inject('subContract','App\SubContract')
+@inject('Contract','App\Contract')
 
 
 
@@ -23,7 +23,7 @@ $organizations = $organization->where('type','mainContractor')->latest()->pluck(
 $projects = $project->latest()->whereIn('id', auth()->user()->projects->pluck('id')->toArray())->pluck('name', 'id')->toArray();
 $contractTypes = $contractType->latest()->pluck('name', 'id')->toArray();
 
-$subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
+$Contracts = $Contract->latest()->pluck('no', 'id')->toArray();
 ?>
     <div class="ibox ibox-primary">
         <div class="ibox-title">
@@ -79,7 +79,7 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="control-label" for="type_id">{{trans('main.contract')}}</label>
-                        {{Form::select('contract_id', $subContracts, request()->contract_id, [
+                        {{Form::select('contract_id', $Contracts, request()->contract_id, [
                             "class" => "form-control select2 " ,
                             "id" => "contract_id",
                             "placeholder" => trans('main.contract')
@@ -93,12 +93,45 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                         <input type="date" id="date" name="date" value="" placeholder="{{trans('main.date')}}" class="form-control">
                     </div>
                 </div>
-                <div class="col-sm-3">
+                {{-- <div class="col-sm-3">
                     <div class="form-group">
                         <label class="control-label" for="total">{{trans('main.contract_value')}}</label>
                         <input type="text" id="total" name="total" value="" placeholder="{{trans('main.contract_value')}}" class="form-control">
                     </div>
+                </div> --}}
+
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label" for="amount_from">{{trans('main.amount_from')}}</label>
+                        <div class="input-group clockpicker" data-autoclose="true">
+                            <input type="number" step="0.01" name="amount_from" class="form-control"
+                                   placeholder="{{trans('main.amount_from')}}" value="{{old('amount_from')}}">
+                            <span class="input-group-addon">
+                                <span class="fa fa-usd"></span>
+                            </span>
+                        </div>
+                        {{--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">--}}
+                    </div>
                 </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label" for="amount_to">{{trans('main.amount_to')}}</label>
+                        <div class="input-group clockpicker" data-autoclose="true">
+                            <input type="number" step="0.01" name="amount_to" class="form-control"
+                                   placeholder="{{trans('main.amount_to')}}" value="{{old('amount_to')}}">
+                            <span class="input-group-addon">
+                                <span class="fa fa-usd"></span>
+                            </span>
+                        </div>
+                        {{--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">--}}
+                    </div>
+                </div>
+
+
+
+
             </div>
             <div class="clearfix"></div>
             <div class="row">
@@ -152,7 +185,7 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                         <th>{{trans('main.period_from') }}</th>
                         <th>{{trans('main.period_to') }}</th>
                         <th>{{trans('main.extract_value') }}</th>
-
+                        <th>{{trans('main.number') }}</th>
 
                         <th>{{trans('main.options') }}</th>
 
@@ -181,7 +214,7 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                                 <td>{{$row->period_from}}</td>
                                 <td>{{$row->period_to}}</td>
                                 <td>{{number_format($row->total,2)}}</td>
-
+                                <td>{{$row->number}}</td>
                                 <td>
 
                                     <a  style="margin: 2px;" type="button" href="{{url('admin/extract/'.$row->id)}}"

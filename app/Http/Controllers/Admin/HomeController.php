@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Worker;
 use App\Contract;
 use App\Employee;
 use App\SubContract;
-use App\Worker;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Permission;
 
@@ -42,9 +43,12 @@ class HomeController extends Controller
 
 
 //        return "done";
+        $user=Auth::user();
+        $product_ids=$user->projects()->select('project_id');
         $worker_by_projects = Worker::Query()
             ->join('projects', 'projects.id', '=', 'workers.project_id')
             ->select('projects.name', 'project_id', DB::raw('count(*) as total'))
+            ->whereIn('project_id',$product_ids)
             ->groupBy('project_id')
             ->get();
         $worker_by_jobs = Worker::Query()
@@ -57,6 +61,7 @@ class HomeController extends Controller
         $today_worker_by_projects = Worker::Query()
             ->join('projects', 'projects.id', '=', 'workers.project_id')
             ->select('projects.name', 'project_id', DB::raw('count(*) as total'))
+            ->whereIn('project_id',$product_ids)
             ->groupBy('project_id')
             ->where('workers.created_at',today())
             ->get();
@@ -70,6 +75,7 @@ class HomeController extends Controller
         $employee_by_projects = Employee::Query()
             ->join('projects', 'projects.id', '=', 'employees.project_id')
             ->select('projects.name', 'project_id', DB::raw('count(*) as total'))
+            ->whereIn('project_id',$product_ids)
             ->groupBy('project_id')
             ->get();
         $employee_by_jobs = Employee::Query()

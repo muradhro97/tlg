@@ -396,7 +396,7 @@ class WorkerTimeSheetController extends Controller
                 }
                 if ($request->attendance == "yes") {
 
-                    $additions = $request->overtime * $hourly_salary;
+                    $additions = ($request->overtime+$request->additional_overtime) * $hourly_salary;
                     $discounts = (($request->deduction_hrs + $request->safety) * $hourly_salary) + $request->deduction_value;
                     $total = $daily_salary + $additions - $discounts;
                 } else {
@@ -404,7 +404,7 @@ class WorkerTimeSheetController extends Controller
                     $deduction_hrs = null;
                     $deduction_value = null;
                     $safety = null;
-                    $additions = $request->overtime * $hourly_salary;
+                    $additions = ($request->overtime+$request->additional_overtime) * $hourly_salary;
                     $discounts = (($request->deduction_hrs + $request->safety) * $hourly_salary) + $request->deduction_value;
                     $total = $additions - $discounts;
                 }
@@ -418,6 +418,7 @@ class WorkerTimeSheetController extends Controller
                     'daily_salary' => $daily_salary,
                     'attendance' => $request->attendance,
                     'overtime' => $request->overtime,
+                    'additional_overtime'=>$request->additional_overtime,
                     'deduction_hrs' => $request->deduction_hrs,
                     'deduction_value' => $request->deduction_value,
                     'safety' => $request->safety,

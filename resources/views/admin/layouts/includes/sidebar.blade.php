@@ -20,10 +20,13 @@
                 </div>
             </li>
 
+            @can('homeReport')
             <li class="@if(request()->is('admin')) active @endif">
                 <a href="{{url('/admin')}}"><i class="fa fa-home"></i> <span
                         class="nav-label">{{trans('main.home')}}</span></a>
             </li>
+            @endcan
+            
             @canany(['allEmp','allWor','addWorTime','historyWorTime','addEmpTime','historyEmpTime','allEmpApp','allWorApp'])
 
                 <li>

@@ -74,14 +74,15 @@ class EmployeeSalaryController extends Controller
         $model = new Accounting();
         $projects = auth()->user()->projects->pluck('id')->toArray();
 
-        if ($request->filled('date')) {
-            $date = $request->date;
-//            $from = Carbon::parse($request->from);
-//            $to = Carbon::parse($request->to);
-//            if ($from->greaterThan($to)) {
-////             dd(456);
-//                return back()->withErrors(trans('main.from_date_must_be_greater_than_to_date'))->withInput();
-//            }
+        if ($request->filled('from') and $request->filled('to')) {
+
+            $from = Carbon::parse($request->from);
+            $to = Carbon::parse($request->to);
+            if ($from->greaterThan($to)) {
+//             dd(456);
+                return back()->withErrors(trans('main.from_date_must_be_greater_than_to_date'))->withInput();
+            }
+
             $rows = Employee::latest()->where('working_status', 'work')
                 ->whereIn('project_id', $projects);
             if ($request->filled('project_id')) {
@@ -106,11 +107,15 @@ class EmployeeSalaryController extends Controller
 
             }
 
-            $rows->whereHas('employeeTimeSheet', function ($q) use ($date) {
-//                $q->whereMonth('date', [$from, $to])->whereNull('accounting_id');
-                $q->whereMonth('date', Carbon::parse($date))
-                    ->whereYear('date', Carbon::parse($date))
-                    ->whereNull('accounting_id')->where('attendance', '!=', 'no');
+//             $rows->whereHas('employeeTimeSheet', function ($q) use ($date) {
+// //                $q->whereMonth('date', [$from, $to])->whereNull('accounting_id');
+//                 $q->whereMonth('date', Carbon::parse($date))
+//                     ->whereYear('date', Carbon::parse($date))
+//                     ->whereNull('accounting_id')->where('attendance', '!=', 'no');
+//             });
+
+            $rows->whereHas('employeeTimeSheet', function ($q) use ($from, $to) {
+                $q->whereBetween('date', [$from, $to])->whereNull('accounting_id')->where('attendance', 'yes');
             });
 
             $rows = $rows->get();
@@ -138,6 +143,7 @@ class EmployeeSalaryController extends Controller
         $rules = [
 
             'date' => 'required|date|date_format:F Y',
+            // 'date_to' => 'required|date|date_format:F Y',
 //            'amount' => 'required|numeric|min:0',
             'safe_id' => 'required|exists:safes,id',
         ];
@@ -166,6 +172,7 @@ class EmployeeSalaryController extends Controller
             $row = Accounting::create([
 
                 'date' => Carbon::parse($request->date),
+                // 'date_to' => Carbon::parse($request->date_to),
 //                'end' => $request->end,
 //                'amount' => $request->amount,
 

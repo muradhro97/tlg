@@ -68,6 +68,16 @@ class ExtractController extends Controller
             $rows->where('total', $request->total);
         }
 
+        if($request->filled('amount_from'))
+        {
+             $rows->where('total','>=', $request->amount_from);
+        }
+
+        if($request->filled('amount_to'))
+        {
+             $rows->where('total','<=', $request->amount_to);
+        }
+
         $rows = $rows->paginate(20);
 
         return view('admin.extract.index', compact('rows'));
@@ -106,6 +116,15 @@ class ExtractController extends Controller
         if ($request->filled('total')) {
             $rows->where('total', $request->total);
         }
+        if($request->filled('amount_from'))
+        {
+            $rows->where('total','<=', $request->amount_from);
+        }
+
+        if($request->filled('amount_to'))
+        {
+            $rows->where('total','>=', $request->amount_to);
+        }
 
         $rows = $rows->paginate(20);
 
@@ -135,6 +154,7 @@ class ExtractController extends Controller
             'date' => 'required|date|date_format:Y-m-d',
 //            'project_id' => 'required|exists:projects,id',
             'sub_contract_id' => 'required',
+            'number' => 'required',
             'organization_id' => 'required|exists:organizations,id',
             'period_from' => 'required|date|date_format:Y-m-d',
             'period_to' => 'required|date||date_format:Y-m-d|after:period_from',
@@ -174,7 +194,7 @@ class ExtractController extends Controller
             $row = Extract::create([
 
                 'date' => $request->date,
-
+                'number'=>$request->number,
                 'sub_contract_id' => $parent_id,
                 'organization_id' => $request->organization_id,
                 'project_id' => $project_id,

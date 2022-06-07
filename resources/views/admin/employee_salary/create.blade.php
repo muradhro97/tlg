@@ -99,17 +99,18 @@
 
             </div>
             <div class="row">
+
                 <div class="col-sm-3">
                     <div class="form-group "
                          id="start_date_wrap">
-                        <label for="date"> {{trans('main.date')}}</label>
+                        <label for="filter-from"> {{trans('main.from')}}</label>
 
                         {{--<input type="text" class="form-control">--}}
                         <div class="input-group date ">
-                            {{Form::text('date', request()->date, [
-                                            "placeholder" => trans('main.date'),
-                                            "class" => "form-control datepicker2",
-
+                            {{Form::text('from', request()->from, [
+                                            "placeholder" => trans('main.from'),
+                                            "class" => "form-control",
+                                            "id" => 'filter-from'
                                         ]) }}
                             {{--<input type="text" name="start_date" class="  form-control" id="filter-from"--}}
                             {{--value="" placeholder="من">--}}
@@ -119,6 +120,27 @@
 
                     </div>
                 </div>
+                <div class="col-sm-3">
+                    <div class="form-group"
+                         id="finish_date_wrap">
+                        <label for="filter-to">{{trans('main.to')}}</label>
+
+                        {{--<input type="text" class="form-control">--}}
+                        <div class="input-group date ">
+                            {{Form::text('to',  request()->to, [
+                                                          "placeholder" => trans('main.to'),
+                                                          "class" => "form-control",
+                                                          "id" => 'filter-to'
+                                                      ]) }}
+                            {{--<input type="text" name="finish_date" class="  form-control" id="filter-to"--}}
+                            {{--value="" placeholder="الى">--}}
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+
+
+                    </div>
+                </div>
+
                 {{--<div class="col-sm-3">--}}
                 {{--<div class="form-group"--}}
                 {{--id="finish_date_wrap">--}}

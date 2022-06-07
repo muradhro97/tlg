@@ -986,6 +986,14 @@
                     <h3 class="heading">{{trans('main.reports')}}</h3>
                     <ul class="list-unstyled permission-ul">
                         <li>
+                            <input type="checkbox" id="homeReport" name="per[]" value="homeReport"
+                                   @if(in_array('homeReport',$permissions)) checked @endif
+                            >
+                            <label for="homeReport">
+                                {{trans('main.home_report')}}
+                            </label>
+                        </li>
+                        <li>
                             <input type="checkbox" id="cashInReport" name="per[]" value="cashInReport"
                                    @if(in_array('cashInReport',$permissions)) checked @endif
                             >
