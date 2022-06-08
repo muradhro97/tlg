@@ -212,6 +212,7 @@
                         {{--<th>{{trans('main.productivity') }}</th>--}}
                         {{--<th>{{trans('main.unit_price') }}</th>--}}
                         <th>{{trans('main.overtime') }}</th>
+                        <th>{{trans('main.overtime') }} 2</th>
                         <th>{{trans('main.deduction_hrs') }}</th>
                         <th>{{trans('main.deduction_value') }}</th>
                         <th>{{trans('main.safety') }}</th>
@@ -249,6 +250,7 @@
                                 {{--<td>{{$row->productivity}}</td>--}}
                                 {{--<td>{{$row->unit_price}}</td>--}}
                                 <td>{{$row->overtime}}</td>
+                                <td>{{$row->additional_overtime}}</td>
                                 <td>{{$row->deduction_hrs}}</td>
                                 <td>{{$row->deduction_value}}</td>
                                 <td>{{$row->safety}}</td>

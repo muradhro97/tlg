@@ -43,9 +43,7 @@ class ReportController extends Controller
             });
         }
         if ($request->filled('project_id')) {
-            $rows->whereHas('worker', function ($q) use ($request){
-                $q->where('project_id' , $request->project_id);
-            });
+            $rows->where('project_id' , $request->project_id);
         }
         $salaries = $rows->sum('total');
 
@@ -114,9 +112,7 @@ class ReportController extends Controller
         }
 
         if ($request->filled('project_id')) {
-            $rows->whereHas('worker', function ($q) use ($request){
-                $q->where('project_id' , $request->project_id);
-            });
+            $rows->where('project_id' , $request->project_id);
         }
 
         $rows = $rows->get();
@@ -205,9 +201,7 @@ class ReportController extends Controller
         }
 
         if ($request->filled('project_id')) {
-            $rows->whereHas('employee', function ($q) use ($request){
-                $q->where('project_id' , $request->project_id);
-            });
+            $rows->where('project_id' , $request->project_id);
         }
 
         $rows = $rows->get();
@@ -260,9 +254,7 @@ class ReportController extends Controller
         }
 
         if ($request->filled('project_id')) {
-            $rows->whereHas('employee', function ($q) use ($request){
-                $q->where('project_id' , $request->project_id);
-            });
+            $rows->where('project_id' , $request->project_id);
         }
 
         $rows = $rows->get();

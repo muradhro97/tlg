@@ -26,6 +26,16 @@
     </div>
     <div class="col-sm-2">
         <div class="form-group">
+            <label class="control-label" for="additional_overtime">{{trans('main.overtime')}}2</label>
+            {{Form::text('additional_overtime', null, [
+        "placeholder" => trans('main.overtime'),
+        "class" => "form-control floatonly",
+        "id" => 'additional_overtime' ])}}
+            <span class="help-block text-danger"><strong></strong></span>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="form-group">
             <label class="control-label" for="deduction_hrs">{{trans('main.deduction_hrs')}}</label>
             {{Form::text('deduction_hrs', null, [
         "placeholder" => trans('main.deduction_hrs'),

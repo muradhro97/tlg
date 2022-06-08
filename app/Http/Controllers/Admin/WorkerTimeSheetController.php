@@ -504,7 +504,7 @@ class WorkerTimeSheetController extends Controller
             $row = WorkerTimeSheet::find($id);
             if ($request->attendance == "yes") {
 //                dd( $request->all());
-                $additions = $request->overtime * $row->hourly_salary;
+                $additions = ($request->overtime + $request->additional_overtime) * $row->hourly_salary;
                 $discounts = (($request->deduction_hrs + $request->safety) * $row->hourly_salary) + $request->deduction_value;
                 $total = $row->daily_salary + $additions - $discounts;
             } else {
@@ -513,7 +513,7 @@ class WorkerTimeSheetController extends Controller
                 $deduction_hrs = null;
                 $deduction_value = null;
                 $safety = null;
-                $additions = $request->overtime * $row->hourly_salary;
+                $additions = ($request->overtime + $request->additional_overtime) * $row->hourly_salary;
                 $discounts = (($request->deduction_hrs + $request->safety) * $row->hourly_salary) + $request->deduction_value;
                 $total = $additions - $discounts;
             }
@@ -527,6 +527,7 @@ class WorkerTimeSheetController extends Controller
 
                 'attendance' => $request->attendance,
                 'overtime' => $request->overtime,
+                'additional_overtime'=>$request->additional_overtime,
                 'deduction_hrs' => $request->deduction_hrs,
                 'deduction_value' => $request->deduction_value,
                 'safety' => $request->safety,

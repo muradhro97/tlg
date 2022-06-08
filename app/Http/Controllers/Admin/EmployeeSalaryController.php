@@ -231,6 +231,7 @@ class EmployeeSalaryController extends Controller
                 AccountingEmployeeSalaryDetail::create([
 
                     'employee_id' => $employee->id,
+                    'project_id' => $employee->project_id,
                     'accounting_id' => $row->id,
                     'days' => $timesheet->count(),
                     'hourly_salary' => $employee->hourly_salary,

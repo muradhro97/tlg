@@ -102,7 +102,8 @@ class WorkerSalaryController extends Controller
 //             dd(456);
                 return back()->withErrors(trans('main.from_date_must_be_greater_than_to_date'))->withInput();
             }
-            $rows = Worker::latest()->where('working_status', 'work')
+            $rows = Worker::latest()
+//                ->where('working_status', 'work')
                 ->whereIn('project_id', $projects);
             if ($request->filled('project_id')) {
                 $rows->where('project_id', $request->project_id);
@@ -207,7 +208,8 @@ class WorkerSalaryController extends Controller
             $end = Carbon::parse($request->end);
 //            $days = $start->diffInDays($end) + 1;
             $projects = auth()->user()->projects->pluck('id')->toArray();
-            $workers = Worker::latest()->where('working_status', 'work')
+            $workers = Worker::latest()
+//                ->where('working_status', 'work')
                 ->whereIn('id', $request->ids)
                 ->whereIn('project_id', $projects);
             $workers->whereHas('workerTimeSheet', function ($q) use ($start, $end) {
@@ -235,7 +237,7 @@ class WorkerSalaryController extends Controller
 
                         if ($item->attendance == "yes") {
 
-                            $additions = $item->overtime * $hourly_salary;
+                            $additions = ($item->overtime+$item->additional_overtime) * $hourly_salary;
                             $discounts = (($item->deduction_hrs + $item->safety) * $hourly_salary) + $item->deduction_value;
                             $total = $daily_salary + $additions - $discounts;
                         } else {
@@ -243,7 +245,7 @@ class WorkerSalaryController extends Controller
                             $deduction_hrs = null;
                             $deduction_value = null;
                             $safety = null;
-                            $additions = $item->overtime * $hourly_salary;
+                            $additions = ($item->overtime+$item->additional_overtime) * $hourly_salary;
                             $discounts = (($item->deduction_hrs + $item->safety) * $hourly_salary) + $item->deduction_value;
                             $total = $additions - $discounts;
                         }
@@ -270,10 +272,12 @@ class WorkerSalaryController extends Controller
 //                dd($net);
                 AccountingWorkerSalaryDetail::create([
                     'worker_id' => $worker->id,
+                    'project_id' => $worker->project_id,
                     'accounting_id' => $row->id,
                     'days' => $timesheet->count(),
                     'daily_salary' => $timesheet->sum('daily_salary'),
                     'overtime' => $timesheet->sum('overtime'),
+                    'additional_overtime' => $timesheet->sum('additional_overtime'),
                     'additions' => $timesheet->sum('additions'),
                     'deduction_hrs' => $timesheet->sum('deduction_hrs'),
                     'deduction_value' => $timesheet->sum('deduction_value'),
