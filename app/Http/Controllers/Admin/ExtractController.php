@@ -253,7 +253,6 @@ class ExtractController extends Controller
 
     }
 
-
     public function mainStore(Request $request)
     {
         //
@@ -301,9 +300,8 @@ class ExtractController extends Controller
                 $extract_no = 1;
             }
             $row = Extract::create([
-
                 'date' => $request->date,
-
+                'number' => $request->number,
                 'contract_id' => $parent_id,
                 'organization_id' => $request->organization_id,
                 'project_id' => $project_id,
@@ -362,14 +360,12 @@ class ExtractController extends Controller
 
     }
 
-
     public function show($id)
     {
 //        return "asa";
         $row = Extract::find($id);
         return view('admin.extract.show', compact('row'));
     }
-
 
     public static function addImage($image, $id, $path)
     {
@@ -410,6 +406,7 @@ class ExtractController extends Controller
 
         return view('admin.extract.edit_extract', compact('model','itemsJs'));
     }
+
     public function update(Request $request , Extract $extract)
     {
         //
@@ -455,7 +452,7 @@ class ExtractController extends Controller
             $row->update([
 
                 'date' => $request->date,
-
+                'number' => $request->number,
                 'sub_contract_id' => $parent_id,
                 'organization_id' => $request->organization_id,
                 'project_id' => $project_id,
@@ -567,7 +564,7 @@ class ExtractController extends Controller
             $row->update([
 
                 'date' => $request->date,
-
+                'number' => $request->number,
                 'contract_id' => $parent_id,
                 'organization_id' => $request->organization_id,
                 'project_id' => $project_id,

@@ -163,7 +163,9 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                     <table class="data-table table table-bordered  print_table">
                         <thead>
                         <th>#</th>
-{{--                        <th>{{trans('main.transaction_no') }}</th>--}}
+                        <th>{{trans('main.number') }}</th>
+
+                        {{--                        <th>{{trans('main.transaction_no') }}</th>--}}
                         <th>{{trans('main.date') }}</th>
                         <th>{{trans('main.sub_contract') }}</th>
                         <th>{{trans('main.contract_type') }}</th>
@@ -188,7 +190,9 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                             ?>
                             <tr>
                                 <td>{{$iteration}}</td>
-{{--                                <td>{{$row->id}}</td>--}}
+                                <td>{{$row->number}}</td>
+
+                                {{--                                <td>{{$row->id}}</td>--}}
                                 <td>{{$row->date}}</td>
                                 <td>{{$row->subContract->no ?? ''}}</td>
 
