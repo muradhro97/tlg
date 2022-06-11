@@ -63,11 +63,7 @@ class EmployeeSalaryController extends Controller
         return view('admin.employee_salary.index', compact('rows'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create(Request $request)
     {
 //        return "asa";
@@ -79,32 +75,25 @@ class EmployeeSalaryController extends Controller
             $from = Carbon::parse($request->from);
             $to = Carbon::parse($request->to);
             if ($from->greaterThan($to)) {
-//             dd(456);
                 return back()->withErrors(trans('main.from_date_must_be_greater_than_to_date'))->withInput();
             }
 
-            $rows = Employee::latest()->where('working_status', 'work')
+            $rows = Employee::latest()
                 ->whereIn('project_id', $projects);
             if ($request->filled('project_id')) {
                 $rows->where('project_id', $request->project_id);
-
-
             }
+
             if ($request->filled('organization_id')) {
                 $rows->where('organization_id', $request->organization_id);
-
-
             }
+
             if ($request->filled('department_id')) {
                 $rows->where('department_id', $request->department_id);
-
-
             }
 
             if ($request->filled('job_id')) {
                 $rows->where('job_id', $request->job_id);
-
-
             }
 
 //             $rows->whereHas('employeeTimeSheet', function ($q) use ($date) {
@@ -115,7 +104,7 @@ class EmployeeSalaryController extends Controller
 //             });
 
             $rows->whereHas('employeeTimeSheet', function ($q) use ($from, $to) {
-                $q->whereBetween('date', [$from, $to])->whereNull('accounting_id')->where('attendance', 'yes');
+                $q->whereBetween('date', [$from, $to])->whereNull('accounting_id')->where('attendance', '!=', 'no');
             });
 
             $rows = $rows->get();
@@ -192,7 +181,8 @@ class EmployeeSalaryController extends Controller
 //            $end = Carbon::parse($request->end);
 //            $days = $start->diffInDays($end) + 1;
             $projects = auth()->user()->projects->pluck('id')->toArray();
-            $employees = Employee::latest()->where('working_status', 'work')
+            $employees = Employee::latest()
+//                ->where('working_status', 'work')
                 ->whereIn('id', $request->ids)
                 ->whereIn('project_id', $projects);
             $employees->whereHas('employeeTimeSheet', function ($q) use ($date) {

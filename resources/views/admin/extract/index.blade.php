@@ -89,8 +89,14 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="control-label" for="date">{{trans('main.date')}}</label>
-                        <input type="date" id="date" name="date" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                        <label class="control-label" for="date">{{trans('main.from')}}</label>
+                        <input type="date" id="date" name="date_from" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label" for="date">{{trans('main.to')}}</label>
+                        <input type="date" id="date" name="date_to" value="" placeholder="{{trans('main.date')}}" class="form-control">
                     </div>
                 </div>
                 <div class="col-sm-3">

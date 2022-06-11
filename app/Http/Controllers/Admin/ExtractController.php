@@ -60,12 +60,11 @@ class ExtractController extends Controller
             $rows->where('sub_contract_id', $request->sub_contract_id);
         }
 
-        if ($request->filled('date')) {
-            $rows->where('date', $request->date);
+        if ($request->filled('date_from')) {
+            $rows->where('date','>=', $request->date_from);
         }
-
-        if ($request->filled('total')) {
-            $rows->where('total', $request->total);
+        if ($request->filled('date_to')) {
+            $rows->where('date','<=', $request->date_to);
         }
 
         if($request->filled('amount_from'))
@@ -109,8 +108,11 @@ class ExtractController extends Controller
             $rows->where('contract_id', $request->contract_id);
         }
 
-        if ($request->filled('date')) {
-            $rows->where('date', $request->date);
+        if ($request->filled('date_from')) {
+            $rows->where('date','>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $rows->where('date','<=', $request->date_to);
         }
 
         if ($request->filled('total')) {
@@ -118,12 +120,12 @@ class ExtractController extends Controller
         }
         if($request->filled('amount_from'))
         {
-            $rows->where('total','<=', $request->amount_from);
+            $rows->where('total','>=', $request->amount_from);
         }
 
         if($request->filled('amount_to'))
         {
-            $rows->where('total','>=', $request->amount_to);
+            $rows->where('total','<=', $request->amount_to);
         }
 
         $rows = $rows->paginate(20);
