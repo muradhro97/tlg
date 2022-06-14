@@ -155,7 +155,7 @@ class EmployeeSalaryController extends Controller
         try {
             $row = Accounting::create([
 
-                'date' => Carbon::parse($request->date),
+                'date' => Carbon::parse($request->date_to),
                 'start' => $request->date,
                 'end' => $request->date_to,
 //                'amount' => $request->amount,
