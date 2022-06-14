@@ -125,9 +125,6 @@ class EmployeeSalaryController extends Controller
 
     public function store(Request $request)
     {
-        //
-//        return $items = json_decode($request->items);
-    //    return $request->all();
 
         $rules = [
 
@@ -137,9 +134,7 @@ class EmployeeSalaryController extends Controller
             'safe_id' => 'required|exists:safes,id',
         ];
 
-
         $validator = validator()->make($request->all(), $rules);
-
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -161,33 +156,28 @@ class EmployeeSalaryController extends Controller
             $row = Accounting::create([
 
                 'date' => Carbon::parse($request->date),
-                'date_to' => Carbon::parse($request->date_to),
-//                'end' => $request->end,
+                'start' => $request->date,
+                'end' => $request->date_to,
 //                'amount' => $request->amount,
-
                 'type' => 'employeeSalary',
 //                    'module' => 'accounting',
                 'safe_id' => $request->safe_id,
-
-
                 'details' => $request->details,
                 'payment_status' => "waiting",
                 'manager_status' => "waiting",
-
-
             ]);
+
             $date = Carbon::parse($request->date);
+            $date_to = Carbon::parse($request->date_to);
 //            $start = Carbon::parse($request->start);
 //            $end = Carbon::parse($request->end);
 //            $days = $start->diffInDays($end) + 1;
             $projects = auth()->user()->projects->pluck('id')->toArray();
             $employees = Employee::latest()
-//                ->where('working_status', 'work')
                 ->whereIn('id', $request->ids)
                 ->whereIn('project_id', $projects);
-            $employees->whereHas('employeeTimeSheet', function ($q) use ($date) {
-                $q->whereMonth('date', $date)
-                    ->whereYear('date', $date)
+            $employees->whereHas('employeeTimeSheet', function ($q) use ($date,$date_to) {
+                $q->whereBetween('date', [$date,$date_to])
                     ->whereNull('accounting_id');
 
             });
@@ -196,16 +186,15 @@ class EmployeeSalaryController extends Controller
 
             $sum_net = 0;
             foreach ($employees as $employee) {
-                $timesheet = $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereMonth('date', $date)
-                    ->whereYear('date', $date)->whereNull('accounting_id')->get();
-                $penalty = $employee->penalty()->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('amount');
+                $timesheet = $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->get();
+                $penalty = $employee->penalty()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('amount');
                 $allowances = $employee->meals + $employee->communications + $employee->transports;
                 $deductions = $penalty + $employee->taxes + $employee->insurance;
 
-                $total = $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('total_daily');
-                $rewards = $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('reward');
+                $total = $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('total_daily');
+                $rewards = $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('reward');
 
-                $loans = $employee->loans()->whereMonth('date', '<=', $date)->whereNull('accounting_id')->sum('amount');
+                $loans = $employee->loans()->whereMonth('date', '<=', $date_to)->whereNull('accounting_id')->sum('amount');
 
                 if ($request->loans[$employee->id] > $loans || $request->loans[$employee->id] < 0) {
                     throw new \ErrorException('Max Loan Of ' . $employee->name . ' is ' . $loans);
@@ -213,7 +202,7 @@ class EmployeeSalaryController extends Controller
 
                 $loans_request = $request->loans[$employee->id];
 
-                $monthly_evaluation = $employee->employeeMonthlyEvaluation()->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('amount');
+                $monthly_evaluation = $employee->employeeMonthlyEvaluation()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('amount');
 
                 $net = $total + $rewards + $allowances - $deductions - $loans_request + $monthly_evaluation;
                 $sum_net += $net;
@@ -221,7 +210,6 @@ class EmployeeSalaryController extends Controller
                 AccountingEmployeeSalaryDetail::create([
 
                     'employee_id' => $employee->id,
-                    'project_id' => $employee->project_id,
                     'accounting_id' => $row->id,
                     'days' => $timesheet->count(),
                     'hourly_salary' => $employee->hourly_salary,
@@ -245,20 +233,20 @@ class EmployeeSalaryController extends Controller
                     'net' => $net,
 
                 ]);
-                $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->update([
+                $employee->employeeTimeSheet()->where('attendance', '!=', 'no')->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->update([
                     'accounting_id' => $row->id,
                 ]);
 
-                $employee->employeeMonthlyEvaluation()->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->update([
+                $employee->employeeMonthlyEvaluation()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->update([
                     'accounting_id' => $row->id,
                 ]);
 
-                $employee->penalty()->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->update([
+                $employee->penalty()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->update([
                     'accounting_id' => $row->id,
                 ]);
 
                 // update employee loans
-                $employee_loans = $employee->loans()->whereMonth('date', '<=', $date)->whereNull('accounting_id')->get();
+                $employee_loans = $employee->loans()->whereMonth('date', '<=', $date_to)->whereNull('accounting_id')->get();
 
                 foreach ($employee_loans as $employee_loan) {
                     if ($employee_loan->amount < $loans_request) {
@@ -332,7 +320,6 @@ class EmployeeSalaryController extends Controller
 
 
     }
-
 
     public function show(Request $request, $id)
     {
