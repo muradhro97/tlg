@@ -1049,6 +1049,22 @@
                                 {{trans('main.organization cred/debt')}}
                             </label>
                         </li>
+                        <li>
+                            <input type="checkbox" id="human_resourcesReport" name="per[]" value="human_resourcesReport"
+                                   @if(in_array('human_resourcesReport',$permissions)) checked @endif
+                            >
+                            <label for="human_resourcesReport">
+                                {{trans('main.human_resourcesReport')}}
+                            </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="safeReport" name="per[]" value="safeReport"
+                                   @if(in_array('safeReport',$permissions)) checked @endif
+                            >
+                            <label for="safeReport">
+                                {{trans('main.safeReport')}}
+                            </label>
+                        </li>
                     </ul>
 
                 </div>

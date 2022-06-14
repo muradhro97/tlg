@@ -89,8 +89,14 @@ $Contracts = $Contract->latest()->pluck('no', 'id')->toArray();
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="control-label" for="date">{{trans('main.date')}}</label>
-                        <input type="date" id="date" name="date" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                        <label class="control-label" for="date">{{trans('main.from')}}</label>
+                        <input type="date" id="date" name="date_from" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label" for="date">{{trans('main.to')}}</label>
+                        <input type="date" id="date" name="date_to" value="" placeholder="{{trans('main.date')}}" class="form-control">
                     </div>
                 </div>
                 {{-- <div class="col-sm-3">
@@ -175,7 +181,9 @@ $Contracts = $Contract->latest()->pluck('no', 'id')->toArray();
                     <table class="data-table table table-bordered  print_table">
                         <thead>
                         <th>#</th>
-{{--                        <th>{{trans('main.transaction_no') }}</th>--}}
+                        <th>{{trans('main.number') }}</th>
+
+                        {{--                        <th>{{trans('main.transaction_no') }}</th>--}}
                         <th>{{trans('main.date') }}</th>
                         <th>{{trans('main.contract') }}</th>
                         <th>{{trans('main.contract_type') }}</th>
@@ -185,7 +193,6 @@ $Contracts = $Contract->latest()->pluck('no', 'id')->toArray();
                         <th>{{trans('main.period_from') }}</th>
                         <th>{{trans('main.period_to') }}</th>
                         <th>{{trans('main.extract_value') }}</th>
-                        <th>{{trans('main.number') }}</th>
 
                         <th>{{trans('main.options') }}</th>
 
@@ -200,7 +207,8 @@ $Contracts = $Contract->latest()->pluck('no', 'id')->toArray();
                             ?>
                             <tr>
                                 <td>{{$iteration}}</td>
-{{--                                <td>{{$row->id}}</td>--}}
+                                <td>{{$row->number}}</td>
+                                {{--                                <td>{{$row->id}}</td>--}}
                                 <td>{{$row->date}}</td>
                                 <td>{{$row->contract->no ?? ''}}</td>
 
@@ -214,7 +222,6 @@ $Contracts = $Contract->latest()->pluck('no', 'id')->toArray();
                                 <td>{{$row->period_from}}</td>
                                 <td>{{$row->period_to}}</td>
                                 <td>{{number_format($row->total,2)}}</td>
-                                <td>{{$row->number}}</td>
                                 <td>
 
                                     <a  style="margin: 2px;" type="button" href="{{url('admin/extract/'.$row->id)}}"

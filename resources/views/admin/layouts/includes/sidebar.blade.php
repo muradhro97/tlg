@@ -26,7 +26,7 @@
                         class="nav-label">{{trans('main.home')}}</span></a>
             </li>
             @endcan
-            
+
             @canany(['allEmp','allWor','addWorTime','historyWorTime','addEmpTime','historyEmpTime','allEmpApp','allWorApp'])
 
                 <li>
@@ -457,6 +457,20 @@
                             <li class="@if(request()->is('admin/reports/organizations')) active @endif">
                                 <a href="{{url('admin/reports/organizations')}}"> <i
                                         class="fa fa-user-circle"></i>{{trans('main.organization cred/debt')}}
+                                </a>
+                            </li>
+                        @endcan
+                        @can('human_resourcesReport')
+                            <li class="@if(request()->is('admin/reports/human_resources')) active @endif">
+                                <a href="{{url('admin/reports/human_resources')}}"> <i
+                                        class="fa fa-user-circle"></i>{{trans('main.human_resources')}}
+                                </a>
+                            </li>
+                        @endcan
+                        @can('safeReport')
+                            <li class="@if(request()->is('admin/reports/safe')) active @endif">
+                                <a href="{{url('admin/reports/safe')}}"> <i
+                                        class="fa fa-user-circle"></i>{{trans('main.safe')}}
                                 </a>
                             </li>
                         @endcan

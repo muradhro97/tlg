@@ -60,12 +60,11 @@ class ExtractController extends Controller
             $rows->where('sub_contract_id', $request->sub_contract_id);
         }
 
-        if ($request->filled('date')) {
-            $rows->where('date', $request->date);
+        if ($request->filled('date_from')) {
+            $rows->where('date','>=', $request->date_from);
         }
-
-        if ($request->filled('total')) {
-            $rows->where('total', $request->total);
+        if ($request->filled('date_to')) {
+            $rows->where('date','<=', $request->date_to);
         }
 
         if($request->filled('amount_from'))
@@ -109,8 +108,11 @@ class ExtractController extends Controller
             $rows->where('contract_id', $request->contract_id);
         }
 
-        if ($request->filled('date')) {
-            $rows->where('date', $request->date);
+        if ($request->filled('date_from')) {
+            $rows->where('date','>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $rows->where('date','<=', $request->date_to);
         }
 
         if ($request->filled('total')) {
@@ -118,12 +120,12 @@ class ExtractController extends Controller
         }
         if($request->filled('amount_from'))
         {
-            $rows->where('total','<=', $request->amount_from);
+            $rows->where('total','>=', $request->amount_from);
         }
 
         if($request->filled('amount_to'))
         {
-            $rows->where('total','>=', $request->amount_to);
+            $rows->where('total','<=', $request->amount_to);
         }
 
         $rows = $rows->paginate(20);
@@ -253,7 +255,6 @@ class ExtractController extends Controller
 
     }
 
-
     public function mainStore(Request $request)
     {
         //
@@ -301,9 +302,8 @@ class ExtractController extends Controller
                 $extract_no = 1;
             }
             $row = Extract::create([
-
                 'date' => $request->date,
-
+                'number' => $request->number,
                 'contract_id' => $parent_id,
                 'organization_id' => $request->organization_id,
                 'project_id' => $project_id,
@@ -362,14 +362,12 @@ class ExtractController extends Controller
 
     }
 
-
     public function show($id)
     {
 //        return "asa";
         $row = Extract::find($id);
         return view('admin.extract.show', compact('row'));
     }
-
 
     public static function addImage($image, $id, $path)
     {
@@ -378,12 +376,18 @@ class ExtractController extends Controller
         $img = Image::make($image);
 
         $img->save($path . $name);
+<<<<<<< HEAD
         // $img->move($path,$name);
 
+=======
+>>>>>>> 14827ef606345689101709b672da0aaecf8185cc
         $img->widen(100, null);
-
         $img->save($path_thumb . $name);
+<<<<<<< HEAD
         // $img->move($path_thumb,$name);
+=======
+
+>>>>>>> 14827ef606345689101709b672da0aaecf8185cc
         $addImage = new ExtractImage();
         $addImage->image = $path . $name;
         $addImage->image_thumb = $path_thumb . $name;
@@ -413,6 +417,7 @@ class ExtractController extends Controller
 
         return view('admin.extract.edit_extract', compact('model','itemsJs'));
     }
+
     public function update(Request $request , Extract $extract)
     {
         //
@@ -458,7 +463,7 @@ class ExtractController extends Controller
             $row->update([
 
                 'date' => $request->date,
-
+                'number' => $request->number,
                 'sub_contract_id' => $parent_id,
                 'organization_id' => $request->organization_id,
                 'project_id' => $project_id,
@@ -570,7 +575,7 @@ class ExtractController extends Controller
             $row->update([
 
                 'date' => $request->date,
-
+                'number' => $request->number,
                 'contract_id' => $parent_id,
                 'organization_id' => $request->organization_id,
                 'project_id' => $project_id,

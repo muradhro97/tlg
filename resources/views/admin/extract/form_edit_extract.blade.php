@@ -55,6 +55,10 @@ foreach($minus_items as $item){
         {!! Field::select('sub_contract_id' , trans('main.sub_contract'),$subContracts,trans('main.select_sub_contract')) !!}
 
     </div>
+    <div class="col-md-6">
+
+        {!! Field::text('number' , trans('main.number') ) !!}
+    </div>
 {{--    <div class="col-md-6">--}}
 
 {{--        {!! Field::select('project_id' , trans('main.project'),$projects,trans('main.select_project')) !!}--}}

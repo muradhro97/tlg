@@ -55,8 +55,7 @@ foreach($minus_items as $item){
     </div>
 
     <div class="col-md-6">
-
-        {!! Field::text('text' , trans('main.number') ) !!}
+        {!! Field::text('number' , trans('main.number') ) !!}
     </div>
 {{--    <div class="col-md-6">--}}
 

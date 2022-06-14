@@ -546,6 +546,9 @@ return [
     'Employee Attendance Count'=>'Employee Attendance Count',
     'Worker Attendance Count'=>'Worker Attendance Count',
     'Human Resources'=>'Human Resources',
+    'human_resourcesReport'=>'Human Resources',
+    'human_resources'=>'Human Resources',
+    'safeReport'=>'Safe',
     'home_report'=>'Home',
     'date_to'=>'Date To ',
 

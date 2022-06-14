@@ -89,8 +89,14 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="control-label" for="date">{{trans('main.date')}}</label>
-                        <input type="date" id="date" name="date" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                        <label class="control-label" for="date">{{trans('main.from')}}</label>
+                        <input type="date" id="date" name="date_from" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label" for="date">{{trans('main.to')}}</label>
+                        <input type="date" id="date" name="date_to" value="" placeholder="{{trans('main.date')}}" class="form-control">
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -163,7 +169,9 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                     <table class="data-table table table-bordered  print_table">
                         <thead>
                         <th>#</th>
-{{--                        <th>{{trans('main.transaction_no') }}</th>--}}
+                        <th>{{trans('main.number') }}</th>
+
+                        {{--                        <th>{{trans('main.transaction_no') }}</th>--}}
                         <th>{{trans('main.date') }}</th>
                         <th>{{trans('main.sub_contract') }}</th>
                         <th>{{trans('main.contract_type') }}</th>
@@ -188,7 +196,9 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                             ?>
                             <tr>
                                 <td>{{$iteration}}</td>
-{{--                                <td>{{$row->id}}</td>--}}
+                                <td>{{$row->number}}</td>
+
+                                {{--                                <td>{{$row->id}}</td>--}}
                                 <td>{{$row->date}}</td>
                                 <td>{{$row->subContract->no ?? ''}}</td>
 
