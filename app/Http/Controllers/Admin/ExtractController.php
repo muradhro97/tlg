@@ -378,10 +378,12 @@ class ExtractController extends Controller
         $img = Image::make($image);
 
         $img->save($path . $name);
+        // $img->move($path,$name);
 
         $img->widen(100, null);
 
         $img->save($path_thumb . $name);
+        // $img->move($path_thumb,$name);
         $addImage = new ExtractImage();
         $addImage->image = $path . $name;
         $addImage->image_thumb = $path_thumb . $name;

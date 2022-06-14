@@ -138,12 +138,12 @@ class EmployeeSalaryController extends Controller
     {
         //
 //        return $items = json_decode($request->items);
-//        return $request->all();
+    //    return $request->all();
 
         $rules = [
 
-            'date' => 'required|date|date_format:F Y',
-            // 'date_to' => 'required|date|date_format:F Y',
+            'date' => 'required|date',
+            'date_to' => 'required|date',
 //            'amount' => 'required|numeric|min:0',
             'safe_id' => 'required|exists:safes,id',
         ];
@@ -172,7 +172,7 @@ class EmployeeSalaryController extends Controller
             $row = Accounting::create([
 
                 'date' => Carbon::parse($request->date),
-                // 'date_to' => Carbon::parse($request->date_to),
+                'date_to' => Carbon::parse($request->date_to),
 //                'end' => $request->end,
 //                'amount' => $request->amount,
 

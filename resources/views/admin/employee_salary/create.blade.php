@@ -188,8 +188,8 @@
                                 ])!!}
                 <div class="row">
                     @include('partials.validation-errors')
-                    {{--<input type="hidden" name="start" value="{{request()->from}}">--}}
-                    <input type="hidden" name="date" value="{{request()->date}}">
+                    <input type="hidden" name="date" value="{{request()->from}}">
+                    <input type="hidden" name="date_to" value="{{request()->to}}">
                     <div class="col-md-6">
 
                         {!! Field::select('safe_id' , trans('main.safe'),$safes,trans('main.select_safe')) !!}
