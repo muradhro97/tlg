@@ -256,18 +256,13 @@
                                 </div>
                                 <div class="clearfix"></div>
                                 <br>
-
-
-
                                 <div class="row">
                                     <div class="col-md-4">
                                         <input type="checkbox" id="checkall">
                                         <label for="checkall">  {{trans('main.select_all')}} </label>
-
-
                                     </div>
-
                                 </div>
+
 {{--                                <div class="text-center">--}}
 {{--                                    {!! $rows->appends(request()->except('page'))->links() !!}--}}
 {{--                                </div>--}}

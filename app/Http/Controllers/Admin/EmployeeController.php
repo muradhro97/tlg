@@ -211,8 +211,8 @@ class EmployeeController extends Controller
             $normal_days = (21 * $remaining_months_in_year)/12;
             $casual_days = (7 * $remaining_months_in_year)/12;
 
-            $row->normal_vacation_no = $normal_days;
-            $row->casual_vacation_no = $casual_days;
+            $row->normal_vacation_no = round($normal_days);
+            $row->casual_vacation_no = round($casual_days);
 
             $row->save();
 

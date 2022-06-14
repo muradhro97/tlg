@@ -155,6 +155,9 @@
                             <th>{{trans('main.quantity')}}</th>
                             <th>{{trans('main.price')}}</th>
                             <th>{{trans('main.total')}}</th>
+                            @can('detailsInvoice')
+                                <th>{{trans('main.options') }}</th>
+                            @endcan
 {{--                            <th>{{trans('main.loans') }}</th>--}}
 {{--                            <th>{{trans('main.taxes') }}</th>--}}
 {{--                            <th>{{trans('main.insurance') }}</th>--}}
@@ -174,6 +177,15 @@
                                     <td>{{number_format($row->quantity)}}</td>
                                     <td>{{$row->price}}</td>
                                     <td>{{ number_format($row->price * $row->quantity,2, '.', '')}}</td>
+                                    @can('detailsInvoice')
+                                        <td>
+
+                                            <a style="margin: 2px;" type="button" href="{{url('admin/invoice/'.$row->accounting->id)}}"
+                                               class="btn btn-sm btn-primary"><i
+                                                    class="fa fa-eye"></i></a>
+                                        </td>
+
+                                    @endcan
                                 </tr>
                                 @php $count ++; @endphp
                             @endforeach

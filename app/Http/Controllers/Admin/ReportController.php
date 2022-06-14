@@ -516,12 +516,12 @@ class ReportController extends Controller
                     $query->where('organization_id',$request->organization_id);
                 });
             }
-            if ($request->filled('job_id'))
-            {
-                $query->whereHas('employee',function ($query) use ($request){
-                    $query->where('job_id',$request->job_id);
-                });
-            }
+//            if ($request->filled('job_id'))
+//            {
+//                $query->whereHas('employee',function ($query) use ($request){
+//                    $query->where('job_id',$request->job_id);
+//                });
+//            }
             if ($request->filled('from')) {
                 $query->where('date', '>=', $request->from);
             }
@@ -532,8 +532,10 @@ class ReportController extends Controller
             {
                 $query->where('attendance',$request->attendance);
             }
+
             return $query;
         }]);
+
 
         $projects->with(['workerTimeSheets' => function ($query)use ($request){
             if ($request->filled('organization_id'))
@@ -542,12 +544,12 @@ class ReportController extends Controller
                     $query->where('organization_id',$request->organization_id);
                 });
             }
-            if ($request->filled('job_id'))
-            {
-                $query->whereHas('worker',function ($query) use ($request){
-                    $query->where('job_id',$request->job_id);
-                });
-            }
+//            if ($request->filled('job_id'))
+//            {
+//                $query->whereHas('worker',function ($query) use ($request){
+//                    $query->where('job_id',$request->job_id);
+//                });
+//            }
             if ($request->filled('from')) {
                 $query->where('date', '>=', $request->from);
             }
@@ -563,7 +565,16 @@ class ReportController extends Controller
 
         $rows = $projects->get()->map(function ($project){
             $project->employees_count = $project->employeeTimeSheets->count();
+            $project->employees_counts =$project->employeeTimeSheets()->with('employee')
+                ->groupBy('job_id')
+                ->orderBy(DB::raw('COUNT(employees.id)','desc'))
+                ->get(array(DB::raw('COUNT(employees.id) as employee_count'),'job_id'));
+
             $project->worker_count = $project->workerTimeSheets->count();
+            $project->worker_counts =$project->workerTimeSheets()->with('worker')
+                ->groupBy('job_id')
+                ->orderBy(DB::raw('COUNT(workers.id)','desc'))
+                ->get(array(DB::raw('COUNT(workers.id) as worker_count'),'job_id'));
             return $project;
         });
 
@@ -571,28 +582,53 @@ class ReportController extends Controller
     }
 
     public function safe(Request $request){
+        $from = $request->from;
+        $to = $request->to;
+
+        /* Cash In */
+        $safe_transactions_cash_in = SafeTransaction::query();
+        $safe_transactions_cash_in->where('safe_id',0);
+        $safe_transactions_cash_in->where(function ($query){
+            return $query->whereHas('accounting',function ($query){
+                return $query->whereIn('type',['cashin']);
+            });
+        });
+        $safe_transactions_cash_in->when($from,function ($query)use ($from){
+            return $query->whereDate('safe_transactions.created_at', '>=', $from);
+        });
+
+        $safe_transactions_cash_in->when($to,function ($query)use ($to){
+            return $query->whereDate('safe_transactions.created_at', '<=', $to);
+        });
+        /* ------------------------------End Cash In */
+
+        /* Cash out */
         $safe_transactions = SafeTransaction::query();
+        $safe_transactions->where('safe_id',0);
         $safe_transactions->where(function ($query){
             return $query->whereHas('accounting',function ($query){
-                return $query->whereIn('type',['cashin','cashout']);
+                return $query->whereNotIn('type',['cashin']);
             })->orWhereHas('payment',function ($query){
                 return $query->where('type','custody');
             });
         });
-
-        $from = $request->from;
-        $to = $request->to;
         $safe_transactions->when($from,function ($query)use ($from){
             return $query->whereDate('safe_transactions.created_at', '>=', $from);
         });
-
         $safe_transactions->when($to,function ($query)use ($to){
             return $query->whereDate('safe_transactions.created_at', '<=', $to);
         });
+        /* ------------------------------End Cash Out */
 
 
         $safe_transactions = $safe_transactions->get();
-        return view('admin.report.safe.index', compact('safe_transactions'));
+        $safe_transactions_cash_in = $safe_transactions_cash_in->get();
+
+        $all  = $safe_transactions->merge($safe_transactions_cash_in);
+        $old_transaction = $all->sortByDesc('created_at')->first();
+        $new_transaction = $all->sortBy('created_at')->first();
+
+        return view('admin.report.safe.index', compact('safe_transactions','safe_transactions_cash_in','old_transaction','new_transaction'));
 
     }
 
