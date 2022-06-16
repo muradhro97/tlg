@@ -12,10 +12,6 @@
             <div class="pull-right">
                 <a class="btn btn-outline btn-primary" target="_blank" href="{{url('admin/invoice-print/'.$row->id)}}"><i class="fa fa-print"></i>  {{trans('main.print')}}
                 </a>
-
-
-
-
             </div>
             @include('partials.validation-errors')
 
@@ -227,7 +223,8 @@
                                         <dt>{{trans('main.project')}}:</dt>
                                         <dd> {{$row->project->name ?? ''}}      </dd>
                                     @endif
-
+                                    <dt>{{trans('main.details')}}:</dt>
+                                    <dd> {{$row->details}}      </dd>
                                 </dl>
                             </div>
                             <div class="col-lg-7" id="cluster_info">

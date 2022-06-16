@@ -84,6 +84,10 @@
                                     <dd> {{$row->employee->name ?? ''}}      </dd>
                                     <dt>{{trans('main.project')}}:</dt>
                                     <dd> {{$row->project->name ?? ''}}      </dd>
+                                    <dt>{{trans('main.transaction_cheque_no')}}:</dt>
+                                    <dd> {{$row->transaction_cheque_no}}      </dd>
+                                    <dt>{{trans('main.details')}}:</dt>
+                                    <dd> {{$row->details}}      </dd>
 
 
                                 </dl>

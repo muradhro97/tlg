@@ -376,18 +376,10 @@ class ExtractController extends Controller
         $img = Image::make($image);
 
         $img->save($path . $name);
-<<<<<<< HEAD
-        // $img->move($path,$name);
 
-=======
->>>>>>> 14827ef606345689101709b672da0aaecf8185cc
         $img->widen(100, null);
         $img->save($path_thumb . $name);
-<<<<<<< HEAD
-        // $img->move($path_thumb,$name);
-=======
 
->>>>>>> 14827ef606345689101709b672da0aaecf8185cc
         $addImage = new ExtractImage();
         $addImage->image = $path . $name;
         $addImage->image_thumb = $path_thumb . $name;

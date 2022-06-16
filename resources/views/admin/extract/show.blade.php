@@ -87,6 +87,8 @@
                                     <dd> {{$row->period_from}}      </dd>
                                     <dt>{{trans('main.net')}}:</dt>
                                     <dd> {{$row->total}}      </dd>
+                                    <dt>{{trans('main.details')}}:</dt>
+                                    <dd> {{$row->details}}      </dd>
 
                                 </dl>
                             </div>

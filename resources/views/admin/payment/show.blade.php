@@ -9,7 +9,10 @@
     <div class="ibox-content m-b-sm border-bottom float-e-margins">
 
         <div class="row">
-
+            <div class="pull-right">
+                <a class="btn btn-outline btn-primary" target="_blank" href="{{url('admin/payment-print/'.$row->id)}}"><i class="fa fa-print"></i>  {{trans('main.print')}}
+                </a>
+            </div>
             @include('partials.validation-errors')
 
             @if($row->type=="cashout"   or $row->type=="custody")
@@ -156,7 +159,8 @@
                                     <dd> {{$row->id}}      </dd>
                                     <dt>{{trans('main.organization')}}:</dt>
                                     <dd> {{$row->organization->name ?? ''}}      </dd>
-
+                                    <dt>{{trans('main.details')}}:</dt>
+                                    <dd> {{$row->details}}      </dd>
 
                                 </dl>
                             </div>

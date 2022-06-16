@@ -45,12 +45,12 @@ class PaymentController extends Controller
 
         if ($request->filled('amount_from')) {
             $rows->where('amount', '>=', $request->amount_from);
-    
+
         }
-    
+
         if ($request->filled('amount_to')) {
             $rows->where('amount', '<=', $request->amount_to);
-    
+
         }
 
 
@@ -375,13 +375,9 @@ class PaymentController extends Controller
             'organization_id' => 'required|exists:organizations,id',
             'project_id' => 'required|exists:projects,id',
             'employee_id' => 'required|exists:employees,id',
-
-
 //            'details' => 'required',
 //            'description' => 'required',
 //            'images.*' => 'image|mimes:jpg,jpeg,bmp,png',
-
-
         ];
 
         if ($request->images != null and count(array_filter($request->images)) > 0) {
@@ -393,8 +389,6 @@ class PaymentController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-
-
         }
 
 
@@ -421,8 +415,6 @@ class PaymentController extends Controller
                 'payment_status' => 'review',
 //                'balance' => $safe->balance,
 //                'new_balance' => $safe->balance - $request->amount,
-
-
             ]);
 
 //            SafeTransaction::create([
@@ -1008,5 +1000,9 @@ class PaymentController extends Controller
         return true;
     }
 
+    public function invoicePrint($id){
+        $row = Payment::find($id);
+        return view('admin.payment.payment_print', compact('row'));
+    }
 
 }

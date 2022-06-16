@@ -143,6 +143,7 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
     Route::post('store-cash-in', 'Admin\PaymentController@storeCashIn');
     Route::post('payment-accept', 'Admin\PaymentController@paymentAccept')->name('payment-accept');//->middleware('throttle:1,1');
     Route::post('payment-decline', 'Admin\PaymentController@paymentDecline')->name('payment-decline');//->middleware('throttle:1,1');
+
     Route::post('cash-out-pay', 'Admin\PaymentController@cashOutPay')->name('cash-out-pay');//->middleware('throttle:1,1');
 
 //    Route::post('payment-custody-accept', 'Admin\PaymentController@paymentCustodyAccept')->name('payment-custody-accept');
@@ -150,6 +151,7 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
 //    Route::post('custody-pay', 'Admin\PaymentController@custodyPay')->name('custody-pay');
 
     Route::resource('payment', 'Admin\PaymentController');
+    Route::get('payment-print/{id}', 'Admin\PaymentController@invoicePrint');
 
 
     Route::resource('safe-transaction', 'Admin\SafeTransactionController');

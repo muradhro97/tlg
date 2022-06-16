@@ -589,7 +589,7 @@ class ReportController extends Controller
         $safe_transactions_cash_in = SafeTransaction::query();
         $safe_transactions_cash_in->where('safe_id',0);
         $safe_transactions_cash_in->where(function ($query){
-            return $query->whereHas('accounting',function ($query){
+            return $query->whereHas('payment',function ($query){
                 return $query->whereIn('type',['cashin']);
             });
         });
@@ -607,9 +607,9 @@ class ReportController extends Controller
         $safe_transactions->where('safe_id',0);
         $safe_transactions->where(function ($query){
             return $query->whereHas('accounting',function ($query){
-                return $query->whereNotIn('type',['cashin']);
+                return $query->whereNotIn('type',['cashin','cashout']);
             })->orWhereHas('payment',function ($query){
-                return $query->where('type','custody');
+                return $query->whereIn('type',['custody','cashout']);
             });
         });
         $safe_transactions->when($from,function ($query)use ($from){
@@ -625,8 +625,8 @@ class ReportController extends Controller
         $safe_transactions_cash_in = $safe_transactions_cash_in->get();
 
         $all  = $safe_transactions->merge($safe_transactions_cash_in);
-        $old_transaction = $all->sortByDesc('created_at')->first();
-        $new_transaction = $all->sortBy('created_at')->first();
+        $old_transaction = $all->sortBy('created_at')->first();
+        $new_transaction = $all->sortByDesc('created_at')->first();
 
         return view('admin.report.safe.index', compact('safe_transactions','safe_transactions_cash_in','old_transaction','new_transaction'));
 

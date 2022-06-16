@@ -32,4 +32,7 @@ class Payment extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+    public function safe_transaction(){
+        return $this->belongsTo(SafeTransaction::class,'id','payment_id');
+    }
 }
