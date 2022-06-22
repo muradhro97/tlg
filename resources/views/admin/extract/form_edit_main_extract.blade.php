@@ -19,7 +19,12 @@ $projects = $project->latest()->pluck('name', 'id')->toArray();
 $contracts = $contracts->latest()->pluck('no', 'id')->toArray();
 $contractTypes = $contractType->latest()->pluck('name', 'id')->toArray();
 
-$items = $item->where('is_minus' , 0)->latest()->get();
+if (empty($model->getAttributes())) {
+    $items = $item->where('is_minus', 0)->latest()->get();
+} else {
+    $items = $model->contract->items;
+}
+
 $minus_items = $item->where('is_minus' , 1)->latest()->get();
 
 
@@ -27,7 +32,7 @@ $new_items =[];
 $new_items_minus =[];
 
 foreach($items as $item){
-    $new_items[$item->id]= $item->name  .' | '.$item->unit->name ?? '';
+    $item->name =  $item->item->name  .' | '.$item->item->unit->name ?? '';
 }
 foreach($minus_items as $item){
     $new_items_minus[$item->id]= $item->name  .' | '.$item->unit->name ?? '';
@@ -133,12 +138,13 @@ foreach($minus_items as $item){
 <div class=" row">
     <div class="col-xs-3" id="items_container" style="padding-right: 5px;">
 
-{{--        {{Form::select('item_id', $new_items, null, [--}}
-{{--                                         "class" => "form-control select2 " ,--}}
-{{--                                         "id" => "item_id" ,--}}
-
-{{--                                         "placeholder" =>trans('main.item_name')--}}
-{{--                                     ])}}--}}
+        @if(!empty($model->getAttributes()))
+            <select class="form-control select2 select2-hidden-accessible" id="item_id" name="item_id" tabindex="-1" aria-hidden="true">
+                @foreach($items as $item)
+                    <option data-price="{{$item->price}}" value="{{$item->item_id}}">{{$item->name}}</option>
+                @endforeach
+            </select>
+        @endif
     </div>
     <div class="col-xs-3" style="padding-right: 5px;">
 

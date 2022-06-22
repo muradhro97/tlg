@@ -227,6 +227,12 @@
                             @php $count ++; @endphp
                         @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td>{{$total}}</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="text-center">

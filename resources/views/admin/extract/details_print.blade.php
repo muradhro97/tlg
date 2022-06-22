@@ -194,35 +194,102 @@
     <div class="row">
 
         @if($row->items()->count()>0)
-            <div class="table-responsive">
-                <table class="data-table table table-bordered big-table">
-                    <thead>
-                    <td>{{trans('main.item_name')}}</td>
-                    <td>{{trans('main.quantity')}}</td>
-                    <td>{{trans('main.price')}}</td>
-                    <th>{{trans('main.exchange_ratio')}}</th>
-                    <td>{{trans('main.total')}}</td>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="data-table table table-bordered">
+                        <thead>
+                        {{--<th>#</th>--}}
+                        <th>{{trans('main.item_name')}}</th>
+                        <th>{{trans('main.quantity')}}</th>
+                        <th>{{trans('main.price')}}</th>
+                        <th>{{trans('main.exchange_ratio')}}</th>
+                        <th>{{trans('main.total')}}</th>
 
-                    </thead>
-                    <tbody>
 
-                    @foreach($row->items as  $inv)
+                        </thead>
+                        <tbody class="">
+                        <?php
+                        $total_plus = 0;
+                        $total_minus = 0;
+                        ?>
+                        @foreach($row->plus_items as  $inv)
+                            <?php
+                            $total_plus += $inv->price * $inv->quantity * $inv->exchange_ratio/100;
+                            ?>
+                            <tr style="{{$inv->item->is_minus? 'border: 2px dashed #d72323' : ''}}">
+
+                                <td>{{$inv->item->name ?? ''}}</td>
+                                <td>{{$inv->quantity?? '---'}}</td>
+                                <td>{{$inv->price}}</td>
+                                <td>{{$inv->exchange_ratio?? '---'}}</td>
+                                @if(!$inv->item->is_minus)
+                                    <td>{{ number_format($inv->price * $inv->quantity * $inv->exchange_ratio/100,4, '.', '')}}</td>
+                                @else
+                                    <td>{{$inv->price}}</td>
+                                @endif
+
+                            </tr>
+                        @endforeach
                         <tr>
 
-                            <td>{{$inv->item->name ?? ''}}</td>
-                            <td>{{$inv->quantity}}</td>
-                            <td>{{$inv->price}}</td>
-                            <td>{{$inv->exchange_ratio}}</td>
-                            <td>{{ number_format($inv->price * $inv->quantity * $inv->exchange_ratio/100 ,4, '.', '')}}</td>
+                        </tr>
+
+                        <tr style=" border: 2px dashed #3c8dbc;">
+                            <td colspan="4">{{trans('main.total')}}</td>
+                            <td colspan="2" class="total">{{$total_plus}}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="data-table table table-bordered">
+                        <thead>
+                        {{--<th>#</th>--}}
+                        <th>{{trans('main.item_name')}}</th>
+                        <th>{{trans('main.quantity')}}</th>
+                        <th>{{trans('main.price')}}</th>
+                        <th>{{trans('main.exchange_ratio')}}</th>
+                        <th>{{trans('main.total')}}</th>
+                        </thead>
+                        <tbody class="">
+                        @foreach($row->minus_items as  $inv)
+                            <?php
+                            $total_minus += $inv->price;
+                            ?>
+                            <tr style="{{$inv->item->is_minus? 'border: 2px dashed #d72323' : ''}}">
+
+                                <td>{{$inv->item->name ?? ''}}</td>
+                                <td>{{$inv->quantity?? '---'}}</td>
+                                <td>{{$inv->price}}</td>
+                                <td>{{$inv->exchange_ratio?? '---'}}</td>
+                                @if(!$inv->item->is_minus)
+                                    <td>{{ number_format($inv->price * $inv->quantity * $inv->exchange_ratio/100,4, '.', '')}}</td>
+                                @else
+                                    <td>{{$inv->price}}</td>
+                                @endif
+
+                            </tr>
+                        @endforeach
+                        <tr>
 
                         </tr>
-                    @endforeach
-                    <tr >
-                        <td colspan="4">{{trans('main.net')}}</td>
-                        <td colspan="2" class="total" style="text-align: left;">{{$row->total}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                        <tr style=" border: 2px dashed #3c8dbc;">
+                            <td colspan="4">{{trans('main.total')}}</td>
+                            <td colspan="2" class="total">{{$total_minus}}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <h2 class="text-center">
+                    {{trans('main.net')}}:
+                    {{$total_plus+$total_minus}}
+                </h2>
             </div>
             <div class="text-center">
                 {{--{!! $rows->appends(request()->except('page'))->links() !!}--}}

@@ -137,27 +137,23 @@ $statusOptions = [
 {{--        </div>--}}
 
 {{--    </div>--}}
-    <div class="col-md-6">
-        <div class="form-group @error('duration') has-error @enderror" id="duration_wrap">
-            <label for="duration">{{trans('main.duration')}}</label>
-            <div class="input-group m-b">
-                {{ Form::text('duration', null, [
-                "placeholder" => trans('main.duration'),
-                "class" => "form-control numberonly2",
-                "id" => "duration"
-                ]) }}
-                <span class="input-group-addon">{{trans('main.day')}}</span>
+{{--    <div class="col-md-6">--}}
+{{--        <div class="form-group @error('duration') has-error @enderror" id="duration_wrap">--}}
+{{--            <label for="duration">{{trans('main.duration')}}</label>--}}
+{{--            <div class="input-group m-b">--}}
+{{--                {{ Form::text('duration', null, [--}}
+{{--                "placeholder" => trans('main.duration'),--}}
+{{--                "class" => "form-control numberonly2",--}}
+{{--                "id" => "duration"--}}
+{{--                ]) }}--}}
+{{--                <span class="input-group-addon">{{trans('main.day')}}</span>--}}
 
-            </div>
-            @error('duration')
-            <span class="help-block"><strong>{{ $message }}</strong></span>
-            @enderror
-
-        </div>
-
-
-
-    </div>
+{{--            </div>--}}
+{{--            @error('duration')--}}
+{{--            <span class="help-block"><strong>{{ $message }}</strong></span>--}}
+{{--            @enderror--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
 </div>
 <div class="row">

@@ -198,6 +198,11 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <hr>
+                            <h2 class="text-center">
+                                {{trans('main.net')}}:
+                                {{$total_plus+$total_minus}}
+                            </h2>
                         </div>
                     </div>
                 </div>

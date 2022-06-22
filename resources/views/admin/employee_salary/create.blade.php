@@ -267,7 +267,8 @@
                         </thead>
                         <tbody>
                         <?php
-                            $date =\Carbon\Carbon::parse(request()->date);
+                            $date =\Carbon\Carbon::parse(request()->from);
+                            $date_to =\Carbon\Carbon::parse(request()->to);
                             $days_sum = 0;
                             $total_regular_minutes_sum = 0;
                             $total_regular_sum = 0;
@@ -283,8 +284,9 @@
                             <?php
                             $timesheet = $row->employeeTimeSheet()
                                 ->where('attendance', '!=' , 'no')
-                                ->whereMonth('date', $date)
-                                ->whereYear('date', $date)
+//                                ->whereMonth('date', $date)
+//                                ->whereYear('date', $date)
+                                ->whereBetween('date', [$date,$date_to])
                                 ->whereNull('accounting_id');
                             $days = $timesheet->count();
                             $total_regular_minutes = $timesheet->sum('total_regular_minutes')/60;
@@ -294,7 +296,7 @@
                             $total_daily_minutes = $timesheet->sum('total_daily_minutes')/60;
                             $total_daily = $timesheet->sum('total_daily');
                             $reward = $timesheet->sum('reward');
-                            $penalty = $row->penalty()->whereMonth('date',$date)->whereYear('date', $date)->whereNull('accounting_id')->sum('amount');
+                            $penalty = $row->penalty()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('amount');
 
                             $days_sum += $days;
                             $total_regular_minutes_sum += $total_regular_minutes;
@@ -315,11 +317,11 @@
                                 <td>{{$days}}</td>
                                 <td>{{number_format($row->hourly_salary,2)}}</td>
                                 <td>{{$total_regular_minutes}}</td>
-                                <td>{{number_format($row->total_regular,2)}}</td>
+                                <td>{{number_format($total_regular,2)}}</td>
                                 <td>{{$overtime_minutes}}</td>
-                                <td>{{number_format($row->overtime,2)}}</td>
+                                <td>{{number_format($overtime,2)}}</td>
                                 <td>{{$total_daily_minutes}}</td>
-                                <td>{{number_format($row->total_daily,2)}}</td>
+                                <td>{{number_format($total_daily,2)}}</td>
                                 <td>{{number_format($reward,2)}}</td>
                                 <td>{{number_format($row->meals,2)}}</td>
                                 <td>{{number_format($row->communications,2)}}</td>
@@ -330,22 +332,22 @@
 
                                 <td>
                                     <?php
-                                        $loans_input = $row->loans()->whereMonth('date','<=',$date)->whereNull('accounting_id')->sum('amount')
+                                        $loans_input = $row->loans()->whereMonth('date','<=',$date_to)->whereNull('accounting_id')->sum('amount')
                                     ?>
                                     <input type="number" max="{{$loans_input}}" value="{{$loans_input}}" name="loans[{{$row->id}}]">
                                 </td>
-                                <td>{{$row->employeeMonthlyEvaluation()->whereMonth('date',$date)->whereYear('date', $date)->whereNull('accounting_id')->sum('amount')}}  </td>
+                                <td>{{$row->employeeMonthlyEvaluation()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('amount')}}  </td>
 
                                 <?php
-                                $penalty = $row->penalty()->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('amount');
+                                $penalty = $row->penalty()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('amount');
                                 $allowances = $row->meals + $row->communications + $row->transports;
                                 $deductions = $penalty + $row->taxes + $row->insurance;
 
-                                $total = $row->employeeTimeSheet()->where('attendance','!=', 'no')->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('total_daily');
-                                $rewards = $row->employeeTimeSheet()->where('attendance','!=', 'no')->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('reward');
+                                $total = $row->employeeTimeSheet()->where('attendance','!=', 'no')->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('total_daily');
+                                $rewards = $row->employeeTimeSheet()->where('attendance','!=', 'no')->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('reward');
 
-                                $loans = $row->loans()->whereMonth('date','<=',$date)->whereNull('accounting_id')->sum('amount');
-                                $monthly_evaluation = $row->employeeMonthlyEvaluation()->whereMonth('date', $date)->whereYear('date', $date)->whereNull('accounting_id')->sum('amount');
+                                $loans = $row->loans()->whereMonth('date','<=',$date_to)->whereNull('accounting_id')->sum('amount');
+                                $monthly_evaluation = $row->employeeMonthlyEvaluation()->whereBetween('date', [$date,$date_to])->whereNull('accounting_id')->sum('amount');
 
                                 $net = $total + $rewards + $allowances - $deductions- $loans + $monthly_evaluation;
                                 $net_sum += $net;

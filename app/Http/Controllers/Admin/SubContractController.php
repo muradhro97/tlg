@@ -20,7 +20,6 @@ use Auth;
 
 class  SubContractController extends Controller
 {
-    //
     public function __construct()
     {
         $this->middleware('permission:allSubContract', ['only' => ['index']]);
@@ -80,30 +79,19 @@ class  SubContractController extends Controller
         if ($request->filled('to')) {
             $rows->where('date', '<=', $request->to);
         }
-        
 
+
+        $total = $rows->sum('price');
         $rows = $rows->paginate(20);
 
-        return view('admin.sub_contract.index', compact('rows'));
+        return view('admin.sub_contract.index', compact('rows','total'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(SubContract $model)
     {
-//        return "asa";
         return view('admin.sub_contract.create', compact('model'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //
@@ -119,12 +107,12 @@ class  SubContractController extends Controller
 //            'details' => 'required',
             'city_id' => 'required|exists:cities,id',
             'start_date' => 'required|date|date_format:Y-m-d',
-//            'finish_date' => 'required|date||date_format:Y-m-d|after:start_date',
+            'finish_date' => 'required|date||date_format:Y-m-d|after:start_date',
 //            'lat' => 'required',
 //            'lon' => 'required',
             'status' => 'required|in:notStart,active,onhold,closed,extended',
 //            'items.*' => 'required',
-            'duration' => 'required|numeric|min:0',
+//            'duration' => 'required|numeric|min:0',
 
 
         ];
@@ -151,6 +139,13 @@ class  SubContractController extends Controller
 //        dd($check);
         DB::beginTransaction();
         try {
+            $fdate = $request->start_date;
+            $tdate = $request->finish_date;
+            $datetime1 = new \DateTime($fdate);
+            $datetime2 = new \DateTime($tdate);
+            $interval = $datetime1->diff($datetime2);
+            $days = $interval->format('%a');//now do whatever you like with $days
+
             $project = Project::find($request->project_id);
             $check = SubContract::where('project_id', $project->id)->max('no_helper') ?? 0;
 //            dd($check);
@@ -159,6 +154,8 @@ class  SubContractController extends Controller
             $request->merge(['no' => 'SUB-TLG-' . $project->abbreviation . '-' . $no]);
             $request->merge(['no_helper' => $no]);
             $request->merge(['type' => 'sub']);
+            $request->merge(['duration' => $days]);
+
             $row = SubContract::create($request->all());
 
             $items = json_decode($request->items);
@@ -217,48 +214,24 @@ class  SubContractController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
         $row = SubContract::find($id);
-
         return view('admin.sub_contract.show', compact('row'));
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
         $model = SubContract::findOrFail($id);
         $itemsJs = json_encode(json_decode($model->items, false));
         return view('admin.sub_contract.edit', compact('model', 'itemsJs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
 
         $rules = [
-
             'date' => 'required|date|date_format:Y-m-d',
 //            'no' => 'required',
             'organization_id' => 'required|exists:organizations,id',
@@ -275,9 +248,7 @@ class  SubContractController extends Controller
             'status' => 'required|in:notStart,active,onhold,closed,extended',
 //            'items.*' => 'required',
 //            'price' => 'required|numeric|min:0',
-            'duration' => 'required|numeric|min:0',
-
-
+//            'duration' => 'required|numeric|min:0',
         ];
 
         if ($request->filled('finish_date')) {
@@ -300,7 +271,15 @@ class  SubContractController extends Controller
         }
         DB::beginTransaction();
         try {
+            $fdate = $request->start_date;
+            $tdate = $request->finish_date;
+            $datetime1 = new \DateTime($fdate);
+            $datetime2 = new \DateTime($tdate);
+            $interval = $datetime1->diff($datetime2);
+            $days = $interval->format('%a');//now do whatever you like with $days
+
             $request->merge(['total' => $request->total]);
+            $request->merge(['duration' => $days]);
             $row = SubContract::findOrFail($id);
             $row->update($request->all());
 

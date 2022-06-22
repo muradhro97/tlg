@@ -364,7 +364,6 @@ class ExtractController extends Controller
 
     public function show($id)
     {
-//        return "asa";
         $row = Extract::find($id);
         return view('admin.extract.show', compact('row'));
     }

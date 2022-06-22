@@ -34,6 +34,10 @@ class Accounting extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function safeTransaction(){
+        return $this->hasOne(SafeTransaction::class);
+    }
+
     public function contract()
     {
         return $this->belongsTo(Contract::class);

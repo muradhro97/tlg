@@ -179,6 +179,7 @@
                     <table class="data-table table table-bordered print_table">
                         <thead>
                         <th>#</th>
+                        <th>#</th>
                         <th>{{trans('main.transaction_no') }}</th>
                         <th>{{trans('main.type') }}</th>
                         <th>{{trans('main.date') }}</th>
@@ -206,6 +207,7 @@
                             <tr>
                                 <td>{{$iteration}}</td>
                                 <td>{{$row->id}}</td>
+                                <td>{{$row->cash_in_serial}}</td>
                                 <td>{{$row->type}}</td>
                                 <td>{{$row->date}}</td>
                                 <td>{{number_format($row->amount,2)}}</td>

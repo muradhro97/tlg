@@ -100,6 +100,8 @@
                                     <dd> {{$row->safe->name ?? ''}}</dd>
                                     <dt>{{trans('main.extract_no')}}:</dt>
                                     <dd> {{$row->extract_no}}</dd>
+                                    <dt>{{trans('main.transaction_cheque_no')}}:</dt>
+                                    <dd> {{$row->transaction_cheque_no}}</dd>
 
                                 </dl>
                             </div>

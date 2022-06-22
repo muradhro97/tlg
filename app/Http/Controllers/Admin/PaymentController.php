@@ -33,8 +33,6 @@ class PaymentController extends Controller
         $this->middleware('permission:acceptPayment', ['only' => ['paymentAccept']]);
         $this->middleware('permission:declinePayment', ['only' => ['paymentDecline']]);
         $this->middleware('permission:payPayment', ['only' => ['cashOutPay']]);
-
-
     }
 
     public function index(Request $request)
@@ -82,17 +80,11 @@ class PaymentController extends Controller
         return view('admin.payment.index', compact('rows'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function cashIn(Payment $model)
     {
 //        return "asa";
         return view('admin.payment.cash_in', compact('model'));
     }
-
 
     public function storeCashIn(Request $request)
     {
@@ -150,7 +142,12 @@ class PaymentController extends Controller
 
 
             ]);
-
+            $safe_transactions_cash_in = SafeTransaction::query();
+            $next_serial = $safe_transactions_cash_in->where(function ($query){
+                return $query->whereHas('payment',function ($query){
+                    return $query->whereIn('type',['cashin','custody-rest']);
+                });
+            })->max('cash_in_serial');
             SafeTransaction::create([
                 'safe_id' => $safe->id,
                 'payment_id' => $row->id,
@@ -158,6 +155,7 @@ class PaymentController extends Controller
 
                 'balance' => $safe->balance,
                 'new_balance' => $safe->balance + $request->amount,
+                'cash_in_serial' => is_null($next_serial)?1 : $next_serial+1,
 
 
             ]);
@@ -229,7 +227,6 @@ class PaymentController extends Controller
 //        return "asa";
         return view('admin.payment.cash_out', compact('model'));
     }
-
 
     public function storeCashOut(Request $request)
     {
@@ -355,13 +352,11 @@ class PaymentController extends Controller
         }
     }
 
-
     public function custody(Payment $model)
     {
 //        return "asa";
         return view('admin.payment.custody', compact('model'));
     }
-
 
     public function storeCustody(Request $request)
     {
@@ -490,10 +485,8 @@ class PaymentController extends Controller
 
     public function custodyRest($id)
     {
-//        return "asa";
         $model = Payment::where('id', $id)->where('status', 'open')->first();
         if ($model->payment_status != 'paid') {
-//            dd($model->payment_status);
             return back();
         }
 
@@ -556,20 +549,12 @@ class PaymentController extends Controller
 
     }
 
-
     public function storeCustodyRest(Request $request)
     {
-        //
-//        return $items = json_decode($request->items);
-//        return $request->all();
+
         $rules = [
-
-
             'rest' => 'required|numeric|min:0',
-
 //            'images.*' => 'image|mimes:jpg,jpeg,bmp,png',
-
-
         ];
 
 
@@ -578,8 +563,6 @@ class PaymentController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-
-
         }
 
 
@@ -589,29 +572,29 @@ class PaymentController extends Controller
             $parent = Payment::find($request->id);
 
             $row = Payment::create([
-
-
                 'amount' => $request->rest,
-
                 'type' => 'custodyRest',
-
-
                 'payment_id' => $parent->id,
 //                'balance' => $safe->balance,
 //                'new_balance' => $safe->balance + $request->rest,
-
-
+                'employee_id' => $parent->employee_id,
+                'organization_id' => $parent->organization_id,
+                'project_id' => $parent->project_id,
+                'date' => $parent->date,
             ]);
+            $safe_transactions_cash_in = SafeTransaction::query();
+            $next_serial = $safe_transactions_cash_in->where(function ($query){
+                return $query->whereHas('payment',function ($query){
+                    return $query->whereIn('type',['cashin','custody-rest']);
+                });
+            })->max('cash_in_serial');
             SafeTransaction::create([
-
                 'safe_id' => $safe->id,
                 'payment_id' => $row->id,
                 'amount' => $request->rest,
-
                 'balance' => $safe->balance,
                 'new_balance' => $safe->balance + $request->rest,
-
-
+                'cash_in_serial' => is_null($next_serial)?1 : $next_serial+1,
             ]);
             $parent->status = 'closed';
             $parent->save();
@@ -666,21 +649,6 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-//    public function show($id)
-//    {
-//
-//    }
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function show(Request $request, $id)
     {
 
@@ -695,7 +663,6 @@ class PaymentController extends Controller
         $row = Payment::find($id);
         return view('admin.payment.show', compact('row'));
     }
-
 
     public function paymentAccept(Request $request)
     {
@@ -970,7 +937,6 @@ class PaymentController extends Controller
         return back();
 
     }
-
 
     public static function addImage($image, $id, $path)
     {

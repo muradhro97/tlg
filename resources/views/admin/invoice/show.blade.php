@@ -174,7 +174,7 @@
                                 <div class="m-b-md">
                                     {{--<a href="{{url('admin/employee/'.$row->id.'/edit')}}"--}}
                                     {{--class="btn btn-outline btn-primary  pull-right">{{trans('main.edit')}}</a>--}}
-                                    <h2>{{trans('main.details')}} # {{$row->id}}</h2>
+                                    <h2>{{trans('main.details')}} # {{$row->id}}  # {{$row->cash_in_serial}}</h2>
                                 </div>
                             </div>
                             <div class="col-lg-5">

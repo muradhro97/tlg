@@ -12,26 +12,30 @@
 @inject('contractType','App\ContractType')
 <?php
 
-$organizations = $organization->where('type','subContractor')->latest()->pluck('name', 'id')->toArray();
+$organizations = $organization->where('type', 'subContractor')->latest()->pluck('name', 'id')->toArray();
 $projects = $project->latest()->pluck('name', 'id')->toArray();
 
 
 $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
 $contractTypes = $contractType->latest()->pluck('name', 'id')->toArray();
-//dd($subContracts);
 
-$items = $item->where('is_minus' , 0)->latest()->get();
-$minus_items = $item->where('is_minus' , 1)->latest()->get();
+if (empty($model->getAttributes())) {
+    $items = $item->where('is_minus', 0)->latest()->get();
+} else {
+    $items = $model->subcontract->items;
+}
+
+$minus_items = $item->where('is_minus', 1)->latest()->get();
 
 
-$new_items =[];
-$new_items_minus =[];
+$new_items = [];
+$new_items_minus = [];
 
 foreach($items as $item){
-    $new_items[$item->id]= $item->name  .' | '.$item->unit->name ?? '';
+    $item->name =  $item->item->name  .' | '.$item->item->unit->name ?? '';
 }
-foreach($minus_items as $item){
-    $new_items_minus[$item->id]= $item->name  .' | '.$item->unit->name ?? '';
+foreach ($minus_items as $item) {
+    $new_items_minus[$item->id] = $item->name . ' | ' . $item->unit->name ?? '';
 }
 
 
@@ -59,10 +63,10 @@ foreach($minus_items as $item){
 
         {!! Field::text('number' , trans('main.number') ) !!}
     </div>
-{{--    <div class="col-md-6">--}}
+    {{--    <div class="col-md-6">--}}
 
-{{--        {!! Field::select('project_id' , trans('main.project'),$projects,trans('main.select_project')) !!}--}}
-{{--    </div>--}}
+    {{--        {!! Field::select('project_id' , trans('main.project'),$projects,trans('main.select_project')) !!}--}}
+    {{--    </div>--}}
 
 </div>
 <div class="row">
@@ -117,30 +121,27 @@ foreach($minus_items as $item){
 
 {{--<div class="row">--}}
 
-    {{--<div class="col-md-6">--}}
-        {{--{!! Field::select('contract_type_id' , trans('main.contract_type'),$contractTypes,trans('main.contract_type')) !!}--}}
-
-    {{--</div>--}}
+{{--<div class="col-md-6">--}}
+{{--{!! Field::select('contract_type_id' , trans('main.contract_type'),$contractTypes,trans('main.contract_type')) !!}--}}
 
 {{--</div>--}}
 
-
-
+{{--</div>--}}
 
 
 {!! Field::textarea('details' , trans('main.details') ) !!}
 
 
-
 <div class=" row">
     <div class="col-xs-3" id="items_container" style="padding-right: 5px;">
 
-{{--        {{Form::select('item_id', $new_items, null, [--}}
-{{--                                         "class" => "form-control select2 " ,--}}
-{{--                                         "id" => "item_id" ,--}}
-
-{{--                                         "placeholder" =>trans('main.item_name')--}}
-{{--                                     ])}}--}}
+        @if(!empty($model->getAttributes()))
+            <select class="form-control select2 select2-hidden-accessible" id="item_id" name="item_id" tabindex="-1" aria-hidden="true">
+                @foreach($items as $item)
+                    <option data-price="{{$item->price}}" value="{{$item->item_id}}">{{$item->name}}</option>
+                @endforeach
+            </select>
+        @endif
     </div>
     <div class="col-xs-3" style="padding-right: 5px;">
 
@@ -148,10 +149,10 @@ foreach($minus_items as $item){
         {{Form::text('quantity', null, [   "placeholder" => trans('main.quantity'),"class" => "form-control floatonly",   ])}}
         <span class="help-block text-danger"><strong></strong></span>
     </div>
-{{--    <div class="col-xs-3" style="padding-right: 5px;">--}}
-{{--        {{Form::text('price', null, [  "placeholder" =>trans('main.price'), "class" => "form-control floatWithNegative ", ])}}--}}
-{{--        <span class="help-block text-danger"><strong></strong></span>--}}
-{{--    </div>--}}
+    {{--    <div class="col-xs-3" style="padding-right: 5px;">--}}
+    {{--        {{Form::text('price', null, [  "placeholder" =>trans('main.price'), "class" => "form-control floatWithNegative ", ])}}--}}
+    {{--        <span class="help-block text-danger"><strong></strong></span>--}}
+    {{--    </div>--}}
     <div class="col-xs-2" style="padding-right: 5px;">
 
         {{Form::text('exchange_ratio', null, [  "placeholder" =>trans('main.exchange_ratio'), "class" => "form-control numberonly", ])}}
@@ -201,7 +202,6 @@ foreach($minus_items as $item){
         <tr>
 
         </tr>
-
 
 
         </tbody>

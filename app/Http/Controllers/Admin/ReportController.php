@@ -590,7 +590,7 @@ class ReportController extends Controller
         $safe_transactions_cash_in->where('safe_id',0);
         $safe_transactions_cash_in->where(function ($query){
             return $query->whereHas('payment',function ($query){
-                return $query->whereIn('type',['cashin']);
+                return $query->whereIn('type',['cashin','custody-rest']);
             });
         });
         $safe_transactions_cash_in->when($from,function ($query)use ($from){

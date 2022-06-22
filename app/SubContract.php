@@ -25,6 +25,11 @@ class SubContract extends Model
     {
         return $this->hasMany(ContractDetail::class,'contract_id');
     }
+
+    public function extract_items(){
+        return $this->hasManyThrough(ExtractItem::class,ContractDetail::class,'contract_id','id','id','item_id');
+    }
+
     public function contractType()
     {
         return $this->belongsTo(ContractType::class,'type_id');

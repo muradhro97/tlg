@@ -25,7 +25,6 @@ class AccountingCashInController extends Controller
         $this->middleware('permission:detailsAccountingCashIn', ['only' => ['show']]);
 //        $this->middleware('permission:managerAcceptDeclineWorkerLoan', ['only' => ['managerChangeStatus']]);
         $this->middleware('permission:safeAcceptDeclineAccountingCashIn', ['only' => ['changeStatus']]);
-
     }
 
     public function index(Request $request)
@@ -37,7 +36,7 @@ class AccountingCashInController extends Controller
         $rows = Accounting::latest()->where('type','cashin');
         $rows->whereIn('project_id',$product_ids);
 
-        
+
 
 
         if ($request->filled('project_id')) {
@@ -84,17 +83,10 @@ class AccountingCashInController extends Controller
         return view('admin.accounting_cash_in.index', compact('rows'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Accounting $model)
     {
-//        return "asa";
         return view('admin.accounting_cash_in.create', compact('model'));
     }
-
 
     public function store(Request $request)
     {
@@ -164,6 +156,7 @@ class AccountingCashInController extends Controller
                 $message ='New Accounting CashIn # '. $row->id .' Added by ('.auth()->user()->name.') and needs your Approval ';
                 $link = url('admin/accounting/' . $row->id);
             } elseif ($safe->type == "BankAccount") {
+
                 $row = Accounting::create([
 
                     'date' => $request->date,
@@ -184,15 +177,12 @@ class AccountingCashInController extends Controller
                 ]);
 
                 SafeTransaction::create([
-
                     'accounting_id' => $row->id,
                     'amount' => $request->amount,
                     'module' => 'accounting',
                     'balance' => $safe->balance,
                     'new_balance' => $safe->balance + $request->amount,
                     'safe_id' => $request->safe_id,
-
-
                 ]);
                 $safe->balance = $safe->balance + $request->amount;
                 $safe->save();
@@ -254,7 +244,6 @@ class AccountingCashInController extends Controller
 
     }
 
-
     public function show(Request $request, $id)
     {
 
@@ -265,11 +254,9 @@ class AccountingCashInController extends Controller
                 $notification->markAsRead();
             }
         }
-
         $row = Accounting::find($id);
         return view('admin.accounting_cash_in.show', compact('row'));
     }
-
 
     public function changeStatus(Request $request)
     {
@@ -283,15 +270,12 @@ class AccountingCashInController extends Controller
                 $safe = Safe::find($row->safe_id);
 
                 SafeTransaction::create([
-
                     'accounting_id' => $row->id,
                     'amount' => $row->amount,
                     'module' => 'accounting',
                     'balance' => $safe->balance,
                     'new_balance' => $safe->balance + $row->amount,
                     'safe_id' => $row->safe_id,
-
-
                 ]);
                 $safe->balance = $safe->balance + $row->amount;
                 $safe->save();
@@ -327,7 +311,6 @@ class AccountingCashInController extends Controller
         }
 
     }
-
 
     public static function addImage($image, $id, $path)
     {

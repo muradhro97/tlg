@@ -114,6 +114,9 @@ if($row->type=="invoice"){
                 <table>
                     <tr>
                         <td class="title">
+                            @if(!is_null($row->safeTransaction))
+                            <span style="font-weight: bold;font-size: 20px;">Transaction # : {{is_null($row->safeTransaction->cash_in_serial)?$row->safeTransaction->id:$row->safeTransaction->cash_in_serial}}</span><br/>
+                            @endif
                             <img src="{{url($main_settings->image)}}" style="width: 80%; height: 80px; max-width: 300px"/>
                         </td>
 

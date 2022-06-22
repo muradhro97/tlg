@@ -27,10 +27,11 @@ class  ContractController extends Controller
 
 
     }
+
     public function index(Request $request)
     {
         //
-         
+
         //  dd($rows);
         $user=Auth::user();
         $product_ids=$user->projects()->select('project_id');
@@ -66,29 +67,18 @@ class  ContractController extends Controller
             $rows->where('date', '<=', $request->to);
         }
 
-        
+        $total = $rows->sum('price');
+
         $rows = $rows->paginate(20);
 
-        return view('admin.contract.index', compact('rows'));
+        return view('admin.contract.index', compact('rows','total'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Contract $model)
     {
-//        return "asa";
         return view('admin.contract.create', compact('model'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 
@@ -96,23 +86,21 @@ class  ContractController extends Controller
 //        return $request->all();
 
         $rules = [
-
             'date' => 'required|date|date_format:Y-m-d',
             'no' => 'required',
             'organization_id' => 'required|exists:organizations,id',
 //            'price' => 'required|numeric|min:0',
-            'duration' => 'required|numeric|min:0',
+//            'duration' => 'required|numeric|min:0',
             'project_id' => 'required|exists:projects,id',
             'type_id' => 'required|exists:contract_types,id',
 //            'details' => 'required',
             'city_id' => 'required|exists:cities,id',
             'start_date' => 'required|date|date_format:Y-m-d',
-//            'finish_date' => 'required|date|date_format:Y-m-d|after:start_date',
+            'finish_date' => 'required|date|date_format:Y-m-d|after:start_date',
 //            'lat' => 'required',
 //            'lon' => 'required',
             'status' => 'required|in:notStart,active,onhold,closed,extended',
 //            'items.*' => 'required',
-
         ];
         if($request->filled('finish_date')){
             $rules['finish_date']=   'required|date|date_format:Y-m-d|after:start_date';
@@ -129,15 +117,21 @@ class  ContractController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-
-
         }
 
         DB::beginTransaction();
         try {
             $request->merge(['total' => $request->total]);
             $request->merge(['type' => 'main']);
-            $row = Contract::create($request->all());
+            $fdate = $request->start_date;
+            $tdate = $request->finish_date;
+            $datetime1 = new \DateTime($fdate);
+            $datetime2 = new \DateTime($tdate);
+            $interval = $datetime1->diff($datetime2);
+            $days = $interval->format('%a');//now do whatever you like with $days
+            $row = new Contract($request->all());
+            $row->duration = $days;
+            $row->save();
             $items = json_decode($request->items);
             $sum = 0;
             foreach ($items as $item) {
@@ -244,13 +238,13 @@ class  ContractController extends Controller
             'no' => 'required',
             'organization_id' => 'required|exists:organizations,id',
 //            'price' => 'required|numeric|min:0',
-            'duration' => 'required|numeric|min:0',
+//            'duration' => 'required|numeric|min:0',
             'project_id' => 'required|exists:projects,id',
             'type_id' => 'required|exists:contract_types,id',
 //            'details' => 'required',
             'city_id' => 'required|exists:cities,id',
             'start_date' => 'required|date|date_format:Y-m-d',
-//            'finish_date' => 'required|date|date_format:Y-m-d|after:start_date',
+            'finish_date' => 'required|date|date_format:Y-m-d|after:start_date',
 //            'lat' => 'required',
 //            'lon' => 'required',
             'status' => 'required|in:notStart,active,onhold,closed,extended',
@@ -282,7 +276,14 @@ class  ContractController extends Controller
         }
         DB::beginTransaction();
         try {
-            $request->merge(['total' => $request->total]);
+            $fdate = $request->start_date;
+            $tdate = $request->finish_date;
+            $datetime1 = new \DateTime($fdate);
+            $datetime2 = new \DateTime($tdate);
+            $interval = $datetime1->diff($datetime2);
+            $days = $interval->format('%a');//now do whatever you like with $days
+
+            $request->merge(['total' => $request->total,'duration'=>$days]);
             $row = Contract::findOrFail($id);
             $row->update($request->all());
             $row->items()->delete();
