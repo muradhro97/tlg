@@ -37,7 +37,7 @@ class AccountingCashOutController extends Controller
         $rows = Accounting::latest()->where('type','cashout');
         $rows->whereIn('project_id',$product_ids);
 
-        
+
 
 
         if ($request->filled('project_id')) {
@@ -78,10 +78,10 @@ class AccountingCashOutController extends Controller
 
 
         }
-
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(20);
 
-        return view('admin.accounting_cash_out.index', compact('rows'));
+        return view('admin.accounting_cash_out.index', compact('rows','total'));
     }
 
     public function create(Accounting $model)

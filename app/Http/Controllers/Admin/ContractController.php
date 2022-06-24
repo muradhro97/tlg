@@ -353,9 +353,6 @@ class  ContractController extends Controller
     }
     public function detailsPrint( $id)
     {
-
-
-
         $row = Contract::find($id);
         return view('admin.contract.details_print', compact('row'));
     }

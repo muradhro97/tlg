@@ -77,9 +77,10 @@ class ExtractController extends Controller
              $rows->where('total','<=', $request->amount_to);
         }
 
+        $total = $rows->sum('total');
         $rows = $rows->paginate(20);
 
-        return view('admin.extract.index', compact('rows'));
+        return view('admin.extract.index', compact('rows', 'total'));
     }
 
     public function mainIndex(Request $request)
@@ -128,9 +129,10 @@ class ExtractController extends Controller
             $rows->where('total','<=', $request->amount_to);
         }
 
+        $total = $rows->sum('total');
         $rows = $rows->paginate(20);
 
-        return view('admin.extract.main_index', compact('rows'));
+        return view('admin.extract.main_index', compact('rows', 'total'));
     }
 
 

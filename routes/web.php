@@ -114,9 +114,9 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
 //    Route::post('store-stock-in', 'Admin\StockTransactionController@storeStockIn');
 //    Route::get('stock-out', 'Admin\StockTransactionController@stockOut');
 //    Route::post('store-stock-out', 'Admin\StockTransactionController@storeStockOut');
-    Route::post('stock-approve', 'Admin\StockOrderController@stockApprove')->name('stock-approve');//->middleware('throttle:1,1');
-    Route::post('stock-accept', 'Admin\StockOrderController@stockAccept')->name('stock-accept');//->middleware('throttle:1,1');
-    Route::post('stock-decline', 'Admin\StockOrderController@stockDecline')->name('stock-decline');//->middleware('throttle:1,1');
+    Route::post('stock-approve', 'Admin\StockOrderController@stockApprove')->name('stock-approve')->middleware('throttle:1,.1');
+    Route::post('stock-accept', 'Admin\StockOrderController@stockAccept')->name('stock-accept')->middleware('throttle:1,.1');
+    Route::post('stock-decline', 'Admin\StockOrderController@stockDecline')->name('stock-decline')->middleware('throttle:1,.1');
     Route::get('stock-in', 'Admin\StockOrderController@stockIn');
     Route::post('store-stock-in', 'Admin\StockOrderController@storeStockIn');
     Route::get('stock-out', 'Admin\StockOrderController@stockOut');
@@ -141,10 +141,10 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
 
     Route::get('cash-in', 'Admin\PaymentController@cashIn');
     Route::post('store-cash-in', 'Admin\PaymentController@storeCashIn');
-    Route::post('payment-accept', 'Admin\PaymentController@paymentAccept')->name('payment-accept');//->middleware('throttle:1,1');
-    Route::post('payment-decline', 'Admin\PaymentController@paymentDecline')->name('payment-decline');//->middleware('throttle:1,1');
+    Route::post('payment-accept', 'Admin\PaymentController@paymentAccept')->name('payment-accept')->middleware('throttle:1,.1');
+    Route::post('payment-decline', 'Admin\PaymentController@paymentDecline')->name('payment-decline')->middleware('throttle:1,.1');
 
-    Route::post('cash-out-pay', 'Admin\PaymentController@cashOutPay')->name('cash-out-pay');//->middleware('throttle:1,1');
+    Route::post('cash-out-pay', 'Admin\PaymentController@cashOutPay')->name('cash-out-pay')->middleware('throttle:1,.1');
 
 //    Route::post('payment-custody-accept', 'Admin\PaymentController@paymentCustodyAccept')->name('payment-custody-accept');
 //    Route::post('payment-custody-decline', 'Admin\PaymentController@paymentCustodyDecline')->name('payment-custody-decline');
@@ -162,12 +162,12 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
     Route::resource('accounting-cash-out', 'Admin\AccountingCashOutController');
     Route::resource('accounting', 'Admin\AccountingController');
     Route::get('accounting-request', 'Admin\AccountingController@accountingRequest');
-    Route::post('accounting-change-status', 'Admin\AccountingController@changeStatus')->name('accounting-change-status');//->middleware('throttle:1,1');
+    Route::post('accounting-change-status', 'Admin\AccountingController@changeStatus')->name('accounting-change-status')->middleware('throttle:1,.1');
     Route::get('create-expense', 'Admin\InvoiceController@createExpense');
     Route::post('save-expense', 'Admin\InvoiceController@saveExpense');
 
 
-    Route::post('invoice-manager-change-status', 'Admin\InvoiceController@managerChangeStatus')->name('invoice-manager-change-status');//->middleware('throttle:1,1');
+    Route::post('invoice-manager-change-status', 'Admin\InvoiceController@managerChangeStatus')->name('invoice-manager-change-status')->middleware('throttle:1,.1');
     Route::post('invoice-safe-change-status', 'Admin\InvoiceController@safeChangeStatus')->name('invoice-safe-change-status');
 //    Route::post('invoice-stock-change-status', 'Admin\InvoiceController@stockChangeStatus')->name('invoice-stock-change-status');
     Route::get('invoice-print/{id}', 'Admin\InvoiceController@invoicePrint');
@@ -206,26 +206,26 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
 
     Route::resource('stock', 'Admin\StockController');
     Route::get('stock-accounting-request', 'Admin\StockController@accountingRequest');
-    Route::post('stock-accounting-change-status', 'Admin\StockController@changeStatus')->name('stock-accounting-change-status');//->middleware('throttle:1,1');
+    Route::post('stock-accounting-change-status', 'Admin\StockController@changeStatus')->name('stock-accounting-change-status')->middleware('throttle:1,.1');
     Route::resource('worker-classification', 'Admin\WorkerClassificationController');
 
-    Route::post('worker-loan-manager-change-status', 'Admin\WorkerLoanController@managerChangeStatus')->name('worker-loan-manager-change-status');//->middleware('throttle:1,1');
+    Route::post('worker-loan-manager-change-status', 'Admin\WorkerLoanController@managerChangeStatus')->name('worker-loan-manager-change-status')->middleware('throttle:1,.1');
 
-    Route::post('worker-loan-manager-change-statuses', 'Admin\WorkerLoanController@managerChangeStatuses')->name('worker-loan-manager-change-statuses');//->middleware('throttle:1,1');
+    Route::post('worker-loan-manager-change-statuses', 'Admin\WorkerLoanController@managerChangeStatuses')->name('worker-loan-manager-change-statuses')->middleware('throttle:1,.1');
 
-    Route::post('worker-loan-safe-change-status', 'Admin\WorkerLoanController@safeChangeStatus')->name('worker-loan-safe-change-status');//->middleware('throttle:1,1');
+    Route::post('worker-loan-safe-change-status', 'Admin\WorkerLoanController@safeChangeStatus')->name('worker-loan-safe-change-status')->middleware('throttle:1,.1');
 
     Route::resource('worker-loan', 'Admin\WorkerLoanController');
 
     Route::get('worker-salary-print/{id}', 'Admin\WorkerSalaryController@detailsPrint')->name('worker-salary-print');
-    Route::post('worker-salary-manager-change-status', 'Admin\WorkerSalaryController@managerChangeStatus')->name('worker-salary-manager-change-status');//->middleware('throttle:1,1');
-    Route::post('worker-salary-safe-change-status', 'Admin\WorkerSalaryController@safeChangeStatus')->name('worker-salary-safe-change-status');//->middleware('throttle:1,1');
+    Route::post('worker-salary-manager-change-status', 'Admin\WorkerSalaryController@managerChangeStatus')->name('worker-salary-manager-change-status')->middleware('throttle:1,.1');
+    Route::post('worker-salary-safe-change-status', 'Admin\WorkerSalaryController@safeChangeStatus')->name('worker-salary-safe-change-status')->middleware('throttle:1,.1');
 
     Route::resource('worker-salary', 'Admin\WorkerSalaryController');
 
 
-    Route::post('employee-loan-manager-change-status', 'Admin\EmployeeLoanController@managerChangeStatus')->name('employee-loan-manager-change-status');//->middleware('throttle:1,1');
-    Route::post('employee-loan-safe-change-status', 'Admin\EmployeeLoanController@safeChangeStatus')->name('employee-loan-safe-change-status');//->middleware('throttle:1,1');
+    Route::post('employee-loan-manager-change-status', 'Admin\EmployeeLoanController@managerChangeStatus')->name('employee-loan-manager-change-status')->middleware('throttle:1,.1');
+    Route::post('employee-loan-safe-change-status', 'Admin\EmployeeLoanController@safeChangeStatus')->name('employee-loan-safe-change-status')->middleware('throttle:1,.1');
 
     Route::resource('employee-loan', 'Admin\EmployeeLoanController');
     Route::resource('employee-monthly-evaluation', 'Admin\EmployeeMonthlyEvaluationController');
@@ -233,8 +233,8 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
     Route::get('employee-salary-print/{id}', 'Admin\EmployeeSalaryController@detailsPrint')->name('employee-salary-print');
 
 
-    Route::post('employee-salary-manager-change-status', 'Admin\EmployeeSalaryController@managerChangeStatus')->name('employee-salary-manager-change-status');//->middleware('throttle:1,1');
-    Route::post('employee-salary-safe-change-status', 'Admin\EmployeeSalaryController@safeChangeStatus')->name('employee-salary-safe-change-status');//->middleware('throttle:1,1');
+    Route::post('employee-salary-manager-change-status', 'Admin\EmployeeSalaryController@managerChangeStatus')->name('employee-salary-manager-change-status')->middleware('throttle:1,.1');
+    Route::post('employee-salary-safe-change-status', 'Admin\EmployeeSalaryController@safeChangeStatus')->name('employee-salary-safe-change-status')->middleware('throttle:1,.1');
 
     Route::resource('employee-salary', 'Admin\EmployeeSalaryController');
     Route::resource('penalty', 'Admin\PenaltyController');

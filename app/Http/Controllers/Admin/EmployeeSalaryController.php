@@ -57,10 +57,11 @@ class EmployeeSalaryController extends Controller
 
 
         }
+        $total = $rows->sum('amount');
 
         $rows = $rows->paginate(20);
 
-        return view('admin.employee_salary.index', compact('rows'));
+        return view('admin.employee_salary.index', compact('rows', 'total'));
     }
 
 

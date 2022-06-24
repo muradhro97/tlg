@@ -54,9 +54,10 @@ class WorkerLoanController extends Controller
             $rows->where('date', $request->date);
         }
 
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(20);
 
-        return view('admin.worker_loan.index', compact('rows'));
+        return view('admin.worker_loan.index', compact('rows', 'total'));
     }
 
     /**

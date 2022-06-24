@@ -232,6 +232,12 @@
                             @php $count ++; @endphp
                         @endforeach
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td>{{$total}}</td>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
             </form>

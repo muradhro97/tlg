@@ -133,12 +133,12 @@
 
                                             <td>{{$inv->item->name ?? ''}}</td>
                                             <td>{{$inv->quantity?? '---'}}</td>
-                                            <td>{{$inv->price}}</td>
+                                            <td>{{number_format($inv->price,2)}}</td>
                                             <td>{{$inv->exchange_ratio?? '---'}}</td>
                                             @if(!$inv->item->is_minus)
                                             <td>{{ number_format($inv->price * $inv->quantity * $inv->exchange_ratio/100,4, '.', '')}}</td>
                                             @else
-                                                <td>{{$inv->price}}</td>
+                                                <td>{{number_format($inv->price,2)}}</td>
                                             @endif
 
                                         </tr>
@@ -149,7 +149,7 @@
 
                                     <tr style=" border: 2px dashed #3c8dbc;">
                                         <td colspan="4">{{trans('main.total')}}</td>
-                                        <td colspan="2" class="total">{{$total_plus}}</td>
+                                        <td colspan="2" class="total">{{number_format($total_plus,2)}}</td>
                                     </tr>
 
                                     </tbody>
@@ -176,12 +176,12 @@
 
                                             <td>{{$inv->item->name ?? ''}}</td>
                                             <td>{{$inv->quantity?? '---'}}</td>
-                                            <td>{{$inv->price}}</td>
+                                            <td>{{number_format($inv->price,2)}}</td>
                                             <td>{{$inv->exchange_ratio?? '---'}}</td>
                                             @if(!$inv->item->is_minus)
                                                 <td>{{ number_format($inv->price * $inv->quantity * $inv->exchange_ratio/100,4, '.', '')}}</td>
                                             @else
-                                                <td>{{$inv->price}}</td>
+                                                <td>{{number_format($inv->price,2)}}</td>
                                             @endif
 
                                         </tr>
@@ -192,7 +192,7 @@
 
                                     <tr style=" border: 2px dashed #3c8dbc;">
                                         <td colspan="4">{{trans('main.total')}}</td>
-                                        <td colspan="2" class="total">{{$total_minus}}</td>
+                                        <td colspan="2" class="total">{{number_format($total_minus,2)}}</td>
                                     </tr>
 
                                     </tbody>
@@ -201,7 +201,7 @@
                             <hr>
                             <h2 class="text-center">
                                 {{trans('main.net')}}:
-                                {{$total_plus+$total_minus}}
+                                {{number_format($total_plus+$total_minus,2)}}
                             </h2>
                         </div>
                     </div>

@@ -36,9 +36,10 @@ class PenaltyController extends Controller
             $rows->where('date', $request->date);
         }
 
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(20);
 
-        return view('admin.penalty.index', compact('rows'));
+        return view('admin.penalty.index', compact('rows', 'total'));
     }
 
     /**

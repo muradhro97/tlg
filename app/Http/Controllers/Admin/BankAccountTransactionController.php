@@ -70,9 +70,10 @@ class BankAccountTransactionController extends Controller
                 return $query->where('date','<=',$request->to);
             });
         }
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(100);
 
-        return view('admin.bank_account_transaction.accounting_safe_transaction', compact('rows'));
+        return view('admin.bank_account_transaction.accounting_safe_transaction', compact('rows','total'));
     }
     public function accountingBankAccountTransaction(Request $request)
     {

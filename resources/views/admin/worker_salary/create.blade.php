@@ -199,6 +199,7 @@
                     @include('partials.validation-errors')
                     <input type="hidden" name="start" value="{{request()->from}}">
                     <input type="hidden" name="end" value="{{request()->to}}">
+                    <input type="hidden" name="type" value="{{request()->type}}">
                     <div class="col-md-6">
 
                         {!! Field::select('safe_id' , trans('main.safe'),$safes,trans('main.select_safe')) !!}

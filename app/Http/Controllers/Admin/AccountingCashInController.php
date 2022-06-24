@@ -78,9 +78,10 @@ class AccountingCashInController extends Controller
 
         }
 
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(20);
 
-        return view('admin.accounting_cash_in.index', compact('rows'));
+        return view('admin.accounting_cash_in.index', compact('rows', 'total'));
     }
 
     public function create(Accounting $model)

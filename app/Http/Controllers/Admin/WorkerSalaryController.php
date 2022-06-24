@@ -72,9 +72,10 @@ class WorkerSalaryController extends Controller
 
         }
 
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(20);
 
-        return view('admin.worker_salary.index', compact('rows'));
+        return view('admin.worker_salary.index', compact('rows', 'total'));
     }
 
 
@@ -118,8 +119,11 @@ class WorkerSalaryController extends Controller
                 $rows->where('labors_group_id', $request->labors_group_id);
             }
 
-            $rows->whereHas('workerTimeSheet', function ($q) use ($from, $to) {
-                $q->whereBetween('date', [$from, $to])->whereNull('accounting_id')->where('attendance', 'yes');
+            $rows->whereHas('workerTimeSheet', function ($q) use ($from, $to,$request) {
+                $q = $q->whereBetween('date', [$from, $to])->whereNull('accounting_id')->where('attendance', 'yes');
+                if ($request->filled('type')){
+                    $q->where('type', $request->type);
+                }
             });
             $rows = $rows->get();
             $days = $from->diffInDays($to) + 1;
@@ -134,7 +138,6 @@ class WorkerSalaryController extends Controller
         } else {
             $rows = collect();
         }
-//return $rows;
 
         return view('admin.worker_salary.create', compact('model', 'rows'));
     }
@@ -142,21 +145,12 @@ class WorkerSalaryController extends Controller
 
     public function store(Request $request)
     {
-        //
-//        return $items = json_decode($request->items);
-//        return $request->all();
-
         $rules = [
-
             'start' => 'required|date|date_format:Y-m-d',
             'end' => 'required|date|date_format:Y-m-d|after_or_equal:start',
 //            'amount' => 'required|numeric|min:0',
-
             'safe_id' => 'required|exists:safes,id',
-
 //            'worker_id' => 'required|exists:workers,id',
-
-
         ];
 
 
@@ -187,22 +181,16 @@ class WorkerSalaryController extends Controller
 
 
             $row = Accounting::create([
-
                 'start' => $request->start,
                 'end' => $request->end,
 //                'amount' => $request->amount,
-
                 'type' => 'workerSalary',
 //                    'module' => 'accounting',
                 'safe_id' => $request->safe_id,
-
 //                'worker_id' => $request->worker_id,
-
                 'details' => $request->details,
                 'payment_status' => "waiting",
                 'manager_status' => "waiting",
-
-
             ]);
             $start = Carbon::parse($request->start);
             $end = Carbon::parse($request->end);
@@ -212,15 +200,21 @@ class WorkerSalaryController extends Controller
 //                ->where('working_status', 'work')
                 ->whereIn('id', $request->ids)
                 ->whereIn('project_id', $projects);
-            $workers->whereHas('workerTimeSheet', function ($q) use ($start, $end) {
-                $q->whereBetween('date', [$start, $end])->whereNull('accounting_id');
+            $workers->whereHas('workerTimeSheet', function ($q) use ($start, $end,$request) {
+                $q = $q->whereBetween('date', [$start, $end])->whereNull('accounting_id');
+                if ($request->filled('type')){
+                    $q->where('type', $request->type);
+                }
             });
 
             $workers = $workers->paginate(100);
-//            dd($workers);
             $sum_net = 0;
             foreach ($workers as $worker) {
-                $timesheet = $worker->workerTimeSheet()->where('attendance', 'yes')->whereBetween('date', [$request->start, $request->end])->whereNull('accounting_id')->get();
+                $timesheet = $worker->workerTimeSheet()->where('attendance', 'yes')->whereBetween('date', [$request->start, $request->end])->whereNull('accounting_id');
+                if ($request->filled('type')){
+                    $timesheet = $timesheet->where('type', $request->type);
+                }
+                $timesheet->get();
                 // Apply salary change to timesheet if salary changed
                 if ($request->salary_changed) {
                     $hourly_salary = $worker->job->hourly_salary;
@@ -269,7 +263,6 @@ class WorkerSalaryController extends Controller
 
                 $net = $timesheet->sum('total') - $loans_request - $worker->job->taxes - $worker->job->insurance;
                 $sum_net += $net;
-//                dd($net);
                 AccountingWorkerSalaryDetail::create([
                     'worker_id' => $worker->id,
                     'project_id' => $worker->project_id,
@@ -288,10 +281,8 @@ class WorkerSalaryController extends Controller
                     'taxes' => $worker->job->taxes,
                     'insurance' => $worker->job->insurance,
                     'net' => $net,
-
-
                 ]);
-                $worker->workerTimeSheet()->where('attendance', 'yes')->whereBetween('date', [$request->start, $request->end])->whereNull('accounting_id')->update([
+                $timesheet->update([
                     'accounting_id' => $row->id,
                 ]);
                 // update employee loans

@@ -318,9 +318,9 @@
                                 <td>{{number_format($row->hourly_salary,2)}}</td>
                                 <td>{{$total_regular_minutes}}</td>
                                 <td>{{number_format($total_regular,2)}}</td>
-                                <td>{{$overtime_minutes}}</td>
+                                <td>{{number_format($overtime_minutes,2)}}</td>
                                 <td>{{number_format($overtime,2)}}</td>
-                                <td>{{$total_daily_minutes}}</td>
+                                <td>{{number_format($total_daily_minutes,2)}}</td>
                                 <td>{{number_format($total_daily,2)}}</td>
                                 <td>{{number_format($reward,2)}}</td>
                                 <td>{{number_format($row->meals,2)}}</td>

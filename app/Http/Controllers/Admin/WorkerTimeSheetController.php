@@ -20,7 +20,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class WorkerTimeSheetController extends Controller
 {
-    //
 
     public function __construct()
     {
@@ -28,34 +27,26 @@ class WorkerTimeSheetController extends Controller
         $this->middleware('permission:editWorTime', ['only' => ['edit', 'update','updateAll']]);
         $this->middleware('permission:deleteWorTime', ['only' => ['destroy','destroyGET']]);
         $this->middleware('permission:historyWorTime', ['only' => ['workerTimeSheetHistory']]);
-
     }
 
     public function workerTimeSheetProductivity(Request $request)
     {
-        //
-        $model = new WorkerTimeSheet();
+        // get all worker time sheet where has workers that have workerClassification
+        $model = WorkerTimeSheet::whereHas('worker.workerClassification');
+//        $model = new WorkerTimeSheet();
         $projects = auth()->user()->projects->pluck('id')->toArray();
         $rows = Worker::latest()->where('working_status', 'work')->whereIn('project_id', $projects);
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
-
-
         }
         if ($request->filled('organization_id')) {
             $rows->where('organization_id', $request->organization_id);
-
-
         }
         if ($request->filled('job_id')) {
             $rows->where('job_id', $request->job_id);
-
-
         }
         if ($request->filled('labors_group_id')) {
             $rows->where('labors_group_id', $request->labors_group_id);
-
-
         }
         if ($request->filled('date')) {
             $date = $request->date;
@@ -64,11 +55,10 @@ class WorkerTimeSheetController extends Controller
         }
         $rows->whereDoesntHave('workerTimeSheet', function ($q) use ($date) {
             $q->where('date', $date);
-
         });
 
 
-        $rows = $rows->paginate(20);
+        $rows = $rows->get();
 
         return view('admin.worker_time_sheet.index_productivity', compact('rows', 'model'));
     }

@@ -26,8 +26,6 @@ class SafeTransactionController extends Controller
 
     public function index(Request $request)
     {
-        //
-// Payment::where('type', 'cashin')->get();
          $rows = SafeTransaction::latest()
             ->where('safe_id', 0)
         ;
@@ -66,9 +64,10 @@ class SafeTransactionController extends Controller
         if ($request->filled('to')) {
             $rows->where('created_at', '<=', $request->to);
         }
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(100);
 
-        return view('admin.safe_transaction.index', compact('rows'));
+        return view('admin.safe_transaction.index', compact('rows','total'));
     }
 
     /**

@@ -6,25 +6,25 @@
 @stop
 @section('content')
 
-@inject('organization','App\Organization')
-@inject('project','App\Project')
-@inject('contractType','App\ContractType')
-@inject('subContract','App\SubContract')
+    @inject('organization','App\Organization')
+    @inject('project','App\Project')
+    @inject('contractType','App\ContractType')
+    @inject('subContract','App\SubContract')
 
 
 
 
-<?php
+    <?php
 
 
-$organizations = $organization->where('type','subContractor')->latest()->pluck('name', 'id')->toArray();
+    $organizations = $organization->where('type', 'subContractor')->latest()->pluck('name', 'id')->toArray();
 
 
-$projects = $project->latest()->whereIn('id', auth()->user()->projects->pluck('id')->toArray())->pluck('name', 'id')->toArray();
-$contractTypes = $contractType->latest()->pluck('name', 'id')->toArray();
+    $projects = $project->latest()->whereIn('id', auth()->user()->projects->pluck('id')->toArray())->pluck('name', 'id')->toArray();
+    $contractTypes = $contractType->latest()->pluck('name', 'id')->toArray();
 
-$subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
-?>
+    $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
+    ?>
     <div class="ibox ibox-primary">
         <div class="ibox-title">
             <h5>{{trans('main.search') }}</h5>
@@ -90,13 +90,15 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="control-label" for="date">{{trans('main.from')}}</label>
-                        <input type="date" id="date" name="date_from" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                        <input type="date" id="date" name="date_from" value="" placeholder="{{trans('main.date')}}"
+                               class="form-control">
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="control-label" for="date">{{trans('main.to')}}</label>
-                        <input type="date" id="date" name="date_to" value="" placeholder="{{trans('main.date')}}" class="form-control">
+                        <input type="date" id="date" name="date_to" value="" placeholder="{{trans('main.date')}}"
+                               class="form-control">
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -154,11 +156,11 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
         </div>
         <div class="ibox-content">
             @can('addExtract')
-            <div class="">
-                <a href="{{url('admin/extract/create')}}" class="btn btn-primary">
-                    <i class="fa fa-plus"></i> {{trans('main.new') }}
-                </a>
-            </div>
+                <div class="">
+                    <a href="{{url('admin/extract/create')}}" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> {{trans('main.new') }}
+                    </a>
+                </div>
             @endcan
             <div class="clearfix"></div>
             <br>
@@ -175,7 +177,7 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                         <th>{{trans('main.date') }}</th>
                         <th>{{trans('main.sub_contract') }}</th>
                         <th>{{trans('main.contract_type') }}</th>
-{{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
+                        {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
                         <th>{{trans('main.organization') }}</th>
                         <th>{{trans('main.project') }}</th>
                         <th>{{trans('main.period_from') }}</th>
@@ -202,7 +204,7 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                                 <td>{{$row->date}}</td>
                                 <td>{{$row->subContract->no ?? ''}}</td>
 
-{{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
+                                {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
                                 <td>{{$row->subContract->contractType->name ?? ''}}</td>
                                 <td>{{$row->organization->name ?? ''}}</td>
                                 <td>{{$row->project->name ?? ''}}</td>
@@ -215,9 +217,9 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
 
                                 <td>
 
-                                    <a  style="margin: 2px;" type="button" href="{{url('admin/extract/'.$row->id)}}"
+                                    <a style="margin: 2px;" type="button" href="{{url('admin/extract/'.$row->id)}}"
                                        class="btn btn-sm btn-primary"><i
-                                                class="fa fa-eye"></i></a>
+                                            class="fa fa-eye"></i></a>
                                     @can('editExtract')
                                         <a href="{{route('extract.edit',$row->id)}}" class="btn btn-sm btn-success">
                                             <i class="fa fa-edit"></i>
@@ -238,6 +240,12 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                             @php $count ++; @endphp
                         @endforeach
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="9"></td>
+                            <td>{{$total}}</td>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="text-center">
@@ -261,14 +269,14 @@ $subContracts = $subContract->latest()->pluck('no', 'id')->toArray();
                             extend: 'print',
                             className: 'btn btn-primary  hide-for-mobile',
                             {{--text: "<i class=fa fa-print'></i>  {{trans('main.print')}}",--}}
-                            text:      '<i class="fa fa-print"></i> {{trans("main.print")}}',
+                            text: '<i class="fa fa-print"></i> {{trans("main.print")}}',
                             autoPrint: true,
                             title: "",
-                            init: function(api, node, config) {
+                            init: function (api, node, config) {
                                 $(node).removeClass('dt-button')
                             },
                             exportOptions: {
-                                columns: [ 0, 1 ,2,3,4,5,6,7]
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7]
                             }
                         }
                     ],

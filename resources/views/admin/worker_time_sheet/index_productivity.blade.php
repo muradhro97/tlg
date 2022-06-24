@@ -17,12 +17,7 @@
 
 
     $organizations = $organization->latest()->pluck('name', 'id')->toArray();
-
-
     $projects = $project->latest()->whereIn('id', auth()->user()->projects->pluck('id')->toArray())->pluck('name', 'id')->toArray();
-
-
-
     $jobs = $job->latest()->pluck('name', 'id')->toArray();
     $laborsGroups = $laborsGroup->latest()->pluck('name', 'id')->toArray();
     ?>
@@ -216,16 +211,10 @@
                                     <div class="col-md-4">
                                         <input type="checkbox" id="select_all">
                                         <label for="select_all">  {{trans('main.select_all')}} </label>
-
-
                                     </div>
-
-                                </div>
-                                <div class="text-center">
-                                    {!! $rows->appends(request()->except('page'))->links() !!}
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="data-table table table-bordered">
+                                    <table class="data-table table table-bordered myTable">
                                         <thead>
                                         <th>{{trans('main.select')}}</th>
                                         {{--                        <th>{{trans('main.transaction_no') }}</th>--}}
@@ -246,7 +235,7 @@
                                         @php $count = 1; @endphp
                                         @foreach($rows as $row)
                                             <?php
-                                            $iteration = $loop->iteration + (($rows->currentPage() - 1) * $rows->perPage())
+                                            $iteration = $loop->iteration
                                             ?>
                                             <tr>
                                                 <td><input type="checkbox" value="{{$row->id}}" name="ids[]"></td>
@@ -281,9 +270,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="text-center">
-                                    {!! $rows->appends(request()->except('page'))->links() !!}
-                                </div>
+
 
                                 {!! Form::close()!!}
                             @else

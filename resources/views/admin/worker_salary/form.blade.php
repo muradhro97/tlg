@@ -50,7 +50,10 @@
         @foreach($rows as $row)
             <?php
             $iteration = $loop->iteration + 1;
-        $row_worker_time_sheet = $row->workerTimeSheet()->where('attendance','yes')->whereBetween('date', [request()->from, request()->to])->whereNull('accounting_id');
+            $row_worker_time_sheet = $row->workerTimeSheet()->where('attendance','yes')->whereBetween('date', [request()->from, request()->to])->whereNull('accounting_id');
+            if(request()->filled('type')){
+                $row_worker_time_sheet = $row_worker_time_sheet->where('type',request()->type);
+            }
             $days = $row_worker_time_sheet->count();
             $daily_salary = $row->job->daily_salary;
             $total_daily_salary =$row_worker_time_sheet->sum('daily_salary');
@@ -88,10 +91,10 @@
                 <td>{{$days}}</td>
                 <td>{{number_format($daily_salary,2)}}</td>
                 <td>{{number_format($total_daily_salary,2)}}</td>
-                <td>{{$overtime}}</td>
+                <td>{{number_format($overtime,2)}}</td>
                 <td>{{number_format($row->job->hourly_salary,2)}}</td>
                 <td>{{number_format($additions,2)}}</td>
-                <td>{{$deduction_hrs}}</td>
+                <td>{{number_format($deduction_hrs,2)}}</td>
                 <td>{{number_format($deduction_value,2)}}</td>
                 <td>{{$safety}}</td>
                 <td>{{number_format($discounts,2)}}</td>
@@ -105,7 +108,7 @@
                 <td>{{$taxes}}</td>
                 <td>{{$insurance}}</td>
                 <?php
-                $net = $row->workerTimeSheet()->where('attendance', 'yes')->whereBetween('date', [request()->from, request()->to])->whereNull('accounting_id')->sum('total') - $row->loans()->whereNull('accounting_id')->sum('amount') - $row->job->taxes - $row->job->insurance;
+                $net = $row_worker_time_sheet->sum('total') - $row->loans()->whereNull('accounting_id')->sum('amount') - $row->job->taxes - $row->job->insurance;
                 $sum_net += $net;
                 ?>
                 <td>{{$net }}</td>
