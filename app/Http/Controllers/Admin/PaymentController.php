@@ -75,9 +75,10 @@ class PaymentController extends Controller
 
         }
 
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(20);
 
-        return view('admin.payment.index', compact('rows'));
+        return view('admin.payment.index', compact('rows', 'total'));
     }
 
     public function cashIn(Payment $model)

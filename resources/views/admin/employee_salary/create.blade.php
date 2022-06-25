@@ -371,24 +371,24 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{$days_sum}}</td>
-                                <td>{{$rows->sum('hourly_salary')}}</td>
-                                <td>{{$total_regular_minutes_sum}}</td>
-                                <td>{{$total_regular_sum}}</td>
-                                <td>{{$overtime_minutes_sum}}</td>
-                                <td>{{$overtime_sum}}</td>
-                                <td>{{$total_daily_minutes_sum}}</td>
-                                <td>{{$total_daily_sum}}</td>
-                                <td>{{$reward_sum}}</td>
-                                <td>{{$rows->sum('meals')}}</td>
-                                <td>{{$rows->sum('communications')}}</td>
-                                <td>{{$rows->sum('transports')}}</td>
-                                <td>{{$penalty_sum}}</td>
-                                <td>{{$rows->sum('taxes')}}</td>
-                                <td>{{$rows->sum('insurance')}}</td>
+                                <td>{{number_format($days_sum,2)}}</td>
+                                <td>{{number_format($rows->sum('hourly_salary'),2)}}</td>
+                                <td>{{number_format($total_regular_minutes_sum,2)}}</td>
+                                <td>{{number_format($total_regular_sum,2)}}</td>
+                                <td>{{number_format($overtime_minutes_sum,2)}}</td>
+                                <td>{{number_format($overtime_sum,2)}}</td>
+                                <td>{{number_format($total_daily_minutes_sum,2)}}</td>
+                                <td>{{number_format($total_daily_sum,2)}}</td>
+                                <td>{{number_format($reward_sum,2)}}</td>
+                                <td>{{number_format($rows->sum('meals'),2)}}</td>
+                                <td>{{number_format($rows->sum('communications'),2)}}</td>
+                                <td>{{number_format($rows->sum('transports'),2)}}</td>
+                                <td>{{number_format($penalty_sum,2)}}</td>
+                                <td>{{number_format($rows->sum('taxes'),2)}}</td>
+                                <td>{{number_format($rows->sum('insurance'),2)}}</td>
                                 <td></td>
                                 <td></td>
-                                <td>{{$net_sum}}</td>
+                                <td>{{number_format($net_sum,2)}}</td>
                             </tr>
                         </tfoot>
 

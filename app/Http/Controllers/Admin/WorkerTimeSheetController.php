@@ -597,14 +597,8 @@ class WorkerTimeSheetController extends Controller
                     $discounts = (($request->deduction_hrs + $request->safety) * $row->hourly_salary) + $request->deduction_value;
                     $total = $additions - $discounts;
                 }
-//dd($total_daily_minutes);
-//            $total_daily_hrs = Carbon::parse("00:00:00")->addMinutes($total_daily_minutes);
-//            dd($aa->format('H:i:s'));   foreach ($request->ids as $id) {
-
 
                 $row->update([
-
-
                     'attendance' => $request->attendance,
                     'overtime' => $request->overtime,
                     'additional_overtime' => $request->additional_overtime,
@@ -623,22 +617,18 @@ class WorkerTimeSheetController extends Controller
                     ->log('worker time sheet  :subject.id updated ');
             }
             DB::commit();
-//            return 1;
             toastr()->success(trans('main.save_done_successfully'));
-            return redirect('admin/worker-time-sheet-history');
-
+//            return redirect()->action('Admin\WorkerTimeSheetController@workerTimeSheetHistory',[$request->all()]);
+            return redirect()->back();
 
         } catch (\Exception $e) {
             DB::rollBack();
 
             return back()->withErrors($e->getMessage())->withInput();
-//            return back();
 
 
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
-
-
             return back()->withErrors($ex->errorInfo[2])->withInput();
 
         }

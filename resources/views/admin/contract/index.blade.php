@@ -199,7 +199,7 @@ $statusOptions = [
                                 <td>{{$row->date}}</td>
                                 <td>{{$row->contractType->name ?? '...'}}</td>
                                 <td>{{$row->status}}</td>
-                                <td>{{$row->price}}</td>
+                                <td>{{number_format($row->price,2)}}</td>
                                 <td>{{$row->duration}}</td>
                                 <td>{{$row->start_date}}</td>
                                 <td>{{$row->finish_date}}</td>
@@ -229,7 +229,7 @@ $statusOptions = [
                         <tfoot>
                         <tr>
                             <td colspan="7"></td>
-                            <td>{{$total}}</td>
+                            <td>{{number_format($total,2)}}</td>
                         </tr>
                         </tfoot>
                     </table>

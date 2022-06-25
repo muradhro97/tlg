@@ -215,7 +215,7 @@
                                 <td>{{$row->accounting_id}}</td>
                                 <td>{{$row->module}}</td>
                                 <td>{{ $row->parent->type ?? ''}}</td>
-                                <td>{{$row->amount}}</td>
+                                <td>{{number_format($row->amount,2)}}</td>
                                 <td>{{$row->safe->name ?? ''}}</td>
                                 {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->organization->name ?? ''}}</td>--}}

@@ -256,14 +256,14 @@
                                 <td>{{$row->accounting_id}}</td>
                                 <td>{{$row->module}}</td>
                                 <td>{{ $row->accounting->type ?? ''}}</td>
-                                <td>{{$row->amount}}</td>
+                                <td>{{number_format($row->amount,2)}}</td>
 {{--                                <td>{{ $row->parent->type ?? ''}}</td>--}}
                                 {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->organization->name ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->project->name ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->employee->name ?? ''}}</td>--}}
-                                <td>{{$row->balance}}</td>
-                                <td>{{$row->new_balance}}</td>
+                                <td>{{number_format($row->balance,2)}}</td>
+                                <td>{{number_format($row->new_balance,2)}}</td>
 
                                 <td>
                                     <a style="margin: 2px;" type="button"
@@ -301,6 +301,12 @@
                             @php $count ++; @endphp
                         @endforeach
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7"></td>
+                            <td>{{number_format($total,2)}}</td>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="text-center">

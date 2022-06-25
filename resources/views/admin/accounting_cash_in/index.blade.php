@@ -217,7 +217,7 @@ $paymentStatusOptions=[
                                 <td>{{$row->id}}</td>
                                 <td>{{$row->type}}</td>
                                 <td>{{$row->date}}</td>
-                                <td>{{$row->amount}}</td>
+                                <td>{{number_format($row->amount,2)}}</td>
                                 {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
                                 <td>{{$row->project->name ?? ''}}</td>
                                 <td>{{$row->transaction_cheque_no}}</td>

@@ -124,21 +124,21 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{$days_sum}}</td>
-                <td>{{$daily_salary_sum}}</td>
-                <td>{{$total_daily_salary_sum}}</td>
-                <td>{{$overtime_sum}}</td>
-                <td>{{$hourly_salary_sum}}</td>
-                <td>{{$additions_sum}}</td>
-                <td>{{$deduction_hrs_sum}}</td>
-                <td>{{$deduction_value_sum}}</td>
-                <td>{{$safety_sum}}</td>
-                <td>{{$discounts_sum}}</td>
-                <td>{{$total_sum}}</td>
+                <td>{{number_format($days_sum,2)}}</td>
+                <td>{{number_format($daily_salary_sum,2)}}</td>
+                <td>{{number_format($total_daily_salary_sum,2)}}</td>
+                <td>{{number_format($overtime_sum,2)}}</td>
+                <td>{{number_format($hourly_salary_sum,2)}}</td>
+                <td>{{number_format($additions_sum,2)}}</td>
+                <td>{{number_format($deduction_hrs_sum,2)}}</td>
+                <td>{{number_format($deduction_value_sum,2)}}</td>
+                <td>{{number_format($safety_sum,2)}}</td>
+                <td>{{number_format($discounts_sum,2)}}</td>
+                <td>{{number_format($total_sum,2)}}</td>
                 <td></td>
-                <td>{{$taxes_sum}}</td>
-                <td>{{$insurance_sum}}</td>
-                <td>{{$sum_net}}</td>
+                <td>{{number_format($taxes_sum,2)}}</td>
+                <td>{{number_format($insurance_sum,2)}}</td>
+                <td>{{number_format($sum_net,2)}}</td>
                 <td></td>
             </tr>
         </tfoot>

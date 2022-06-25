@@ -46,7 +46,7 @@ class InvoiceController extends Controller
         $product_ids=$user->projects()->select('project_id');
         $rows = Accounting::latest()->whereIn('type', ['invoice', 'expense']);
         $rows->whereIn('project_id',$product_ids);
-        
+
 
         if ($request->filled('project_id')) {
             $rows->where('project_id', $request->project_id);
@@ -91,10 +91,10 @@ class InvoiceController extends Controller
 
         }
 
-
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(20);
 
-        return view('admin.invoice.index', compact('rows'));
+        return view('admin.invoice.index', compact('rows', 'total'));
     }
 
     /**

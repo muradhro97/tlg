@@ -129,9 +129,10 @@ class BankAccountTransactionController extends Controller
         if ($request->filled('to')) {
             $rows->where('created_at', '<=', $request->to);
         }
+        $total = $rows->sum('amount');
         $rows = $rows->paginate(100);
 
-        return view('admin.bank_account_transaction.accounting_bank_account_transaction', compact('rows'));
+        return view('admin.bank_account_transaction.accounting_bank_account_transaction', compact('rows','total'));
     }
 
     /**

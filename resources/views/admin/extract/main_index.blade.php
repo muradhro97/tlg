@@ -251,7 +251,7 @@ $Contracts = $Contract->latest()->pluck('no', 'id')->toArray();
                         <tfoot>
                         <tr>
                             <td colspan="9"></td>
-                            <td>{{$total}}</td>
+                            <td>{{number_format($total,2)}}</td>
                         </tr>
                         </tfoot>
                     </table>

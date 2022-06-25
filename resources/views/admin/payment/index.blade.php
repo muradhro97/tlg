@@ -263,6 +263,12 @@
                             @php $count ++; @endphp
                         @endforeach
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="5"></td>
+                            <td>{{number_format($total,2)}}</td>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="text-center">
