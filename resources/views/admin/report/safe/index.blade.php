@@ -149,7 +149,7 @@
                 </a>
             </div>
         </div>
-        <div class="ibox-content">
+        <div id="tablePrint" class="ibox-content x_content">
             {{--<div class="">--}}
             {{--<a href="{{url('admin/cash-in')}}" class="btn btn-primary">--}}
             {{--<i class="fa fa-plus"></i> {{trans('main.cash_in') }}--}}
@@ -166,8 +166,12 @@
             <div class="clearfix"></div>
             <br>
 
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row ">
+                <button id="prinbtThis" class="noPrint btn btn-success x_content">
+                    <i class="fa fa-print"></i>
+                    إطبع
+                </button>
+                <div class="col-md-6 x_content">
                     <h4>{{trans('main.cash_out') }}</h4>
                     @if($safe_transactions->count()>0)
                         <div class="table-responsive">

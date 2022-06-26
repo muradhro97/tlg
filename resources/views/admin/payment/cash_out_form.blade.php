@@ -12,7 +12,8 @@ $organizations = $organization->latest()->pluck('name', 'id')->toArray();
 
 
 //$labors_departments = $labors_department->latest()->pluck('name', 'id')->toArray();
-$projects = $project->latest()->pluck('name', 'id')->toArray();
+$projects = auth()->user()->projects->pluck('name','id')->toArray();
+// $projects = $project->latest()->pluck('name', 'id')->toArray();
 $employees = $employee->latest()->pluck('name', 'id')->toArray();
 //$categories = $category->latest()->where('main_category', 0)->get();
 //dd($categories);

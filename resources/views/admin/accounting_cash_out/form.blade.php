@@ -12,7 +12,8 @@
 
 
 $organizations = $organization->latest()->pluck('name', 'id')->toArray();
-$projects = $project->latest()->pluck('name', 'id')->toArray();
+$projects = auth()->user()->projects->pluck('name','id')->toArray();
+// $projects = $project->latest()->pluck('name', 'id')->toArray();
 $safes = $safe->oldest()->where('type','BankAccount')->pluck('name', 'id')->toArray();
 
 

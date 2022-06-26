@@ -374,6 +374,23 @@ $event = 'notification';
 
     {{--Command: toastr["info"]("ss", "dd");--}}
 </script>
+
+<script src="{{asset('assets/admin/js/printThis.js')}}"></script>
+{{-- <script src="{{asset('assets/admin/js/jquery-2.1.1.js')}}"></script> --}}
+<script>
+    $(document).ready( function () {
+$('#prinbtThis').on('click' , function (){
+console.log('hi mr mohamed ')     
+$('#tablePrint').printThis({
+importCSS:true,
+importStyle:true,
+loadCSS:"../../public/css/custom.css",
+
+})
+})
+})
+
+</script>
 @toastr_render
 @stack('script')
 @stack('script2')

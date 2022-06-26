@@ -51,14 +51,20 @@
 
     </div>
 
-    <div class="row">
+    <div class="row" id="tablePrint" >
         <div class="col-lg-12">
             <div class="wrapper wrapper-content animated fadeInUp">
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">
+
                             <div class="col-lg-12">
+
                                 <div class="m-b-md">
+                                    <button id="prinbtThis" class="noPrint btn btn-success x_content">
+                                        <i class="fa fa-print"></i>
+                                        إطبع
+                                    </button>
                                     {{--<a href="{{url('admin/employee/'.$row->id.'/edit')}}"--}}
                                     {{--class="btn btn-outline btn-primary  pull-right">{{trans('main.edit')}}</a>--}}
                                     <h2>{{trans('main.details')}} # {{$row->id}}</h2>
