@@ -143,16 +143,13 @@ class ExtractController extends Controller
 
     public function mainCreate(Accounting $model)
     {
-//        return "asa";
         return view('admin.extract.create_main_extract', compact('model'));
     }
 
 
     public function store(Request $request)
     {
-        //
-//        return $items = json_decode($request->items);
-//        return $request->all();
+
         $rules = [
 
             'date' => 'required|date|date_format:Y-m-d',
