@@ -126,15 +126,16 @@
                     <tr>
                         <td>{{trans('main.id')}}:</td>
                         <td> {{$row->id}}      </td>
-                        <td>{{trans('main.date')}}:</td>
+                        <td>{{trans('main.number')}}:</td>
+                        <td> {{$row->number}}      </td>
                         <td> {{$row->date}}      </td>
-
                     </tr>
                     <tr>
                         <td>{{trans('main.organization')}}:</td>
                         <td> {{$row->organization->name ?? ''}}      </td>
                         <td>{{trans('main.project')}}:</td>
                         <td> {{$row->project->name ?? ''}}</td>
+
                     </tr>
 
                     <tr>
@@ -150,6 +151,11 @@
                         <td> {{$row->period_from}}      </td>
                         <td>{{trans('main.period_to')}}:</td>
                         <td> {{$row->period_to}}</td>
+                        <td>{{trans('main.date')}}:</td>
+                    </tr>
+                    <tr>
+                        <td>{{trans('main.details')}}:</td>
+                        <td> {{$row->details}}</td>
                     </tr>
 
 
