@@ -5,12 +5,84 @@
     @include('admin.layouts.partials.breadcrumb',['title'=>trans('main.payments'),'url'=>'payment'])
 @stop
 @section('content')
+
+
+<style>
+    @media print {
+        #prinbtThis{
+            display: none !important;
+        }
+        @page {size: landscape}
+
+
+
+    dl {
+  width: 100%;
+  float: left;
+  overflow: hidden;
+  background: #ff0;
+  margin-top: 0;
+    margin-bottom: 20px;
+    direction: ltr;
+}
+
+dt {
+  background: #cc0;
+  float: right;
+    width: 160px;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    direction: ltr;
+}
+dd {
+  float: right;
+  width: 27% !important;
+  background: #dd0;
+  display: block;
+  direction: ltr;
+}
+
+
+        /* .row > div > .wrapper > .ibox > .ibox-content */
+         #tablePrint{
+            clear: both !important;
+            background-color: #f3f3f3 !important;
+            color: inherit !important;
+            padding: 15px 20px 20px 20px !important;
+            border-color: #6a7b86 !important;
+            border-image: none !important;
+            border-style: solid solid none !important;
+            border-width: 1px 0 !important;
+
+        }
+
+    @page {
+      margin: 2.5cm;
+      direction: ltr;
+    }
+
+}
+
+
+
+
+</style>
+
     <!-- FILE: app/views/start.blade.php -->
     <div class="ibox-content m-b-sm border-bottom float-e-margins">
 
         <div class="row">
 
             @include('partials.validation-errors')
+
+            <div class="pull-right">
+                <a class="btn btn-outline btn-primary" target="_blank" href="{{url('admin/accounting-cash-in-print/'.$row->id)}}"><i class="fa fa-print"></i>  {{trans('main.print')}}
+                </a>
+            </div>
+
             @can('safeAcceptDeclineAccountingCashIn')
                 @if($row->type=="cashin" and $row->payment_status=="waiting" )
 
@@ -51,20 +123,20 @@
 
     </div>
 
-    <div class="row" id="tablePrint" >
+    <div class="row"  >
         <div class="col-lg-12">
             <div class="wrapper wrapper-content animated fadeInUp">
                 <div class="ibox">
-                    <div class="ibox-content">
+                    <div class="ibox-content" id="tablePrint">
                         <div class="row">
 
                             <div class="col-lg-12">
 
                                 <div class="m-b-md">
-                                    <button id="prinbtThis" class="noPrint btn btn-success x_content">
+                                    {{-- <button id="prinbtThis" class="noPrint btn btn-success x_content">
                                         <i class="fa fa-print"></i>
                                         إطبع
-                                    </button>
+                                    </button> --}}
                                     {{--<a href="{{url('admin/employee/'.$row->id.'/edit')}}"--}}
                                     {{--class="btn btn-outline btn-primary  pull-right">{{trans('main.edit')}}</a>--}}
                                     <h2>{{trans('main.details')}} # {{$row->id}}</h2>
@@ -75,7 +147,7 @@
                                 </dl>
                             </div>
                         </div>
-                        <div class="row">
+                        <div id="prinbtThisRow" class="row">
                             <div class="col-lg-5">
                                 <dl class="dl-horizontal">
 

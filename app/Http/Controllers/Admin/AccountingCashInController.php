@@ -245,6 +245,12 @@ class AccountingCashInController extends Controller
 
     }
 
+    public function detailsPrint($id)
+    {
+        $row = Accounting::find($id);
+        return view('admin.accounting_cash_in.details_print', compact('row'));
+    }
+
     public function show(Request $request, $id)
     {
 

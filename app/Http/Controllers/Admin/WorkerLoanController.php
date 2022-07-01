@@ -29,6 +29,14 @@ class WorkerLoanController extends Controller
 
     }
 
+    public function detailsPrint()
+    {
+        $rows = Accounting::orderBy('date','desc')->orderBy('created_at','desc')->where('type', 'workerLoan');
+        $total = $rows->sum('amount');
+        $rows = $rows->get();
+        return view('admin.worker_loan.details_print', compact('rows','total'));
+    }
+
     public function index(Request $request)
     {
         //

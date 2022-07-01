@@ -14,10 +14,6 @@
             <div class="pull-right">
                 <a class="btn btn-outline btn-primary" target="_blank" href="{{url('admin/extract-print/'.$row->id)}}"><i class="fa fa-print"></i>  {{trans('main.print')}}
                 </a>
-
-
-
-
             </div>
             @if($row->type=="cashin" and $row->payment_status=="waiting" )
 

@@ -168,25 +168,30 @@
                 @endcan
                 {{csrf_field()}}
                 <div class="table-responsive">
+                    <div class="pull-right">
+                        <a class="btn btn-outline btn-primary" target="_blank" href="{{url('admin/worker-loans-print')}}"><i class="fa fa-print"></i>  {{trans('main.print')}}
+                        </a>
+                    </div>
                     <table class="data-table table table-bordered  print_table">
+                        
                         <thead>
-                        <th>#</th>
-                        <th>{{trans('main.id') }}</th>
-                        <th>{{trans('main.date') }}</th>
-                        <th>{{trans('main.worker') }}</th>
-                        <th>{{trans('main.amount') }}</th>
-                        {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
-                        {{--<th>{{trans('main.project') }}</th>--}}
-                        {{--<th>{{trans('main.organization') }}</th>--}}
-                        {{--<th>{{trans('main.contract') }}</th>--}}
-                        <th>{{trans('main.safe') }}</th>
-                        {{--<th>{{trans('main.safe_balance') }}</th>--}}
-                        {{--<th>{{trans('main.safe_new_balance') }}</th>--}}
-                        <th>{{trans('main.manager_status') }}</th>
-                        <th>{{trans('main.payment_status') }}</th>
-                        @can('detailsWorkerLoan')
-                            <th>{{trans('main.options') }}</th>
-                        @endcan
+                                <th>#</th>
+                                <th>{{trans('main.id') }}</th>
+                                <th>{{trans('main.date') }}</th>
+                                <th>{{trans('main.worker') }}</th>
+                                <th>{{trans('main.amount') }}</th>
+                                {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
+                                {{--<th>{{trans('main.project') }}</th>--}}
+                                {{--<th>{{trans('main.organization') }}</th>--}}
+                                {{--<th>{{trans('main.contract') }}</th>--}}
+                                <th>{{trans('main.safe') }}</th>
+                                {{--<th>{{trans('main.safe_balance') }}</th>--}}
+                                {{--<th>{{trans('main.safe_new_balance') }}</th>--}}
+                                <th>{{trans('main.manager_status') }}</th>
+                                <th>{{trans('main.payment_status') }}</th>
+                                @can('detailsWorkerLoan')
+                                    <th>{{trans('main.options') }}</th>
+                                @endcan
                         {{--<th class="text-center">{{trans('main.edit') }}</th>--}}
                         {{--<th class="text-center">{{trans('main.delete') }}</th>--}}
                         </thead>
@@ -256,7 +261,7 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    @push('script')
+    @push('script1')
 
         <script>
             $(document).ready(function () {
@@ -269,7 +274,7 @@
                             {{--text: "<i class=fa fa-print'></i>  {{trans('main.print')}}",--}}
                             text:      '<i class="fa fa-print"></i> {{trans("main.print")}}',
                             autoPrint: true,
-                            title: "",
+                            title: "worker loans",
                             init: function(api, node, config) {
                                 $(node).removeClass('dt-button')
                             },

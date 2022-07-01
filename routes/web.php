@@ -176,7 +176,9 @@ Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function () {
     Route::resource('expense-item', 'Admin\ExpenseItemController');
 
     Route::get('extract-print/{id}', 'Admin\ExtractController@detailsPrint');
-
+    Route::get('accounting-cash-in-print/{id}', 'Admin\AccountingCashInController@detailsPrint');
+    Route::get('worker-loans-print', 'Admin\WorkerLoanController@detailsPrint');
+    Route::get('employee-loans-print', 'Admin\EmployeeLoanController@detailsPrint');
 
     Route::resource('extract', 'Admin\ExtractController');
     Route::get('main_extract', 'Admin\ExtractController@mainIndex');

@@ -164,6 +164,10 @@
                 @endcan
                 {{csrf_field()}}
                 <div class="table-responsive">
+                    <div class="pull-right">
+                        <a class="btn btn-outline btn-primary" target="_blank" href="{{url('admin/employee-loans-print')}}"><i class="fa fa-print"></i>  {{trans('main.print')}}
+                        </a>
+                    </div>
                     <table class="data-table table table-bordered print_table">
                         <thead>
                         <th>#</th>
@@ -250,7 +254,7 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    @push('script')
+    @push('script1')
 
         <script>
             $(document).ready(function () {

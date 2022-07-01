@@ -27,6 +27,14 @@ class EmployeeLoanController extends Controller
         $this->middleware('permission:safeAcceptDeclineEmployeeLoan', ['only' => ['safeChangeStatus']]);
 
     }
+
+    public function detailsPrint()
+    {
+        $rows = Accounting::orderBy('date','desc')->orderBy('created_at','desc')->where('type', 'employeeLoan');
+        $total = $rows->sum('amount');
+        $rows = $rows->get();
+        return view('admin.employee_loan.details_print', compact('rows','total'));
+    }
     public function index(Request $request)
     {
         //

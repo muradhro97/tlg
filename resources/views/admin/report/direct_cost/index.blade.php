@@ -41,30 +41,33 @@
                     ])}}
                 </div>
             </div>
-            <div class="col-sm-4 text-center">
-                <div class="col-sm-12">
-                    <div class="col-sm-6">
-                        <label class="control-label" for="from">{{trans('main.from')}}</label>
-                        <div class="input-group clockpicker" data-autoclose="true">
-                            <input type="text" name="from" class="form-control"
-                                   placeholder="{{trans('main.from')}}" value="{{old('from')}}">
-                            <span class="input-group-addon">
-                                    <span class="fa fa-clock-o"></span>
-                                </span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="control-label" for="to">{{trans('main.to')}}</label>
-                        <div class="input-group clockpicker" data-autoclose="true">
-                            <input type="text" name="to" class="form-control"
-                                   placeholder="{{trans('main.to')}}" value="{{old('to')}}">
-                            <span class="input-group-addon">
-                                    <span class="fa fa-clock-o"></span>
-                                </span>
-                        </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="control-label" for="date">{{trans('main.from')}}</label>
+                    <div class="input-group date">
+
+                        {!! Form::text('from',request()->from,[
+                            'class' => 'form-control ',
+                            'placeholder' => trans('main.from'),
+                             "id" => 'filter-from'
+                        ]) !!}
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="control-label" for="to">{{trans('main.to')}}</label>
+                    <div class="input-group date">
 
+                        {!! Form::text('to',request()->to,[
+                            'class' => 'form-control ',
+                            'placeholder' => trans('main.to'),
+                             "id" => 'filter-to'
+                        ]) !!}
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
             </div>
             <div class="clearfix"></div>
             <div class="row">
