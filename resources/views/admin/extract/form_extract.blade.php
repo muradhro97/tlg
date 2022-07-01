@@ -31,8 +31,14 @@ $minus_items = $item->where('is_minus', 1)->latest()->get();
 $new_items = [];
 $new_items_minus = [];
 
-foreach($items as $item){
-    $item->name =  $item->item->name  .' | '.$item->item->unit->name ?? '';
+if (empty($model->getAttributes())) {
+    foreach($items as $item){
+        $item->name =  $item->name  .' | '.$item->unit->name ?? '';
+    }
+}else{
+    foreach($items as $item){
+        $item->name =  $item->item->name  .' | '.$item->item->unit->name ?? '';
+    }
 }
 foreach ($minus_items as $item) {
     $new_items_minus[$item->id] = $item->name . ' | ' . $item->unit->name ?? '';

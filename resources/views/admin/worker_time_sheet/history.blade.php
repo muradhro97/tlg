@@ -208,9 +208,9 @@
                         <th data-hide="all">{{trans('main.organization') }}</th>
                         <th data-hide="all">{{trans('main.department') }}</th>
                         <th data-hide="all">{{trans('main.labors_group') }}</th>
-                        {{--<th>{{trans('main.type') }}</th>--}}
-                        {{--<th>{{trans('main.productivity') }}</th>--}}
-                        {{--<th>{{trans('main.unit_price') }}</th>--}}
+                        <th>{{trans('main.type') }}</th>
+                        <th>{{trans('main.productivity') }}</th>
+                        <th>{{trans('main.unit_price') }}</th>
                         <th>{{trans('main.overtime') }}</th>
                         <th>{{trans('main.overtime') }} 2</th>
                         <th>{{trans('main.deduction_hrs') }}</th>
@@ -246,17 +246,17 @@
                                 <td>{{$row->worker->organization->name ?? ''}}</td>
                                 <td>{{$row->worker->department->name ?? ''}}</td>
                                 <td>{{$row->worker->group->name ?? ''}}</td>
-                                {{--<td>{{$row->type}}</td>--}}
-                                {{--<td>{{$row->productivity}}</td>--}}
-                                {{--<td>{{$row->unit_price}}</td>--}}
+                                <td>{{$row->type}}</td>
+                                <td>{{number_format($row->productivity,2)}}</td>
+                                <td>{{number_format($row->unit_price,2)}}</td>
                                 <td>{{$row->overtime}}</td>
                                 <td>{{$row->additional_overtime}}</td>
                                 <td>{{$row->deduction_hrs}}</td>
                                 <td>{{$row->deduction_value}}</td>
                                 <td>{{$row->safety}}</td>
-                                <td>{{$row->additions}}</td>
-                                <td>{{$row->discounts}}</td>
-                                <td>{{$row->total}}</td>
+                                <td>{{number_format($row->additions,2)}}</td>
+                                <td>{{number_format($row->discounts,2)}}</td>
+                                <td>{{number_format($row->total,2)}}</td>
                                 <td>{{$row->details}}</td>
                                 @can('editWorTime')
                                     <td class="text-center"><a

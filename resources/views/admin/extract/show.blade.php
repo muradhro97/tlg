@@ -22,20 +22,20 @@
             @if($row->type=="cashin" and $row->payment_status=="waiting" )
 
 
-                    <form method="post" action="{{route('accounting-change-status')}}" style="display: inline;">
-                        {{csrf_field()}}
+                <form method="post" action="{{route('accounting-change-status')}}" style="display: inline;">
+                    {{csrf_field()}}
 
-                        <input type="hidden" name="id" value="{{$row->id}}">
-                        <button class="btn btn-primary btn-outline " type="submit" name="payment_status" value="confirmed"><i
-                                    class="fa fa-check"></i> {{trans('main.confirm')}}
-                        </button>
+                    <input type="hidden" name="id" value="{{$row->id}}">
+                    <button class="btn btn-primary btn-outline " type="submit" name="payment_status" value="confirmed"><i
+                            class="fa fa-check"></i> {{trans('main.confirm')}}
+                    </button>
 
-                        <button class="btn btn-danger btn-outline " type="submit" name="payment_status" value="cancel"><i
-                                    class="fa fa-times"></i> {{trans('main.decline')}}
-                        </button>
-                        {{--<button type="submit" class="btn btn-primary btn-outline " name="action" value="update">Update</button>--}}
-                        {{--<button type="submit" name="action" value="delete">Delete</button>--}}
-                    </form>
+                    <button class="btn btn-danger btn-outline " type="submit" name="payment_status" value="cancel"><i
+                            class="fa fa-times"></i> {{trans('main.decline')}}
+                    </button>
+                    {{--<button type="submit" class="btn btn-primary btn-outline " name="action" value="update">Update</button>--}}
+                    {{--<button type="submit" name="action" value="delete">Delete</button>--}}
+                </form>
 
 
             @endif
@@ -79,6 +79,8 @@
 
                                     <dt>{{trans('main.id')}}:</dt>
                                     <dd> {{$row->id}}      </dd>
+                                    <dt>{{trans('main.number')}}:</dt>
+                                    <dd> {{$row->number}}      </dd>
                                     <dt>{{trans('main.sub_contract')}}:</dt>
                                     <dd> {{$row->subContract->no ?? ''}}      </dd>
                                     <dt>{{trans('main.organization')}}:</dt>
@@ -122,8 +124,8 @@
                                     </thead>
                                     <tbody class="">
                                     <?php
-                                        $total_plus = 0;
-                                        $total_minus = 0;
+                                    $total_plus = 0;
+                                    $total_minus = 0;
                                     ?>
                                     @foreach($row->plus_items as  $inv)
                                         <?php
@@ -136,7 +138,7 @@
                                             <td>{{number_format($inv->price,2)}}</td>
                                             <td>{{$inv->exchange_ratio?? '---'}}</td>
                                             @if(!$inv->item->is_minus)
-                                            <td>{{ number_format($inv->price * $inv->quantity * $inv->exchange_ratio/100,4, '.', '')}}</td>
+                                                <td>{{ number_format($inv->price * $inv->quantity * $inv->exchange_ratio/100,4, '.', '')}}</td>
                                             @else
                                                 <td>{{number_format($inv->price,2)}}</td>
                                             @endif
@@ -225,8 +227,8 @@
                             @foreach($row->images as $image)
                                 <a href="{{url($image->image)}}" title="Tlg" data-gallery=""><img
                                         src="{{url($image->image_thumb)}}"></a>
-                        @endforeach
-                        <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+                            @endforeach
+                            <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
                             <div id="blueimp-gallery" class="blueimp-gallery">
                                 <div class="slides"></div>
                                 <h3 class="title"></h3>

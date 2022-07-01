@@ -82,25 +82,13 @@ class WorkerSalaryController extends Controller
 
     public function create(Request $request)
     {
-    //    return "asa";
         $model = new Accounting();
         $projects = auth()->user()->projects->pluck('id')->toArray();
-//        $from = Carbon::parse($request->from);
-//        $to = Carbon::parse($request->to);
-//        return     $rows = Worker::latest()->where('working_status', 'work')
-//            ->whereIn('project_id', $projects)
-//              ->whereHas('workerTimeSheet', function ($q) use ($from, $to) {
-//                  $q->whereBetween('date', [$from, $to])->whereNull('accounting_id');
-//
-//              }) ->get();
-
-//        if ($request->filled('from') and $request->filled('to')  and $request->filled('type')) {
         if ($request->filled('from') and $request->filled('to')) {
 
             $from = Carbon::parse($request->from);
             $to = Carbon::parse($request->to);
             if ($from->greaterThan($to)) {
-//             dd(456);
                 return back()->withErrors(trans('main.from_date_must_be_greater_than_to_date'))->withInput();
             }
             $rows = Worker::latest()
@@ -120,7 +108,9 @@ class WorkerSalaryController extends Controller
             }
 
             $rows->whereHas('workerTimeSheet', function ($q) use ($from, $to,$request) {
-                $q = $q->whereBetween('date', [$from, $to])->whereNull('accounting_id')->where('attendance', 'yes');
+                $q = $q->whereBetween('date', [$from, $to])->whereNull('accounting_id')
+//                    ->where('attendance', 'yes')
+                ;
                 if ($request->filled('type')){
                     $q->where('type', $request->type);
                 }
@@ -131,10 +121,6 @@ class WorkerSalaryController extends Controller
             foreach ($rows as $row) {
                 $row->days = $days;
             }
-//            if($request->type=='productivity'){
-//                return view('admin.worker_salary.create_productivity', compact('model', 'rows'));
-//            }
-
         } else {
             $rows = collect();
         }
@@ -210,13 +196,16 @@ class WorkerSalaryController extends Controller
             $workers = $workers->paginate(100);
             $sum_net = 0;
             foreach ($workers as $worker) {
-                $timesheet = $worker->workerTimeSheet()->where('attendance', 'yes')->whereBetween('date', [$request->start, $request->end])->whereNull('accounting_id');
+                $timesheet = $worker->workerTimeSheet()
+//                    ->where('attendance', 'yes')
+                    ->whereBetween('date', [$request->start, $request->end])
+                    ->whereNull('accounting_id');
                 if ($request->filled('type')){
                     $timesheet = $timesheet->where('type', $request->type);
                 }
-                $timesheet->get();
+//                $timesheet = $timesheet->get();
                 // Apply salary change to timesheet if salary changed
-                if ($request->salary_changed) {
+                if (isset($request->salary_changed) && $request->salary_changed == 'on') {
                     $hourly_salary = $worker->job->hourly_salary;
                     $daily_salary = $worker->job->daily_salary;
                     if (!$hourly_salary) {
@@ -227,23 +216,20 @@ class WorkerSalaryController extends Controller
                         DB::rollBack();
                         return back()->withErrors(trans('main.please_enter_worker_daily_salary_first'))->withInput();
                     }
-                    foreach ($timesheet as $item) {
-
+                    foreach ($timesheet->get() as $item) {
+                        if ($item->type == 'productivity')
+                        {
+                            continue;
+                        }
                         if ($item->attendance == "yes") {
-
                             $additions = ($item->overtime+$item->additional_overtime) * $hourly_salary;
                             $discounts = (($item->deduction_hrs + $item->safety) * $hourly_salary) + $item->deduction_value;
                             $total = $daily_salary + $additions - $discounts;
                         } else {
-                            $overtime = null;
-                            $deduction_hrs = null;
-                            $deduction_value = null;
-                            $safety = null;
                             $additions = ($item->overtime+$item->additional_overtime) * $hourly_salary;
                             $discounts = (($item->deduction_hrs + $item->safety) * $hourly_salary) + $item->deduction_value;
                             $total = $additions - $discounts;
                         }
-
                         $item->update([
                             'hourly_salary' => $hourly_salary,
                             'daily_salary' => $daily_salary,

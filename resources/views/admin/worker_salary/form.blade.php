@@ -9,6 +9,10 @@
         {{--                        <th>{{trans('main.contract_type') }}</th>--}}
         {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
         <th>{{trans('main.days') }}</th>
+        @if(request()->type == 'productivity')
+            <th>{{trans('main.productivity') }}</th>
+            <th>{{trans('main.unit_price') }}</th>
+        @endif
         <th>{{trans('main.current_daily_salary') }}</th>
         <th>{{trans('main.total_daily_salary') }}</th>
         <th>{{trans('main.overtime') }}({{trans('main.hours')}})</th>
@@ -34,6 +38,7 @@
         $days_sum = 0;
         $daily_salary_sum = 0;
         $total_daily_salary_sum = 0;
+        $productivity_sum  = 0;
         $overtime_sum = 0;
         $hourly_salary_sum = 0;
         $additions_sum = 0;
@@ -54,10 +59,12 @@
             if(request()->filled('type')){
                 $row_worker_time_sheet = $row_worker_time_sheet->where('type',request()->type);
             }
+
             $days = $row_worker_time_sheet->count();
             $daily_salary = $row->job->daily_salary;
             $total_daily_salary =$row_worker_time_sheet->sum('daily_salary');
-            $overtime = $row_worker_time_sheet->sum('overtime');
+            $productivity =$row_worker_time_sheet->sum('productivity');
+            $overtime = $row_worker_time_sheet->sum('overtime') + $row_worker_time_sheet->sum('additional_overtime');
             $hourly_salary = $row->job->hourly_salary;
             $additions = $row_worker_time_sheet->sum('additions');
             $deduction_hrs = $row_worker_time_sheet->sum('deduction_hrs');
@@ -71,6 +78,7 @@
             $days_sum +=$days;
             $daily_salary_sum +=$daily_salary;
             $total_daily_salary_sum +=$total_daily_salary;
+            $productivity_sum += $productivity;
             $overtime_sum +=$overtime;
             $hourly_salary_sum +=$hourly_salary;
             $additions_sum +=$additions;
@@ -89,6 +97,10 @@
                 <td>{{$row->name}}</td>
                 <td>{{$row->job->name?? '---'}}</td>
                 <td>{{$days}}</td>
+                @if(request()->type == 'productivity')
+                    <td>{{number_format($productivity,2)}}</td>
+                    <td>{{number_format($row->workerClassification->unit_price ?? 1)}}</td>
+                @endif
                 <td>{{number_format($daily_salary,2)}}</td>
                 <td>{{number_format($total_daily_salary,2)}}</td>
                 <td>{{number_format($overtime,2)}}</td>
@@ -125,6 +137,10 @@
                 <td></td>
                 <td></td>
                 <td>{{number_format($days_sum,2)}}</td>
+                @if(request()->type == 'productivity')
+                    <td>{{number_format($productivity_sum,2)}}</td>
+                    <td></td>
+                @endif
                 <td>{{number_format($daily_salary_sum,2)}}</td>
                 <td>{{number_format($total_daily_salary_sum,2)}}</td>
                 <td>{{number_format($overtime_sum,2)}}</td>
