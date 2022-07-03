@@ -108,24 +108,23 @@ class BankAccountTransactionController extends Controller
         if ($request->filled('module')) {
             $rows->where('module', $request->module);
         }
-//        if ($request->filled('safe')) {
-//            $rows->where('safe', $request->safe);
-//        }
+
+        if ($request->filled('safe_id')) {
+            $rows->where('safe_id', $request->safe_id);
+        }
 
         if ($request->filled('amount_from')) {
             $rows->where('amount', '>=', $request->amount_from);
-
         }
 
         if ($request->filled('amount_to')) {
             $rows->where('amount', '<=', $request->amount_to);
-
         }
-
 
         if ($request->filled('from')) {
             $rows->where('created_at', '>=', $request->from);
         }
+
         if ($request->filled('to')) {
             $rows->where('created_at', '<=', $request->to);
         }

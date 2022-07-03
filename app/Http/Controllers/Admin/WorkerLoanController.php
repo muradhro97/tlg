@@ -39,8 +39,6 @@ class WorkerLoanController extends Controller
 
     public function index(Request $request)
     {
-        //
-//return   User::permission(['safeNotificationWorkerLoan','managerNotificationWorkerLoan'])->get();
         $rows = Accounting::orderBy('date','desc')->orderBy('created_at','desc')->where('type', 'workerLoan');
 
         if ($request->filled('worker_id')) {
@@ -54,6 +52,7 @@ class WorkerLoanController extends Controller
         if ($request->filled('manager_status')) {
             $rows->where('manager_status', $request->manager_status);
         }
+
         if ($request->filled('payment_status')) {
             $rows->where('payment_status', $request->payment_status);
         }
@@ -63,19 +62,15 @@ class WorkerLoanController extends Controller
         }
 
         $total = $rows->sum('amount');
+
         $rows = $rows->paginate(20);
 
         return view('admin.worker_loan.index', compact('rows', 'total'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create(Accounting $model)
     {
-//        return "asa";
         return view('admin.worker_loan.create', compact('model'));
     }
 
@@ -383,7 +378,7 @@ class WorkerLoanController extends Controller
                             DB::rollBack();
                             return back()->withErrors(trans('main.amount_bigger_than_safe_balance'))->withInput();
                         }
-                        if ($request->manager_status != "accept") {
+                        if ($row->manager_status != "accept") {
                             DB::rollBack();
                             return back()->withErrors(trans('main.manager_did_not_accept'))->withInput();
                         }
