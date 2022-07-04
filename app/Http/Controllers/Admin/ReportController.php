@@ -335,7 +335,7 @@ class ReportController extends Controller
         }
 
         $employees= $employees->get()->map(function (Employee $employee){
-            $invoice_amount = $employee->custodyInvoices()->sum('amount');
+            $invoice_amount = $employee->custodyInvoices()->sum('amount') + $employee->custodyRest()->sum('amount');
             $custody_amount = $employee->custody()->sum('amount');
             return [
                 'id' => $employee->id,
@@ -355,8 +355,10 @@ class ReportController extends Controller
     public function custodyDetails(Employee $employee){
         $invoices = $employee->custodyInvoices;
         $custody = $employee->custody;
+        $rest = $employee->custodyRest;
 
         $mergedRows = $invoices->merge($custody);
+        $mergedRows = $mergedRows->merge($rest);
 
         $mergedRows = $mergedRows->sortBy('date');
         return view('admin.report.custody.details', compact('mergedRows','employee'));

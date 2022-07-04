@@ -161,6 +161,10 @@ class Employee extends Model
         return $this->hasMany(Payment::class)->where('type', 'custody');
     }
 
+    public function custodyRest(){
+        return $this->hasMany(Payment::class)->where('type', 'custodyRest');
+    }
+
     public function invoices(){
         return $this->hasMany(Accounting::class);
     }

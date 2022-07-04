@@ -81,8 +81,14 @@
                         @foreach($mergedRows as $index => $row)
                             <tr>
                                 <td>{{$index+1}}</td>
-                                <td>{{$row instanceof \App\Accounting ? $row->amount : '---'}}</td>
-                                <td>{{$row instanceof \App\Payment ? $row->amount : '---'}}</td>
+                                <td>
+                                    @if($row instanceof \App\Accounting or $row->type == 'custodyRest')
+                                        {{$row->amount}}
+                                    @else
+                                        {{'---'}}
+                                    @endif
+                                </td>
+                                <td>{{ ($row instanceof \App\Payment and $row->type == 'custody') ? $row->amount : '---'}}</td>
                                 <td>{{$row->details}}</td>
                                 <td>{{$row->date}}</td>
 

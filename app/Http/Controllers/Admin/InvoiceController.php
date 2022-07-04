@@ -187,11 +187,11 @@ class InvoiceController extends Controller
                 $d->size_id = $item->size_id;
                 $d->quantity = $item->quantity;
                 $d->save();
-
                 $amount = $amount + ($item->price * $item->quantity);
             }
             $row->amount = $amount;
             $row->save();
+
             if ($request->hasFile('images')) {
                 $images = $request->file('images');
                 foreach ($images as $image) {
@@ -199,8 +199,50 @@ class InvoiceController extends Controller
 
                 }
             }
+            if (!is_null($request->is_on_custody)) {
+                $employee = Employee::find($request->employee_id);
+                // update employee custody
+                $employee_custody = $employee->custody()->where('status','custody')->get();
 
-//        $client->roles()->sync($request->input('role'));
+                // check employee custody bigger than amount
+                if ($employee_custody->sum('amount') < $amount) {
+                    return back()->withErrors(['amount is bigger than employee custody'])->withInput();
+                }
+
+                foreach ($employee_custody as $custody) {
+                    if ($custody->amount < $amount) {
+                        $amount -= $custody->amount;
+                        $custody->update([
+                            'status' => 'closed',
+                        ]);
+
+                    } elseif ($custody->amount == $amount) {
+                        $custody->update([
+                            'status' => 'closed',
+                        ]);
+                        break;
+                    } elseif ($custody->amount > $amount && $amount > 0) {
+
+                        $row = Payment::create([
+                            'employee_id' => $custody->employee_id,
+                            'amount' => $amount,
+                            'organization_id' => $custody->organization_id,
+                            'project_id' => $custody->project_id,
+                            'details' => $custody->details,
+                            'type' => 'custody',
+                            'status' => 'closed',
+                            'date' => $custody->date,
+                            'payment_status' => 'paid',
+                        ]);
+
+                        $custody->update([
+                            'amount' => $custody->amount - $amount
+                        ]);
+                        break;
+                    }
+                }
+            }
+
             DB::commit();
             activity()
                 ->performedOn($row)
@@ -241,7 +283,6 @@ class InvoiceController extends Controller
         $rules = [
 
             'date' => 'required|date|date_format:Y-m-d',
-
             'safe_id' => 'required|exists:safes,id',
             'employee_id' => 'required|exists:employees,id',
             'organization_id' => 'required|exists:organizations,id',
