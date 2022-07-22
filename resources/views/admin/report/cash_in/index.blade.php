@@ -148,7 +148,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>{{trans('main.funding') }}</h4>
+                            <h4>{{trans('main.accounting_cash_in') }}</h4>
 
                             @if($funding_rows->count()>0)
 
@@ -172,7 +172,7 @@
                                                 <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->date}}</a></td>
                                                 <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->project->name}}</a></td>
                                                 <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->organization->name}}</a></td>
-                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{number_format($row->total,2)}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{number_format($row->amount,2)}}</a></td>
                                             {{--                                <td>--}}
                                             {{--                                    <a href="{{route('cash_in_details',$row['id'])}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>--}}
                                             {{--                                </td>--}}
@@ -219,7 +219,7 @@
                                                 <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->date}}</a></td>
                                                 <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->project->name}}</a></td>
                                                 <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{$row->organization->name}}</a></td>
-                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{number_format($row->total,2)}}</a></td>
+                                                <td><a href="{{url('/admin/accounting-cash-in/'.$row->id)}}">{{number_format($row->amount,2)}}</a></td>
                                                 {{--                                <td>--}}
                                                 {{--                                    <a href="{{route('cash_in_details',$row['id'])}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>--}}
                                                 {{--                                </td>--}}

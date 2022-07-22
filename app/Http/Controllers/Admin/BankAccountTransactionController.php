@@ -134,11 +134,7 @@ class BankAccountTransactionController extends Controller
         return view('admin.bank_account_transaction.accounting_bank_account_transaction', compact('rows','total'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create(BankAccount $model)
     {
 //        return "asa";

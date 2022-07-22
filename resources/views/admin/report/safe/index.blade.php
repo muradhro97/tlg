@@ -389,7 +389,7 @@
                                 <tbody>
                                 <tr>
                                     <td>{{trans('main.safe_balance') }}</td>
-                                    <td>{{$old_transaction->balance}}</td>
+                                    <td>{{!is_null($old_transaction)?$old_transaction->balance:'---'}}</td>
                                 </tr>
                                 <tr>
                                     <td>{{trans('main.cash_in') }}</td>
@@ -401,7 +401,7 @@
                                 </tr>
                                 <tr>
                                     <td>{{trans('main.safe_new_balance') }}</td>
-                                    <td>{{$new_transaction->new_balance}}</td>
+                                    <td>{{!is_null($new_transaction)?$new_transaction->new_balance:'---'}}</td>
                                 </tr>
                                 </tbody>
                             </table>

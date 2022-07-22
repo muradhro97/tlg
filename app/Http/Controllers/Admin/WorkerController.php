@@ -161,7 +161,7 @@ class WorkerController extends Controller
             'department_id' => 'required|exists:labors_departments,id',
             'start_date' => 'required|date|date_format:Y-m-d',
 
-            'working_status' => 'required|in:work,fired,resigned,retired,blacklist',
+            'working_status' => 'required|in:work,fired,resigned,retired,blacklist,not_started',
 //            'bank_id' => 'required|exists:banks,id',
 //            'bank_account' => 'required|max:255',
 //            'daily_salary' => 'required|numeric|min:0',
@@ -328,7 +328,7 @@ class WorkerController extends Controller
             'department_id' => 'required|exists:labors_departments,id',
             'start_date' => 'required|date|date_format:Y-m-d',
 
-            'working_status' => 'required|in:work,fired,resigned,retired,blacklist',
+            'working_status' => 'required|in:work,fired,resigned,retired,blacklist,not_started',
 
 //            'images.*' => 'image|mimes:jpg,jpeg,bmp,png',
 

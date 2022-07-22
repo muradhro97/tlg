@@ -127,6 +127,7 @@ class Worker extends Model
                 'resigned' => trans('main.resigned'),
                 'retired' => trans('main.retired'),
                 'blacklist' => trans('main.blacklist'),
+                'not_started' => trans('main.not_started'),
 
             ];
             return $workingStatusOptions[$this->working_status];

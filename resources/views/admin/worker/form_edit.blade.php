@@ -61,6 +61,7 @@ $workingStatusOptions = [
     'resigned' => trans('main.resigned'),
     'retired' => trans('main.retired'),
     'blacklist' => trans('main.blacklist'),
+    'not_started' => trans('main.not_started'),
 
 ];
 ?>

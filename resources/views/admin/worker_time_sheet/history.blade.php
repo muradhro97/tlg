@@ -259,7 +259,7 @@
                                 <td>{{number_format($row->total,2)}}</td>
                                 <td>{{$row->details}}</td>
                                 @can('editWorTime')
-                                    <td class="text-center"><a
+                                    <td class="text-center"><a target="_blank"
                                                 href="{{url('admin/worker-time-sheet/'.$row->id.'/edit')}}"
                                                 class="btn btn-xs btn-success"><i class="fa fa-edit"></i></a>
                                     </td>

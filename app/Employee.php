@@ -117,6 +117,7 @@ class Employee extends Model
                 'fired' => trans('main.fired'),
                 'resigned' => trans('main.resigned'),
                 'retired' => trans('main.retired'),
+                'not_started' => trans('main.not_started'),
 
             ];
             return $workingStatusOptions[$this->working_status];

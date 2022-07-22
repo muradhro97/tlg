@@ -571,6 +571,26 @@ class PaymentController extends Controller
         try {
             $safe = Safe::first();
             $parent = Payment::find($request->id);
+            // validate rest amount is less than parent amount
+            if ($request->rest > $parent->amount) {
+                return back()->withErrors('Rest Amount is greater than Custody Amount');
+            }
+            // if parent amount is greater than rest amount create new payment with rest amount
+            if ($request->rest < $parent->amount) {
+                $rest = $parent->amount - $request->rest;
+                Payment::create([
+                    'employee_id' => $parent->employee_id,
+                    'project_id' => $parent->project_id,
+                    'details' => $parent->details,
+                    'organization_id' => $parent->organization_id,
+                    'type' => 'custody',
+                    'status' => 'open',
+                    'date' => $parent->date,
+                    'payment_status' => 'paid',
+                    'amount' => $rest,
+                ]);
+            }
+            /*------------------------------------------------*/
 
             $row = Payment::create([
                 'amount' => $request->rest,
@@ -598,6 +618,7 @@ class PaymentController extends Controller
                 'cash_in_serial' => is_null($next_serial)?1 : $next_serial+1,
             ]);
             $parent->status = 'closed';
+            $parent->amount = $request->rest;
             $parent->save();
             $safe->balance = $safe->balance + $request->rest;
             $safe->save();

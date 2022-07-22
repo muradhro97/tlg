@@ -80,15 +80,15 @@
                     </div>
                 </div>
                 {{--<div class="col-sm-3">--}}
-                    {{--<div class="form-group">--}}
-                        {{--<label class="control-label" for="module">{{trans('main.module')}}</label>--}}
-                        {{--{{Form::select('module', $moduleOptions, request()->module, [--}}
-                            {{--"class" => "form-control select2 " ,--}}
-                            {{--"id" => "module",--}}
-                            {{--"placeholder" => trans('main.module')--}}
-                        {{--])}}--}}
-                        {{--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">--}}
-                    {{--</div>--}}
+                {{--<div class="form-group">--}}
+                {{--<label class="control-label" for="module">{{trans('main.module')}}</label>--}}
+                {{--{{Form::select('module', $moduleOptions, request()->module, [--}}
+                {{--"class" => "form-control select2 " ,--}}
+                {{--"id" => "module",--}}
+                {{--"placeholder" => trans('main.module')--}}
+                {{--])}}--}}
+                {{--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">--}}
+                {{--</div>--}}
                 {{--</div>--}}
                 <div class="col-sm-3">
                     <div class="form-group">
@@ -216,18 +216,18 @@
 
             @if($rows->count()>0)
                 <div class="table-responsive">
-                    <table class=" table-bordered print_table " >
+                    <table class=" table-bordered print_table ">
                         <thead>
                         <th>#</th>
                         <th>{{trans('main.transaction_no') }}</th>
                         <th>{{trans('main.transaction_date') }}</th>
                         <th>{{trans('main.date') }}</th>
-{{--                        <th>{{trans('main.payment_id') }}</th>--}}
+                        {{--                        <th>{{trans('main.payment_id') }}</th>--}}
                         <th>{{trans('main.accounting_id') }}</th>
                         <th>{{trans('main.module') }}</th>
                         <th>{{trans('main.type') }}</th>
                         <th>{{trans('main.amount') }}</th>
-{{--                        <th>{{trans('main.safe') }}</th>--}}
+                        {{--                        <th>{{trans('main.safe') }}</th>--}}
                         {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
                         {{--<th data-hide="all" >{{trans('main.organization') }}</th>--}}
                         {{--<th data-hide="all" >{{trans('main.project') }}</th>--}}
@@ -252,12 +252,12 @@
                                 <td>{{$row->id}}</td>
                                 <td>{{$row->created_at->toDayDateTimeString() }}</td>
                                 <td>{{ $row->parent->date ?? ''}}</td>
-{{--                                <td>{{$row->payment_id}}</td>--}}
+                                {{--                                <td>{{$row->payment_id}}</td>--}}
                                 <td>{{$row->accounting_id}}</td>
                                 <td>{{$row->module}}</td>
                                 <td>{{ $row->accounting->type ?? ''}}</td>
                                 <td>{{number_format($row->amount,2)}}</td>
-{{--                                <td>{{ $row->parent->type ?? ''}}</td>--}}
+                                {{--                                <td>{{ $row->parent->type ?? ''}}</td>--}}
                                 {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->organization->name ?? ''}}</td>--}}
                                 {{--<td>{{$row->parent->project->name ?? ''}}</td>--}}
@@ -267,9 +267,14 @@
 
                                 <td>
                                     <a style="margin: 2px;" type="button"
-                                       href=" @if($row->module =="treasury"){{url('admin/payment/'.$row->payment_id)}} @elseif($row->module =="accounting" and   $row->parent) {{url('admin/'.$routeOptions[$row->parent->type].'/'.$row->accounting_id)}} @endif"
+                                       href="
+                                       @if($row->module =="treasury")
+                                       {{url('admin/payment/'.$row->payment_id)}}
+                                        @elseif($row->module =="accounting" and   $row->parent)
+                                        {{url('admin/'.$routeOptions[$row->parent->type].'/'.$row->accounting_id)}}
+                                        @endif"
                                        class="btn btn-sm btn-primary"><i
-                                                class="fa fa-eye"></i></a>
+                                            class="fa fa-eye"></i></a>
                                 </td>
                                 {{--                                <td>{{$row->status}}</td>--}}
 
@@ -329,14 +334,14 @@
                             extend: 'print',
                             className: 'btn btn-primary  hide-for-mobile',
                             {{--text: "<i class=fa fa-print'></i>  {{trans('main.print')}}",--}}
-                            text:      '<i class="fa fa-print"></i> {{trans("main.print")}}',
+                            text: '<i class="fa fa-print"></i> {{trans("main.print")}}',
                             autoPrint: true,
                             title: "",
-                            init: function(api, node, config) {
+                            init: function (api, node, config) {
                                 $(node).removeClass('dt-button')
                             },
                             exportOptions: {
-                                columns: [ 0, 1 ,2,3,4,5,6,7,8,9,10,11]
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
                             }
                         }
                     ],

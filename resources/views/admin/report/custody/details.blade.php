@@ -74,7 +74,10 @@
                         <th>{{trans('main.debtor') }}</th>
                         <th>{{trans('main.details') }}</th>
                         <th>{{trans('main.date') }}</th>
-
+                        <th>{{trans('main.type') }}</th>
+                        @canany(['detailsPayment','detailsInvoice'])
+                            <th>{{trans('main.options') }}</th>
+                        @endcanany
                         </thead>
                         <tbody>
                         @php $count = 1; @endphp
@@ -91,7 +94,24 @@
                                 <td>{{ ($row instanceof \App\Payment and $row->type == 'custody') ? $row->amount : '---'}}</td>
                                 <td>{{$row->details}}</td>
                                 <td>{{$row->date}}</td>
-
+                                <td>{{$row->type}}</td>
+                                @if($row instanceof \App\Payment)
+                                    @can('detailsPayment')
+                                        <td>
+                                        <a style="margin: 2px;" type="button" href="{{url('admin/payment/'.$row->id)}}"
+                                           class="btn btn-sm btn-primary"><i
+                                                class="fa fa-eye"></i></a>
+                                        </td>
+                                    @endcan
+                                @else
+                                    @can('detailsInvoice')
+                                        <td>
+                                            <a style="margin: 2px;" type="button" href="{{url('admin/invoice/'.$row->id)}}"
+                                               class="btn btn-sm btn-primary"><i
+                                                    class="fa fa-eye"></i></a>
+                                        </td>
+                                    @endcan
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>

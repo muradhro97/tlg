@@ -245,7 +245,6 @@
                                         <a style="margin: 2px;" type="button" href="{{url('admin/payment/'.$row->id)}}"
                                            class="btn btn-sm btn-primary"><i
                                                     class="fa fa-eye"></i></a>
-
                                     @endcan
                                 </td>
                                 @endcan

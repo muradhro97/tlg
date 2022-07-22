@@ -318,7 +318,7 @@
                                             <td>{{number_format($row->accountingEmployeeSalaryDetail()->sum('taxes'),2)}}</td>
                                             <td>{{number_format($row->accountingEmployeeSalaryDetail()->sum('insurance'),2)}}</td>
                                             <td>{{number_format($row->accountingEmployeeSalaryDetail()->sum('monthly_evaluations'),2)}}</td>
-                                            {{--                                    <td>{{number_format($row->accountingEmployeeSalaryDetail()->sum('loans'),2)}}</td>--}}
+                                            <td>{{number_format($row->accountingEmployeeSalaryDetail()->sum('loans'),2)}}</td>
                                             <td>{{number_format($row->accountingEmployeeSalaryDetail()->sum('net') + $row->accountingEmployeeSalaryDetail()->sum('loans'),2)}}</td>
                                         </tr>
                                         </tfoot>

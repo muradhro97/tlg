@@ -267,7 +267,7 @@ class AccountingCashInController extends Controller
 
     public function changeStatus(Request $request)
     {
-//        return "asa";
+
         DB::beginTransaction();
         try {
             $row = Accounting::find($request->id);

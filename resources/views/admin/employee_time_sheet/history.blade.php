@@ -328,7 +328,7 @@
                                 <td>{{minToHour($row->total_daily_minutes)}}</td>
                                 <td>{{$row->details}}</td>
                                 @can('editEmpTime')
-                                    <td class="text-center"><a
+                                    <td class="text-center"><a target="_blank"
                                                 href="{{url('admin/employee-time-sheet/'.$row->id.'/edit')}}"
                                                 class="btn btn-xs btn-success"><i class="fa fa-edit"></i></a>
                                     </td>

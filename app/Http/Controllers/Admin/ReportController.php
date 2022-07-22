@@ -511,7 +511,7 @@ class ReportController extends Controller
             $projects->where('id',$request->project_id);
         }
 
-        $projects->with(['employeeTimeSheets' => function ($query)use ($request){
+         $projects->with(['employeeTimeSheets' => function ($query)use ($request){
             if ($request->filled('organization_id'))
             {
                 $query->whereHas('employee',function ($query) use ($request){
@@ -546,12 +546,6 @@ class ReportController extends Controller
                     $query->where('organization_id',$request->organization_id);
                 });
             }
-//            if ($request->filled('job_id'))
-//            {
-//                $query->whereHas('worker',function ($query) use ($request){
-//                    $query->where('job_id',$request->job_id);
-//                });
-//            }
             if ($request->filled('from')) {
                 $query->where('date', '>=', $request->from);
             }
@@ -567,13 +561,13 @@ class ReportController extends Controller
 
         $rows = $projects->get()->map(function ($project){
             $project->employees_count = $project->employeeTimeSheets->count();
-            $project->employees_counts =$project->employeeTimeSheets()->with('employee')
+            $project->employees_counts =$project->employeeTimeSheets()->whereIn('employee_time_sheets.id',$project->employeeTimeSheets->pluck('id'))->with('employee')
                 ->groupBy('job_id')
                 ->orderBy(DB::raw('COUNT(employees.id)','desc'))
                 ->get(array(DB::raw('COUNT(employees.id) as employee_count'),'job_id'));
 
             $project->worker_count = $project->workerTimeSheets->count();
-            $project->worker_counts =$project->workerTimeSheets()->with('worker')
+            $project->worker_counts =$project->workerTimeSheets()->whereIn('worker_time_sheets.id',$project->workerTimeSheets->pluck('id'))->with('worker')
                 ->groupBy('job_id')
                 ->orderBy(DB::raw('COUNT(workers.id)','desc'))
                 ->get(array(DB::raw('COUNT(workers.id) as worker_count'),'job_id'));

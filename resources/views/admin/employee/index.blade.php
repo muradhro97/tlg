@@ -52,6 +52,7 @@
         'fired' => trans('main.fired'),
         'resigned' => trans('main.resigned'),
         'retired' => trans('main.retired'),
+        'not_started' => trans('main.not_started'),
 
     ];
     ?>
@@ -219,6 +220,8 @@
                                                 <i class="fa fa-map-marker"></i> {{$row->address}}<br>
                                                 <i class="fa fa fa-id-badge"></i> {{$row->unique_no}}<br>
                                                 <i class="fa fa-envelope-o"></i> {{$row->email}}<br>
+                                                <i class="fa fa-user"></i> {{$row->WorkingStatusDisplay}}<br>
+
                                                 {{--San Francisco, CA 94107<br>--}}
                                                 <abbr title="Phone">P:</abbr> {{$row->mobile}}
 

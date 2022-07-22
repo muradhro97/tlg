@@ -260,7 +260,7 @@
                                 {{--<td>{{$row->new_balance}}</td>--}}
                                 <td>{{$row->manager_status}}</td>
                                 <td>{{$row->payment_status}}</td>
-                                <td>{{$row->stock_status}}</td>
+                                <td>{{$row->type == 'expense' ? 'N/A' : $row->stock_status}}</td>
                                 @can('detailsInvoice')
                                     <td>
 

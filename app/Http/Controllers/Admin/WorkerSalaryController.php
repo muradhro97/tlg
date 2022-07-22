@@ -197,7 +197,7 @@ class WorkerSalaryController extends Controller
             $sum_net = 0;
             foreach ($workers as $worker) {
                 $timesheet = $worker->workerTimeSheet()
-//                    ->where('attendance', 'yes')
+                    ->where('attendance', 'yes')
                     ->whereBetween('date', [$request->start, $request->end])
                     ->whereNull('accounting_id');
                 if ($request->filled('type')){

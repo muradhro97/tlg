@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
 
-    @include('admin.layouts.partials.breadcrumb',['title'=>trans('main.cash_in'),'url'=>'reports/cash_in'])
+    @include('admin.layouts.partials.breadcrumb',['title'=>trans('main.human_resources'),'url'=>'reports/human_resources'])
 @stop
 @section('content')
     @inject('project','App\Project')

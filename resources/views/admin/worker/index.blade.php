@@ -14,9 +14,7 @@
 
 
 
-    <?php
-
-
+    @php
     $organizations = $organization->latest()->pluck('name', 'id')->toArray();
 
 
@@ -47,9 +45,11 @@
         'resigned' => trans('main.resigned'),
         'retired' => trans('main.retired'),
         'blacklist' => trans('main.blacklist'),
+        'not_started' => trans('main.not_started'),
 
     ];
     ?>
+    @endphp
     <div>
         @can('addWor')
         <a href="{{url('admin/worker/create')}}" class="btn btn-primary">
@@ -272,7 +272,9 @@
                                                 {{--<i class="fa fa-envelope-o"></i> {{$row->email}}<br>--}}
                                                 {{--San Francisco, CA 94107<br>--}}
                                                 <abbr title="Phone">P:</abbr> {{$row->mobile}} <br>
-                                                <i class="fa fa fa-globe"></i> {{$row->nationality_no}}
+                                                <i class="fa fa fa-globe"></i> {{$row->nationality_no}}<br>
+                                                <i class="fa fa-user"></i> {{$row->WorkingStatusDisplay}}
+
                                             </address>
                                         </div>
                                         <div class="clearfix"></div>

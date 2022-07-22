@@ -146,112 +146,117 @@
             <br>
 
             @if($rows->count()>0)
-            <form method="post" action="{{route('worker-loan-manager-change-statuses')}}"
-                  style="display: inline;">
-                @can('managerAcceptDeclineWorkerLoan')
-                    <button class="btn btn-primary btn-outline " type="submit" name="manager_status" value="accept">
-                        <i
-                            class="fa fa-check"></i> {{trans('main.manager_accept')}}
-                    </button>
-                    <button class="btn btn-danger btn-outline " type="submit" name="manager_status" value="decline">
-                        <i
-                            class="fa fa-times"></i> {{trans('main.manager_decline')}}
-                    </button>
-                @endcan
-                @can('safeAcceptDeclineWorkerLoan')
-                        <button class="btn btn-primary btn-outline " type="submit" name="payment_status" value="confirmed">
+                <form method="post" action="{{route('worker-loan-manager-change-statuses')}}"
+                      style="display: inline;">
+                    @can('managerAcceptDeclineWorkerLoan')
+                        <button class="btn btn-primary btn-outline " type="submit" name="manager_status" value="accept">
+                            <i
+                                class="fa fa-check"></i> {{trans('main.manager_accept')}}
+                        </button>
+                        <button class="btn btn-danger btn-outline " type="submit" name="manager_status" value="decline">
+                            <i
+                                class="fa fa-times"></i> {{trans('main.manager_decline')}}
+                        </button>
+                    @endcan
+                    @can('safeAcceptDeclineWorkerLoan')
+                        <button class="btn btn-primary btn-outline " type="submit" name="payment_status"
+                                value="confirmed">
                             <i class="fa fa-check"></i> {{trans('main.safe_confirm')}}
                         </button>
                         <button class="btn btn-danger btn-outline " type="submit" name="payment_status" value="cancel">
                             <i class="fa fa-times"></i> {{trans('main.safe_decline')}}
                         </button>
-                @endcan
-                {{csrf_field()}}
-                <div class="table-responsive">
-                    <div class="pull-right">
-                        <a class="btn btn-outline btn-primary" target="_blank" href="{{url('admin/worker-loans-print')}}"><i class="fa fa-print"></i>  {{trans('main.print')}}
-                        </a>
-                    </div>
-                    <table class="data-table table table-bordered  print_table">
-                        
-                        <thead>
-                                <th>#</th>
-                                <th>{{trans('main.id') }}</th>
-                                <th>{{trans('main.date') }}</th>
-                                <th>{{trans('main.worker') }}</th>
-                                <th>{{trans('main.amount') }}</th>
-                                {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
-                                {{--<th>{{trans('main.project') }}</th>--}}
-                                {{--<th>{{trans('main.organization') }}</th>--}}
-                                {{--<th>{{trans('main.contract') }}</th>--}}
-                                <th>{{trans('main.safe') }}</th>
-                                {{--<th>{{trans('main.safe_balance') }}</th>--}}
-                                {{--<th>{{trans('main.safe_new_balance') }}</th>--}}
-                                <th>{{trans('main.manager_status') }}</th>
-                                <th>{{trans('main.payment_status') }}</th>
-                                @can('detailsWorkerLoan')
-                                    <th>{{trans('main.options') }}</th>
-                                @endcan
-                        {{--<th class="text-center">{{trans('main.edit') }}</th>--}}
-                        {{--<th class="text-center">{{trans('main.delete') }}</th>--}}
-                        </thead>
-                        <tbody>
-                        @php $count = 1; @endphp
-                        @foreach($rows as $row)
-                            <?php
-                            $iteration = $loop->iteration + (($rows->currentPage() - 1) * $rows->perPage())
-                            ?>
-                            <tr>
-                                <td>
-                                    @if(($row->type=="workerLoan" and $row->manager_status=="waiting") or ($row->type=="workerLoan"  and $row->payment_status=="waiting" and $row->manager_status=="accept" )  )
-                                    <input type="checkbox" value="{{$row->id}}" name="ids[]">
-                                    @endif
-                                </td>
-                                <td>{{$row->id}}</td>
-                                <td>{{$row->date}}</td>
-                                <td>{{$row->worker->name ?? ''}}</td>
-                                <td>{{number_format($row->amount,2)}}</td>
-                                {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
-                                {{--<td>{{$row->project->name ?? ''}}</td>--}}
-                                {{--<td>{{$row->organization->name ?? ''}}</td>--}}
-                                {{--<td>{{$row->contract->no ?? ''}}</td>--}}
-                                <td>{{$row->safe->name ?? ''}}</td>
-                                {{--<td>{{$row->balance}}</td>--}}
-                                {{--<td>{{$row->new_balance}}</td>--}}
-                                <td>{{$row->manager_status}}</td>
-                                <td>{{$row->payment_status}}</td>
-                                @can('detailsWorkerLoan')
+                    @endcan
+                    {{csrf_field()}}
+                    <div class="table-responsive">
+                        <div class="pull-right">
+                            <a class="btn btn-outline btn-primary" target="_blank"
+                               href="{{url('admin/worker-loans-print')}}"><i
+                                    class="fa fa-print"></i> {{trans('main.print')}}
+                            </a>
+                        </div>
+                        <table class="data-table table table-bordered  print_table">
+
+                            <thead>
+                            <th>#</th>
+                            <th>{{trans('main.id') }}</th>
+                            <th>{{trans('main.date') }}</th>
+                            <th>{{trans('main.worker') }}</th>
+                            <th>{{trans('main.amount') }}</th>
+                            {{--                        <th>{{trans('main.custody_transaction_no') }}</th>--}}
+                            {{--<th>{{trans('main.project') }}</th>--}}
+                            {{--<th>{{trans('main.organization') }}</th>--}}
+                            {{--<th>{{trans('main.contract') }}</th>--}}
+                            <th>{{trans('main.safe') }}</th>
+                            {{--<th>{{trans('main.safe_balance') }}</th>--}}
+                            {{--<th>{{trans('main.safe_new_balance') }}</th>--}}
+                            <th>{{trans('main.manager_status') }}</th>
+                            <th>{{trans('main.payment_status') }}</th>
+                            <th>{{trans('main.status') }}</th>
+                            @can('detailsWorkerLoan')
+                                <th>{{trans('main.options') }}</th>
+                            @endcan
+                            {{--<th class="text-center">{{trans('main.edit') }}</th>--}}
+                            {{--<th class="text-center">{{trans('main.delete') }}</th>--}}
+                            </thead>
+                            <tbody>
+                            @php $count = 1; @endphp
+                            @foreach($rows as $row)
+                                <?php
+                                $iteration = $loop->iteration + (($rows->currentPage() - 1) * $rows->perPage())
+                                ?>
+                                <tr>
                                     <td>
-
-                                        <a style="margin: 2px;" type="button"
-                                           href="{{url('admin/worker-loan/'.$row->id)}}"
-                                           class="btn btn-sm btn-primary"><i
-                                                    class="fa fa-eye"></i></a>
+                                        @if(($row->type=="workerLoan" and $row->manager_status=="waiting") or ($row->type=="workerLoan"  and $row->payment_status=="waiting" and $row->manager_status=="accept" )  )
+                                            <input type="checkbox" value="{{$row->id}}" name="ids[]">
+                                        @endif
                                     </td>
-                                @endcan
+                                    <td>{{$row->id}}</td>
+                                    <td>{{$row->date}}</td>
+                                    <td>{{$row->worker->name ?? ''}}</td>
+                                    <td>{{number_format($row->amount,2)}}</td>
+                                    {{--                                <td>{{$row->safe_transaction_id ?? ''}}</td>--}}
+                                    {{--<td>{{$row->project->name ?? ''}}</td>--}}
+                                    {{--<td>{{$row->organization->name ?? ''}}</td>--}}
+                                    {{--<td>{{$row->contract->no ?? ''}}</td>--}}
+                                    <td>{{$row->safe->name ?? ''}}</td>
+                                    {{--<td>{{$row->balance}}</td>--}}
+                                    {{--<td>{{$row->new_balance}}</td>--}}
+                                    <td>{{$row->manager_status}}</td>
+                                    <td>{{$row->payment_status}}</td>
+                                    <td>{{is_null($row->accounting_id) ? '---' : 'deducted'}}</td>
+                                    @can('detailsWorkerLoan')
+                                        <td>
 
-                                {{--<td class="text-center"><a href="{{url('admin/stock-transaction/'.$row->id.'/edit')}}"--}}
-                                {{--class="btn btn-xs btn-success"><i class="fa fa-edit"></i></a>--}}
-                                {{--</td>--}}
-                                {{--<td class="text-center">--}}
-                                {{--{{Form::open(array('method'=>'delete','class'=>'delete','url'=>url('admin/stock-transaction/'.$row->id) )) }}--}}
-                                {{--<button type="submit" class="destroy btn btn-danger btn-xs"><i--}}
-                                {{--class="fa fa-trash-o"></i></button>--}}
-                                {{--{{Form::close()}}--}}
-                                {{--</td>--}}
+                                            <a style="margin: 2px;" type="button"
+                                               href="{{url('admin/worker-loan/'.$row->id)}}"
+                                               class="btn btn-sm btn-primary"><i
+                                                    class="fa fa-eye"></i></a>
+                                        </td>
+                                    @endcan
+
+                                    {{--<td class="text-center"><a href="{{url('admin/stock-transaction/'.$row->id.'/edit')}}"--}}
+                                    {{--class="btn btn-xs btn-success"><i class="fa fa-edit"></i></a>--}}
+                                    {{--</td>--}}
+                                    {{--<td class="text-center">--}}
+                                    {{--{{Form::open(array('method'=>'delete','class'=>'delete','url'=>url('admin/stock-transaction/'.$row->id) )) }}--}}
+                                    {{--<button type="submit" class="destroy btn btn-danger btn-xs"><i--}}
+                                    {{--class="fa fa-trash-o"></i></button>--}}
+                                    {{--{{Form::close()}}--}}
+                                    {{--</td>--}}
+                                </tr>
+                                @php $count ++; @endphp
+                            @endforeach
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>{{$total}}</td>
                             </tr>
-                            @php $count ++; @endphp
-                        @endforeach
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="4"></td>
-                            <td>{{$total}}</td>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </form>
+                            </tfoot>
+                        </table>
+                    </div>
+                </form>
                 <div class="text-center">
                     {!! $rows->appends(request()->except('page'))->links() !!}
                 </div>
@@ -272,14 +277,14 @@
                             extend: 'print',
                             className: 'btn btn-primary  hide-for-mobile',
                             {{--text: "<i class=fa fa-print'></i>  {{trans('main.print')}}",--}}
-                            text:      '<i class="fa fa-print"></i> {{trans("main.print")}}',
+                            text: '<i class="fa fa-print"></i> {{trans("main.print")}}',
                             autoPrint: true,
                             title: "worker loans",
-                            init: function(api, node, config) {
+                            init: function (api, node, config) {
                                 $(node).removeClass('dt-button')
                             },
                             exportOptions: {
-                                columns: [ 0, 1 ,2,3,4]
+                                columns: [0, 1, 2, 3, 4]
                             }
                         }
                     ],

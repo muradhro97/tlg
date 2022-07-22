@@ -183,6 +183,7 @@
                         <th>{{trans('main.manager_status') }}</th>
                         <th>{{trans('main.payment_status') }}</th>
                         <th>{{trans('main.Was Custody') }}</th>
+                        <th>{{trans('main.status') }}</th>
                         @can('detailsEmployeeLoan')
                             <th>{{trans('main.options') }}</th>
                         @endcan
@@ -213,6 +214,7 @@
                                 <td>{{$row->manager_status}}</td>
                                 <td>{{$row->payment_status}}</td>
                                 <td>{{$row->is_was_custody? 'yes':'---'}}</td>
+                                <td>{{is_null($row->accounting_id) ? '---' : 'deducted'}}</td>
                                 @can('detailsEmployeeLoan')
                                     <td>
 

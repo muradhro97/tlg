@@ -127,7 +127,7 @@ class InvoiceController extends Controller
             'project_id' => 'required|exists:projects,id',
 //            'labors_department_id' => 'required|exists:labors_departments,id',
 //            'labors_type' => 'required|in:na,all,supervisor,technical,assistant,worker',
-            'safe_id' => 'required_if:is_on_custody,null|exists:safes,id',
+        // safe_id required if is_on_custody is null
             'employee_id' => 'required|exists:employees,id',
 
 
@@ -137,6 +137,10 @@ class InvoiceController extends Controller
 
 
         ];
+        if (is_null($request->is_on_custody))
+        {
+            $rules['safe_id'] = 'required|exists:safes,id';
+        }
 
         if ($request->images != null and count(array_filter($request->images)) > 0) {
             $rules['images.*'] = 'image|mimes:jpg,jpeg,bmp,png';
@@ -166,7 +170,7 @@ class InvoiceController extends Controller
 //                'contract_id' => $request->contract_id,
                 'type' => 'invoice',
 //                    'module' => 'accounting',
-                'safe_id' => $request->safe_id,
+                'safe_id' => is_null($request->is_on_custody) ? $request->safe_id : null,
 //                    'extract_no' => $request->extract_no,
                 'employee_id' => $request->employee_id,
                 'is_on_custody'  => is_null($request->is_on_custody)? 0:1,
@@ -202,12 +206,17 @@ class InvoiceController extends Controller
             if (!is_null($request->is_on_custody)) {
                 $employee = Employee::find($request->employee_id);
                 // update employee custody
-                $employee_custody = $employee->custody()->where('status','custody')->get();
+                $employee_custody = $employee->custody()->where('status','open')->get();
 
                 // check employee custody bigger than amount
                 if ($employee_custody->sum('amount') < $amount) {
                     return back()->withErrors(['amount is bigger than employee custody'])->withInput();
                 }
+
+                // update accounting payment_status and manager_status
+                $row->payment_status = "confirmed";
+                $row->manager_status = "accept";
+                $row->save();
 
                 foreach ($employee_custody as $custody) {
                     if ($custody->amount < $amount) {
@@ -223,7 +232,7 @@ class InvoiceController extends Controller
                         break;
                     } elseif ($custody->amount > $amount && $amount > 0) {
 
-                        $row = Payment::create([
+                        $payment = Payment::create([
                             'employee_id' => $custody->employee_id,
                             'amount' => $amount,
                             'organization_id' => $custody->organization_id,
@@ -283,12 +292,17 @@ class InvoiceController extends Controller
         $rules = [
 
             'date' => 'required|date|date_format:Y-m-d',
-            'safe_id' => 'required|exists:safes,id',
+//            'safe_id' => 'required_if:is_on_custody,null|exists:safes,id',
             'employee_id' => 'required|exists:employees,id',
             'organization_id' => 'required|exists:organizations,id',
             'project_id' => 'required|exists:projects,id',
 
         ];
+
+        if (is_null($request->is_on_custody))
+        {
+            $rules['safe_id'] = 'required|exists:safes,id';
+        }
 
         if ($request->images != null and count(array_filter($request->images)) > 0) {
             $rules['images.*'] = 'image|mimes:jpg,jpeg,bmp,png';
@@ -312,7 +326,7 @@ class InvoiceController extends Controller
                 'date' => $request->date,
                 'amount' => $amount,
                 'type' => 'expense',
-                'safe_id' => $request->safe_id,
+                'safe_id' => is_null($request->is_on_custody) ? $request->safe_id : null,
                 'employee_id' => $request->employee_id,
                 'details' => $request->details,
                 'payment_status' => "waiting",
@@ -348,6 +362,54 @@ class InvoiceController extends Controller
                 foreach ($images as $image) {
                     $this->addImage($image, $row->id, 'uploads/accounting/');
 
+                }
+            }
+
+            if (!is_null($request->is_on_custody)) {
+                $employee = Employee::find($request->employee_id);
+                // update employee custody
+                $employee_custody = $employee->custody()->where('status','open')->get();
+
+                // check employee custody bigger than amount
+                if ($employee_custody->sum('amount') < $amount) {
+                    return back()->withErrors(['amount is bigger than employee custody'])->withInput();
+                }
+                // update accounting payment_status and manager_status
+                $row->payment_status = "confirmed";
+                $row->manager_status = "accept";
+                $row->save();
+
+                foreach ($employee_custody as $custody) {
+                    if ($custody->amount < $amount) {
+                        $amount -= $custody->amount;
+                        $custody->update([
+                            'status' => 'closed',
+                        ]);
+
+                    } elseif ($custody->amount == $amount) {
+                        $custody->update([
+                            'status' => 'closed',
+                        ]);
+                        break;
+                    } elseif ($custody->amount > $amount && $amount > 0) {
+
+                        $payment = Payment::create([
+                            'employee_id' => $custody->employee_id,
+                            'amount' => $amount,
+                            'organization_id' => $custody->organization_id,
+                            'project_id' => $custody->project_id,
+                            'details' => $custody->details,
+                            'type' => 'custody',
+                            'status' => 'closed',
+                            'date' => $custody->date,
+                            'payment_status' => 'paid',
+                        ]);
+
+                        $custody->update([
+                            'amount' => $custody->amount - $amount
+                        ]);
+                        break;
+                    }
                 }
             }
 

@@ -157,7 +157,7 @@ class EmployeeController extends Controller
             'department_id' => 'required|exists:departments,id',
             'start_date' => 'required|date|date_format:Y-m-d',
 
-            'working_status' => 'required|in:work,fired,resigned,retired',
+            'working_status' => 'required|in:work,fired,resigned,retired,not_started',
 //            'bank_id' => 'required|exists:banks,id',
 //            'bank_account' => 'required|max:255',
 //            'daily_salary' => 'required|numeric|min:0',
@@ -346,7 +346,7 @@ class EmployeeController extends Controller
             'meals' => 'required|numeric|min:0',
             'communications' => 'required|numeric|min:0',
             'transports' => 'required|numeric|min:0',
-            'working_status' => 'required|in:work,fired,resigned,retired',
+            'working_status' => 'required|in:work,fired,resigned,retired,not_started',
 
 //            'images.*' => 'image|mimes:jpg,jpeg,bmp,png',
 
